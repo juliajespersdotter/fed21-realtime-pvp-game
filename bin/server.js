@@ -10,7 +10,6 @@ const app = require('../app');
 const debug = require('debug')('game:server');
 const http = require('http');
 const socketio = require('socket.io');
-const socket_controller = require('../controllers/socket_controller');
 
 /**
  * Get port from environment and store in Express.

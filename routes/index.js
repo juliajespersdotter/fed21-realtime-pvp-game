@@ -2,5 +2,7 @@
  * Routes
  */
 
-// Marias kommentar 
-// en till kommentar från Maria 
+ const express = require('express');
+ const router = express.Router();
+ 
+ module.exports = router;
