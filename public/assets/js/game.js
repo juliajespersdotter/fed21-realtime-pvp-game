@@ -24,8 +24,8 @@ const updatePlayerList = players => {
 
 /**
  * @todo 
- * - eventlistener for submitting form 
- * - create gameboard
+ * - eventlistener for submitting form 🤩
+ * - create gameboard 🧐
  * - formula for shuffling virus 
  * 
  */
