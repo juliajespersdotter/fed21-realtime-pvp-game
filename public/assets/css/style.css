@@ -1,7 +1,6 @@
 /* Styles */
 
 #start {
-	display:none;
 	width: 100vw;
 	height: 100vh;
 	background-color: rgb(255, 174, 228);
@@ -44,4 +43,8 @@
 .footer {
 	background-color: rgb(71, 156, 182);
 	grid-column: 1/7;
+}
+
+.hide{
+	display: none;
 }

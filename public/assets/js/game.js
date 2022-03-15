@@ -21,3 +21,56 @@ const updatePlayerList = players => {
 
 // * virus icon
 // <i class="fa-solid fa-virus-covid"></i>
+
+/**
+ * @todo 
+ * - eventlistener for submitting form 
+ * - create gameboard
+ * - formula for shuffling virus 
+ * 
+ */
+
+const socket = io();
+const startEl = document.querySelector('#start');
+const gameGrid = document.querySelector('main');
+const gameWrapperEl = document.querySelector('#game-wrapper');
+const usernameForm = document.querySelector('#username-form');
+
+let username = null;
+const width = 5;
+
+addEventListener('submit', e => {
+	e.preventDefault();
+
+	username = usernameForm.username.value;
+
+	console.log(`Player username is ${username}`);
+
+	//socket.emit('user:joined', username, (status) => {
+		//console.log("Server acknowledged that user joined", status);
+
+		//if (status.success) {
+			// hide form view
+		startEl.classList.add('hide');
+
+			// show game view
+		gameWrapperEl.classList.remove('hide');
+
+		//}
+	//});
+});
+
+function createBoard(grid) {
+	// loop to create divs inside the game element
+	for (let i = 0; i < width * width; i++) {
+		const square = document.createElement('div');
+
+		// give each new div a unique id
+		square.dataset.id = i;
+
+		//append divs to gameboard
+		grid.appendChild(square);
+	}
+}
+
+createBoard(gameGrid);
