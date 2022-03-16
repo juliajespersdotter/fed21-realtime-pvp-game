@@ -33,6 +33,14 @@ io.on('connection', (socket) => {
 });
 
 /*
+Efter att användare fyllt i användarnamn och valt avatar kontrolleras ifall det finns en spelare som är redo att spela.
+typ....
+if (userReady) {
+	prompt('Are you ready?');
+} else {
+	sätt diven som håller waitingroom till 'show' 
+} och igen när det kommer in en spelare som vill spela så måste prompten komma upp....
+
 // find an available player number
 
 const connections = [null, null];
