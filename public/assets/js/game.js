@@ -20,6 +20,10 @@ let username = null;
 const width = 10;
 
 
+socket.on('user:joined', username => {
+	console.log("a user", username);
+});
+
 
 /*
 Efter att användare fyllt i användarnamn och valt avatar kontrolleras ifall det finns en spelare som är redo att spela.
@@ -103,16 +107,7 @@ createBoard(gameGrid);
 // const socket = io();
 
 
-// <i class="fa-solid fa-user-astronaut"></i>
-// <i class="fa-solid fa-user-bounty-hunter"></i>
-// <i class="fa-solid fa-user-cowboy"></i>
-// <i class="fa-solid fa-user-crown"></i>
-// <i class="fa-solid fa-user-ninja"></i>
-// <i class="fa-solid fa-user-police"></i>
-// <i class="fa-solid fa-user-robot"></i>
-// <i class="fa-solid fa-alien-8bit"></i>
-// <i class="fa-solid fa-pinata"></i>
-// <i class="fa-solid fa-user-secret"></i>
+
 
 // * virus icon
 // <i class="fa-solid fa-virus-covid"></i>

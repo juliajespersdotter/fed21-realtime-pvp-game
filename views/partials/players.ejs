@@ -1,8 +1,14 @@
+<<<<<<< HEAD
 <ul id="players"></ul>
 
 
 <% if (players.length > 0) { %>
+=======
+<% if (players.length > 1) { %>
+>>>>>>> main
 	<% players.forEach(player => { %>
 		<p class="user"><%= player.username %></p>
-	<% }); %>
+	<% }) %>
+<% } else if (players.length === 1) { %>
+	<p>You are currently alone in this game! Waiting for another player...</p>
 <% } %>

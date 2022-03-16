@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
 		username: "Julia"
 		}
 	]
-
+	console.log(players.username)
 	res.render('index', { players });
 });
 
