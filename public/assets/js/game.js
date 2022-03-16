@@ -41,6 +41,10 @@ const usernameForm = document.querySelector('#username-form');
 let username = null;
 const width = 10;
 
+socket.on('user:joined', username => {
+	console.log("a user", username);
+})
+
 addEventListener('submit', e => {
 	e.preventDefault();
 
