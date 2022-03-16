@@ -131,11 +131,11 @@ img {
 
 
 .square{
-	border: 1px solid white;
 	width: 70px;
 	height: 70px;
 }
 
-.green{
-	background-color: green;
+.fa-virus-covid {
+	font-size: 70px;
+	color: green;
 }

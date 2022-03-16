@@ -10,6 +10,7 @@ const usernameForm = document.querySelector('#username-form');
 
 let username = null;
 const width = 10;
+let rounds = 0;
 
 
 socket.on('user:joined', username => {
@@ -59,12 +60,25 @@ usernameForm.addEventListener('submit', e => {
 		// hide form view
 		startEl.classList.add('hide');
 
+		// create board
+		createBoard(gameGrid);
+
 		// show game view
 		gameWrapperEl.classList.remove('hide');
 
 		}
 	});
 });
+
+gameGrid.addEventListener('click', e => {
+	rounds ++;
+
+	console.log(e.target);
+	if(e.target.tagName === 'I'){
+		e.target.parentNode.innerHTML = "";
+		createVirus();
+	}
+})
 
 function createBoard(grid) {
 	
@@ -78,27 +92,23 @@ function createBoard(grid) {
 
 		//append divs to gameboard
 		grid.appendChild(square);
-
 	}
 
-	// get a random number between 0-99
-	const randomNumber = Math.floor(Math.random() * 100);
-	console.log(randomNumber);
-
-	// find div with data-id with the random number
-	const virus = document.querySelector(`[data-id="${randomNumber}"]`);
-
-	// make chosen div green
-	virus.classList.add('green');
+	createVirus();
 
 }
 
-createBoard(gameGrid);
+const createVirus = () => {
+	// get a random number between 0-99
+	const randomNumber = Math.floor(Math.random() * 100);
+	console.log(randomNumber);
+	const virusIcon = `<i class="fa-solid fa-virus-covid"></i>`;
 
-// const socket = io();
+	setTimeout(function(){
+		// find div with data-id with the random number
+		const virus = document.querySelector(`[data-id="${randomNumber}"]`);
+		virus.innerHTML = `${virusIcon}`;
 
+	}, 1000); 
+}
 
-
-
-// * virus icon
-// <i class="fa-solid fa-virus-covid"></i>
