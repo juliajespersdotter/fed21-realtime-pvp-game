@@ -6,7 +6,14 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-	res.render('index');
+	const players = [
+		{
+		username: username, 
+		room: room
+		}
+	]
+
+	res.render('index', { players });
 });
 
 module.exports = router;
