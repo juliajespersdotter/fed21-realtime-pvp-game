@@ -1,0 +1,47 @@
+<%- include('partials/head') %>
+
+	<!-- Startpage -->
+	<div id="start" class="container">
+		<form id="username-form">
+			<div class="username">
+				<input type="text" id="username" class="" required placeholder="Enter username...">
+			</div>
+
+			<button type="submit" class="">Enter a room to play!</button>
+		</form>
+	</div>
+
+	<!-- Waitingroom -->
+	<div id="waitingroom" class="container hide">
+		<form id="waitingroom-form">
+			<div>
+				<h1>Waiting for another player to join the game.....</h1>
+			</div>
+		</form>
+	</div>
+
+	<!-- Gameboard -->
+	<div id="game-wrapper" class="content hide">
+		<header class="header">
+			<h1>Name of the game</h1>
+		</header>
+
+		<aside class="aside">
+			<h2>Players:</h2>
+			<%- include('partials/players') %>  <!-- list the two players that are playing the game -->
+		</aside>
+
+		<aside class="aside-below">
+			<h2>Points:</h2>
+			<%- include('partials/points') %> <!-- show points -->
+		</aside>
+
+		<main class="main">
+		</main>
+
+		<footer class="footer">
+			<p>Game created by the Socket Slayers</p>
+		</footer>
+	</div>
+	
+<%- include('partials/footer-scripts') %>
