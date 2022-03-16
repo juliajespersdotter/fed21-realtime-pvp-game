@@ -37,7 +37,7 @@ const gameWrapperEl = document.querySelector('#game-wrapper');
 const usernameForm = document.querySelector('#username-form');
 
 let username = null;
-const width = 5;
+const width = 10;
 
 addEventListener('submit', e => {
 	e.preventDefault();
@@ -64,6 +64,7 @@ function createBoard(grid) {
 	// loop to create divs inside the game element
 	for (let i = 0; i < width * width; i++) {
 		const square = document.createElement('div');
+		square.classList.add('square');
 
 		// give each new div a unique id
 		square.dataset.id = i;
