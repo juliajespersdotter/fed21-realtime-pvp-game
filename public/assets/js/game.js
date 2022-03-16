@@ -2,7 +2,7 @@
  * Game
  */
 
-const debug = require('debug');
+// const socket = io();
 
 
 // update user list
@@ -63,17 +63,31 @@ addEventListener('submit', e => {
 });
 
 function createBoard(grid) {
+	
 	// loop to create divs inside the game element
 	for (let i = 0; i < width * width; i++) {
 		const square = document.createElement('div');
 		square.classList.add('square');
 
 		// give each new div a unique id
-		const squareID = square.dataset.id = i;
+		square.dataset.id = i;
+		console.log(square);
 
 		//append divs to gameboard
 		grid.appendChild(square);
+
 	}
+
+	// get a random number between 0-99
+	const randomNumber = Math.floor(Math.random() * 100);
+	console.log(randomNumber);
+
+	// find div with data-id with the random number
+	const virus = document.querySelector(`[data-id="${randomNumber}"]`);
+
+	// make chosen div green
+	virus.classList.add('green');
+
 }
 
 createBoard(gameGrid);
