@@ -4,7 +4,6 @@
 	width: 100vw;
 	height: 100vh;
 	background-color: rgb(255, 174, 228);
-
 	display: grid;
 	grid-template-columns: repeat(5, 1fr);
 	grid-template-rows: repeat(5, 1fr);
@@ -13,7 +12,6 @@
 #username-form {
 	grid-column: 3;
 	grid-row: 3;
-
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -66,7 +64,7 @@
 }
 
 .hide{
-	display: none;
+	display: none !important;
 }
 
 
