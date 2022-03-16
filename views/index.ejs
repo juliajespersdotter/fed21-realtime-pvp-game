@@ -23,23 +23,24 @@
 	<!-- Gameboard -->
 	<div id="game-wrapper" class="content hide">
 		<header class="header">
-			<p>Name of the game</p>
+			<h1>Name of the game</h1>
 		</header>
 
 		<aside class="aside">
-			<p>Users:</p>
-			<%- include('partials/players') %>
+			<h2>Players:</h2>
+			<%- include('partials/players') %>  <!-- list the two players that are playing the game -->
 		</aside>
 
 		<aside class="aside-below">
-			<p>Points</p>
+			<h2>Points:</h2>
+			<%- include('partials/points') %> <!-- show points -->
 		</aside>
 
 		<main class="main">
 		</main>
 
 		<footer class="footer">
-			<p>the creators</p>
+			<p>Game created by the Socket Slayers</p>
 		</footer>
 	</div>
 	
