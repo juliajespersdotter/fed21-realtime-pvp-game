@@ -2,6 +2,8 @@
  * Game
  */
 
+const debug = require('debug');
+
 
 // update user list
 const updatePlayerList = players => {
@@ -67,7 +69,7 @@ function createBoard(grid) {
 		square.classList.add('square');
 
 		// give each new div a unique id
-		square.dataset.id = i;
+		const squareID = square.dataset.id = i;
 
 		//append divs to gameboard
 		grid.appendChild(square);
