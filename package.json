@@ -26,5 +26,20 @@
   "devDependencies": {
     "cross-env": "^7.0.3",
     "nodemon": "^2.0.15"
-  }
+  },
+  "main": "app.js",
+  "bin": {
+    "realtime-game": "bin/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/juliajespersdotter/fed21-realtime-pvp-game.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/juliajespersdotter/fed21-realtime-pvp-game/issues"
+  },
+  "homepage": "https://github.com/juliajespersdotter/fed21-realtime-pvp-game#readme",
+  "description": ""
 }

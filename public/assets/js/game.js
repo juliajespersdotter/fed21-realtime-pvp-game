@@ -2,14 +2,6 @@
  * Game
  */
 
-/**
- * @todo 
- * - eventlistener for submitting form 🤩
- * - create gameboard 🧐
- * - formula for shuffling virus 
- * 
- */
-
 const socket = io();
 const startEl = document.querySelector('#start');
 const gameGrid = document.querySelector('main');
@@ -83,7 +75,6 @@ function createBoard(grid) {
 
 		// give each new div a unique id
 		square.dataset.id = i;
-		console.log(square);
 
 		//append divs to gameboard
 		grid.appendChild(square);
