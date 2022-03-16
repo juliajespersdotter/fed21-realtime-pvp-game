@@ -11,6 +11,7 @@ const debug = require('debug')('game:server');
 const http = require('http');
 const socketio = require('socket.io');
 const socket_controller = require('../controllers/socket_controller');
+const models = require('../models');
 
 /**
  * Get port from environment and store in Express.
@@ -31,6 +32,23 @@ const io = new socketio.Server(server);
 io.on('connection', (socket) => {
 	socket_controller(socket, io);
 });
+
+/**
+ * Connect to database
+ */
+ models.connect()
+ .then(() => {
+	 /**
+	  * Listen on provided port, on all network interfaces.
+	  */
+	 server.listen(port);
+	 server.on('error', onError);
+	 server.on('listening', onListening);
+ })
+ .catch(e => {
+	 debug('Failed to connect to database:', e);
+	 process.exit(1);
+ })
 
 /*
 Efter att användare fyllt i användarnamn och valt avatar kontrolleras ifall det finns en spelare som är redo att spela.
@@ -67,9 +85,6 @@ console.log(`Player ${playerIndex} has connected`)
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
 
 /**
  * Normalize a port into a number, string, or false.
