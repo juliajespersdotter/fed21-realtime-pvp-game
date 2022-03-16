@@ -31,25 +31,43 @@ if (userReady) {
 } och igen när det kommer in en spelare som vill spela så måste prompten komma upp....
 */
 
-addEventListener('submit', e => {
+// update user list
+const updatePlayerList = players => {
+	document.querySelector('#players').innerHTML = 
+	Object.values(players).map(username => `<li><span class="fa-solid  fa-user-astronaut"></span>${username}</li>`).join("");
+}
+
+socket.on('player:connected', (username) => {
+	debug('New player connected', username);
+});
+
+socket.on('player:disconnected', (username) => {
+	debug('Player disconnected', username);
+});
+
+socket.on('player:list', players => {
+	updatePlayerList(players);
+})
+
+usernameForm.addEventListener('submit', e => {
 	e.preventDefault();
 
 	username = usernameForm.username.value;
 
 	console.log(`Player username is ${username}`);
 
-	//socket.emit('user:joined', username, (status) => {
-		//console.log("Server acknowledged that user joined", status);
+	socket.emit('player:joined', username, (status) => {
+		console.log("Server acknowledged that user joined", status);
 
-		//if (status.success) {
-			// hide form view
+		if (status.success) {
+		// hide form view
 		startEl.classList.add('hide');
 
-			// show game view
+		// show game view
 		gameWrapperEl.classList.remove('hide');
 
-		//}
-	//});
+		}
+	});
 });
 
 function createBoard(grid) {
