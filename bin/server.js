@@ -37,7 +37,6 @@ instrument(io, {
 
 
 io.on('connection', (socket) => {
-	socket.join('some room');
 	socket_controller(socket, io);
 });
 
