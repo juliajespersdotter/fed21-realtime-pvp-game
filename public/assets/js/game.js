@@ -36,16 +36,32 @@ const updatePlayerList = players => {
 	Object.values(players).map(username => `<li>${username}${avatar}</li>`).join("");
 }
 
+socket.on('player:list', players => {
+	updatePlayerList(players);
+})
+
 socket.on('player:connected', (username) => {
-	debug('New player connected', username);
+	console.log('New player connected', username);
 });
 
 socket.on('player:disconnected', (username) => {
-	debug('Player disconnected', username);
+	console.log('Player disconnected', username);
 });
 
-socket.on('player:list', players => {
-	updatePlayerList(players);
+socket.on('create:game', () => {
+	// create board
+	createBoard(gameGrid);
+})
+
+socket.on('show:virus', randomNumber => {
+	const virusIcon = `<i class="fa-solid fa-virus-covid"></i>`;
+        
+        setTimeout(function(){
+            // find div with data-id with the random number
+            const virus = document.querySelector(`[data-id="${randomNumber}"]`);
+            virus.innerHTML = `${virusIcon}`;
+        
+        }, 1000); 
 })
 
 chosenAvatar.addEventListener('click', e => {
@@ -66,14 +82,17 @@ usernameForm.addEventListener('submit', e => {
 		console.log("Server acknowledged that user joined", status);
 
 		if (status.success) {
+		createBoard(gameGrid);
 		// hide form view
 		startEl.classList.add('hide');
 
-		// create board
-		createBoard(gameGrid);
-
 		// show game view
 		gameWrapperEl.classList.remove('hide');
+
+		// update list of users in room
+		updatePlayerList(status.players);
+
+		socket.emit('show:virus', status.randomNumber);
 
 		}
 	});
@@ -85,12 +104,11 @@ gameGrid.addEventListener('click', e => {
 	console.log(e.target);
 	if(e.target.tagName === 'I'){
 		e.target.parentNode.innerHTML = "";
-		createVirus();
+		socket.emit('randomise');
 	}
 })
 
 function createBoard(grid) {
-	
 	// loop to create divs inside the game element
 	for (let i = 0; i < 54; i++) {
 		const square = document.createElement('div');
@@ -117,7 +135,6 @@ const createVirus = () => {
 		// find div with data-id with the random number
 		const virus = document.querySelector(`[data-id="${randomNumber}"]`);
 		virus.innerHTML = `${virusIcon}`;
-
-	}, 1000); 
+	socket.emit('randomise');
+	})
 }
-
