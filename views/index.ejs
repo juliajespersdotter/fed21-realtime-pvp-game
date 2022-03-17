@@ -1,66 +1,40 @@
 <%- include('partials/head') %>
 
-	<!-- Startpage -->
-	<div id="start" class="container">
-		<form id="username-form">
-			<div class="username">
-				<input type="text" id="username" class="" required placeholder="Enter username...">
-			</div>
-			<div>
-				<h2>Choose an avatar</h2>
-			</div>
-			<div class="avatar-wrapper">
-				<div class="avatar-content">
-				  <a href="#"><img src="/assets/img/meteor-solid.svg" alt=""></a>
-				  <a href="#"><img src="/assets/img/baby-solid.svg" alt=""></a>
-				  <a href="#"><img src="/assets/img/face-frown-solid.svg" alt=""></a>
-				  <a href="#"><img src="/assets/img/face-smile-solid.svg" alt=""></a>
-				  <a href="#"><img src="/assets/img/person-swimming-solid.svg" alt=""></a>
-				  <a href="#"><img src="/assets/img/poo-solid.svg" alt=""></a>
-				  <a href="#"><img src="/assets/img/skull-solid.svg" alt=""></a>
-				  <a href="#"><img src="/assets/img/user-astronaut-solid.svg" alt=""></a>
-				  <a href="#"><img src="/assets/img/user-secret-solid.svg" alt=""></a>
-				  <a href="#"><img src="/assets/img/bed-solid.svg" alt=""></a>
-				</div>
-			</div>
-			<div class="button-wrapper">
-				<button class="submit-btn" type="submit">Enter a room to play!</button>
-			</div>
-		</form>
-	</div>
+<!-- Startpage -->
+<div id="start" class="container">
+	<form id="username-form">
 
-	<!-- Waitingroom -->
-	<div id="waitingroom" class="container hide">
-		<form id="waitingroom-form">
-			<div>
-				<h1>Waiting for another player to join the game.....</h1>
-			</div>
-		</form>
-	</div>
+		<div class="username">
+			<input type="text" id="username" class="" required placeholder="Enter username...">
+		</div>
 
-	<!-- Gameboard -->
-	<div id="game-wrapper" class="content hide">
-		<header class="header">
-			<h1>Socket Slayers</h1>
-		</header>
-	
-		<aside class="aside">
-			<h2>Players:</h2>
-			<div id="players"></div>
-			<%- include('partials/players') %>  <!-- list the two players that are playing the game -->
-		</aside>
-	
-		<aside class="aside-below">
-			<h2>Points:</h2>
-			<%- include('partials/points') %> <!-- show points -->
-		</aside>
-	
-		<main class="main">
-		</main>
-	
-		<footer class="footer">
-			<p>Game created by the Socket Slayers</p>
-		</footer>
-	</div>
+		<div>
+			<h2>Choose an avatar</h2>
+		</div>
+
+		<div class="avatar-wrapper">
+			<div class="avatar-content">
+				<a href="#"><img src="/assets/img/meteor-solid.svg" alt=""></a>
+				<a href="#"><img src="/assets/img/baby-solid.svg" alt=""></a>
+			  	<a href="#"><img src="/assets/img/face-frown-solid.svg" alt=""></a>
+				<a href="#"><img src="/assets/img/face-smile-solid.svg" alt=""></a>
+				<a href="#"><img src="/assets/img/person-swimming-solid.svg" alt=""></a>
+				<a href="#"><img src="/assets/img/poo-solid.svg" alt=""></a>
+				<a href="#"><img src="/assets/img/skull-solid.svg" alt=""></a>
+				<a href="#"><img src="/assets/img/user-astronaut-solid.svg" alt=""></a>
+				<a href="#"><img src="/assets/img/user-secret-solid.svg" alt=""></a>
+				<a href="#"><img src="/assets/img/bed-solid.svg" alt=""></a>
+			</div>
+		</div>
+			
+		<div class="button-wrapper">
+			<button class="submit-btn" type="submit">Enter a room to play!</button>
+		</div>
+	</form>
+</div>
+
+<%- include('partials/waitingroom') %>
+
+<%- include('partials/gameboard') %>
 	
 <%- include('partials/footer-scripts') %>
