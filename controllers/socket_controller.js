@@ -29,6 +29,44 @@ const handlePlayerJoined = function(username, callback) {
 
     }
 }
+/* 
+const handleGame = function(room, player, callback) {
+	//the game has been played 10 times and the players have finished the game.
+	const randdomTimeForVirusToShow = Math.floor(Math.random() * 10000) + 1;
+	
+	const gameInfo = {
+		randdomTimeForVirusToShow,
+	};
+} */
+
+let compare;
+const handleScore = function(playersTime) {
+	//the game has been played 10 times and the players have finished the game.
+
+	//compare time between playerA and B
+	let compare = {
+		playersTime,
+		player,
+	}
+
+	//plocka ut playersTime, jämför playersTime med playersTime. Behåll den med lägst playersTime. Hitta var den playersTime finns och vilken player som tillhör.
+
+	//player with lowest time is the winner
+	if (theTwoScores.playersTime) {
+
+	}
+
+	//find the room that this socket is part of
+	const room = rooms.find(chatroom => {
+		if (chatroom.users.hasOwnProperty(this.id)) {
+			return true;
+		}
+	});
+
+	//tell the score to everyone in the room
+	this.broadcast.to(room.id).emit('winner', room.users);
+	//front: when they recieve the winner 1 point should be added to score.
+}
 
 module.exports = function(socket, _io) {
 	io = _io;
@@ -42,6 +80,8 @@ module.exports = function(socket, _io) {
 
 	// handle user joined
 	socket.on('player:joined', handlePlayerJoined);
+
+	socket.on('score', handleScore);
 
 	// handle user emitting a new message
 	//socket.on('chat:message', handleChatMessage);

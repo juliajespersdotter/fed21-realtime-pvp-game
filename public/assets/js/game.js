@@ -11,6 +11,7 @@ const usernameForm = document.querySelector('#username-form');
 let username = null;
 const width = 10;
 let rounds = 0;
+let winner = 0;
 
 
 socket.on('user:joined', username => {
@@ -28,10 +29,15 @@ if (userReady) {
 } och igen när det kommer in en spelare som vill spela så måste prompten komma upp....
 */
 
-// update user list
-const updatePlayerList = players => {
+// update score
+const updatePlayerList = playersScore => {
 	document.querySelector('#players').innerHTML = 
-	Object.values(players).map(username => `<li><span class="fa-solid  fa-user-astronaut"></span>${username}</li>`).join("");
+	Object.values(playersScore).map(winner => `<li>${winner}</li>`).join("");
+}
+
+const updateScore = score => {
+	document.querySelector('#score').innerHTML = 
+		Object.values(users).map(username => `<li><i class="fa-solid fa-cat-space"></i>${username}</li>`).join("");
 }
 
 socket.on('player:connected', (username) => {
@@ -45,6 +51,10 @@ socket.on('player:disconnected', (username) => {
 socket.on('player:list', players => {
 	updatePlayerList(players);
 })
+
+socket.on('score', (winner, looser) => {
+	addNoticeToChat(`${winner} ${looser}`);
+});
 
 usernameForm.addEventListener('submit', e => {
 	e.preventDefault();
