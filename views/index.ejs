@@ -6,7 +6,7 @@
 			<div class="username">
 				<input type="text" id="username" class="" required placeholder="Enter username...">
 			</div>
-			<div class="avatar-text-wrapper">
+			<div>
 				<h2>Choose an avatar</h2>
 			</div>
 			<div class="avatar-wrapper">
@@ -39,27 +39,28 @@
 	</div>
 
 	<!-- Gameboard -->
-	<div id="game-wrapper" class="content hide">
-		<header class="header">
-			<h1>Name of the game</h1>
-		</header>
-
-		<aside class="aside">
-			<h2>Players:</h2>
-			<%- include('partials/players') %>  <!-- list the two players that are playing the game -->
-		</aside>
-
-		<aside class="aside-below">
-			<h2>Points:</h2>
-			<%- include('partials/points') %> <!-- show points -->
-		</aside>
-
-		<main class="main">
-		</main>
-
-		<footer class="footer">
-			<p>Game created by the Socket Slayers</p>
-		</footer>
-	</div>
+		<div id="game-wrapper" class="content hide">
+			<header class="header">
+				<h1>Socket Slayers</h1>
+			</header>
+	
+			<aside class="aside">
+				<h2>Players:</h2>
+				<%- include('partials/players') %>  <!-- list the two players that are playing the game -->
+			</aside>
+	
+			<aside class="aside-below">
+				<h2>Points:</h2>
+				<%- include('partials/points') %> <!-- show points -->
+			</aside>
+	
+			<main class="main">
+			</main>
+	
+			<footer class="footer">
+				<p>Game created by the Socket Slayers</p>
+			</footer>
+		</div>
+	
 	
 <%- include('partials/footer-scripts') %>

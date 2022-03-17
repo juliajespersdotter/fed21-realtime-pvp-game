@@ -7,8 +7,10 @@ const startEl = document.querySelector('#start');
 const gameGrid = document.querySelector('main');
 const gameWrapperEl = document.querySelector('#game-wrapper');
 const usernameForm = document.querySelector('#username-form');
+const chosenAvatar = document.querySelector('.avatar-wrapper');
 
 let username = null;
+let avatar = null;
 const width = 10;
 let rounds = 0;
 
@@ -31,7 +33,7 @@ if (userReady) {
 // update user list
 const updatePlayerList = players => {
 	document.querySelector('#players').innerHTML = 
-	Object.values(players).map(username => `<li><span class="fa-solid  fa-user-astronaut"></span>${username}</li>`).join("");
+	Object.values(players).map(username => `<li>${username}${avatar}</li>`).join("");
 }
 
 socket.on('player:connected', (username) => {
@@ -44,6 +46,13 @@ socket.on('player:disconnected', (username) => {
 
 socket.on('player:list', players => {
 	updatePlayerList(players);
+})
+
+chosenAvatar.addEventListener('click', e => {
+	if (e.target.tagName === 'IMG') {
+		avatar = e.target;
+	} 
+	console.log(avatar);
 })
 
 usernameForm.addEventListener('submit', e => {
