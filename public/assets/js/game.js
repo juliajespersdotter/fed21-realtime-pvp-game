@@ -102,7 +102,7 @@ gameGrid.addEventListener('click', e => {
 	rounds ++;
 
 	console.log(e.target);
-	if(e.target.tagName === 'I'){
+	if(e.target.tagName === 'IMG'){
 		e.target.parentNode.innerHTML = "";
 		socket.emit('randomise');
 	}
@@ -129,7 +129,8 @@ const createVirus = () => {
 	// get a random number between 0-99
 	const randomNumber = Math.floor(Math.random() * 54);
 	console.log(randomNumber);
-	const virusIcon = `<i class="fa-solid fa-virus-covid"></i>`;
+	const virusIcon = `<img src="/assets/img/virus.svg">`;
+	//<i class="fa-solid fa-virus-covid"></i>
 
 	setTimeout(function(){
 		// find div with data-id with the random number
