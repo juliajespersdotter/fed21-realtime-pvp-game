@@ -83,7 +83,7 @@ gameGrid.addEventListener('click', e => {
 function createBoard(grid) {
 	
 	// loop to create divs inside the game element
-	for (let i = 0; i < width * width; i++) {
+	for (let i = 0; i < 54; i++) {
 		const square = document.createElement('div');
 		square.classList.add('square');
 
@@ -100,7 +100,7 @@ function createBoard(grid) {
 
 const createVirus = () => {
 	// get a random number between 0-99
-	const randomNumber = Math.floor(Math.random() * 100);
+	const randomNumber = Math.floor(Math.random() * 54);
 	console.log(randomNumber);
 	const virusIcon = `<i class="fa-solid fa-virus-covid"></i>`;
 
