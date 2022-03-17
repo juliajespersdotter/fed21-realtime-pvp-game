@@ -117,15 +117,13 @@ const createVirus = () => {
 			let time = Date.now();
 
 			//time between when the virus popped and the played clicked
-			console.log("time right now", time)
 			let playersTime = time - showVirus;
 
-			console.log("at what time did i click?", playersTime);
-
+			//made into seconds
 			console.log(`it took ${Math.floor(playersTime / 1000)} seconds for you to catch the virus!`);
 
 		});
 
-	}, 1000); //add a random time
+	}, Math.floor(Math.random() * 10000) + 1); //add a random time the virus shows
 }
 
