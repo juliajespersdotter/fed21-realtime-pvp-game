@@ -108,7 +108,24 @@ const createVirus = () => {
 		// find div with data-id with the random number
 		const virus = document.querySelector(`[data-id="${randomNumber}"]`);
 		virus.innerHTML = `${virusIcon}`;
+		const showVirus = Date.now();
+		
 
-	}, 1000); 
+		//where the virus was when the player clicked
+		virus.addEventListener('click', (e) => {
+			//at what time did the virus show?
+			let time = Date.now();
+
+			//time between when the virus popped and the played clicked
+			console.log("time right now", time)
+			let playersTime = time - showVirus;
+
+			console.log("at what time did i click?", playersTime);
+
+			console.log(`it took ${Math.floor(playersTime / 1000)} seconds for you to catch the virus!`);
+
+		});
+
+	}, 1000); //add a random time
 }
 
