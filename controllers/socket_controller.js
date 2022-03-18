@@ -74,7 +74,7 @@ const handleGame = function(room, player, callback) {
 let rounds = 0;
 let maxRounds = 10;
 let compare;
-const handleScore = function(playersTime, player) {
+const handleScore = function(data) {
 	rounds ++;
 	console.log('rounds played', rounds);
 
