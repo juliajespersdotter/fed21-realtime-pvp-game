@@ -74,17 +74,19 @@ const handlePlayerJoined = function(username, callback) {
 
 
 const handleGameLogic = function() {
-    const game = rooms.find(gameRoom => gameRoom.id === 'some room');
+    // const game = rooms.find(gameRoom => gameRoom.id === 'some room');
 
-    //Object.keys(game.players).length === 2
+    // //Object.keys(game.players).length === 2
 
-    if(game){
-        // get a random number between 0-99
-        randomNumber = Math.floor(Math.random() * 100);
-        console.log(randomNumber);
+    // if(game){
+    //     // get a random number between 0-99
+    //     randomNumber = Math.floor(Math.random() * 100);
+    //     console.log(randomNumber);
         
-        this.broadcast.to('some room').emit('show:virus', randomNumber);
-    } 
+    //     this.broadcast.to('some room').emit('show:virus', randomNumber);
+    // } 
+
+    io.emit('start:game');
     
 }
 
@@ -102,5 +104,17 @@ module.exports = function(socket, _io) {
 	socket.on('player:joined', handlePlayerJoined);
 
 	// handle game start logic
-	socket.on('randomise', handleGameLogic);
+	socket.on('start:game', () => {
+        io.emit('start:game');
+    });
+
+    socket.on('virus:clicked', (data) => {
+        
+        io.emit('virus:clicked', data);
+    });
+
+    socket.on('calculate:time', (data) => {
+        let playerTime = data.showVirus - data.clickTime;
+		console.log(`it took ${playerTime / 1000} seconds for you to catch the virus!`);
+    })
 }

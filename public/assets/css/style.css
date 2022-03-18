@@ -137,6 +137,31 @@ main{
 }
 
 .fa-virus-covid {
-	font-size: 70px;
 	color: green;
+	font-size: 70px;
+} 
+
+.virus{
+	position: absolute;
+	top: 43%;
+	left: 46%;
+	transition: 0.1s ease all;
+}
+
+@keyframes shake {
+	10%, 90% {
+		transform: translate3d(-1px, 0, 0);
+	}
+	
+	20%, 80% {
+		transform: translate3d(1px, 1px, 0);
+	}
+	
+	30%, 50%, 70% {
+		transform: translate3d(-3px, -1px, 0);
+	}
+	
+	40%, 60% {
+		transform: translate3d(3px, 0, 0);
+	}
 }
