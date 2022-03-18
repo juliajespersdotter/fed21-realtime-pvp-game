@@ -9,6 +9,8 @@ const gameWrapperEl = document.querySelector('#game-wrapper');
 const usernameForm = document.querySelector('#username-form');
 const chosenAvatar = document.querySelector('.avatar-wrapper');
 const virus = document.querySelector('.virus');
+const createGame = document.querySelector('#createGame');
+const joinGame = document.querySelector('#joinGame');
 
 let username = null;
 let avatar = null;
@@ -24,17 +26,17 @@ if (userReady) {
 */
 
 // update user list with avatar (avatar not included as parameter now)
-const updatePlayerList = (players, avatar) => {
+const updatePlayerList = (playerOne, playerTwo, avatar) => {
 	document.querySelector('#players').innerHTML = 
-	Object.values(players).map(username => `<li>${username}</li>`).join("");
+	 `<li>${playerOne}</li><li>${playerTwo}</li>`;
 
 	// does not work
 	//document.querySelector('.avatar').innerHTML = 
 	//Object.values(avatar).map(avatar => `<li>${avatar}</li>`).join("");
 }
 
-socket.on('player:list', players => {
-	updatePlayerList(players);
+socket.on('player:list', (playerOne, playerTwo) => {
+	updatePlayerList(playerOne, playerTwo);
 })
 
 socket.on('player:connected', (username) => {
@@ -50,10 +52,84 @@ socket.on('start:game', () => {
 	console.log("game started");
 })
 
+socket.on('already:joined', data => {
+	console.log("You are already in an existing game " + data.gameId);
+})
+
+socket.on('join:success', data => {
+	console.log("You joined the game " + data.gameId);
+})
+
 socket.on('virus:clicked', (data) => {
-    moveVirus(data.offsetLeft, data.offsetTop, data.clickTime);
+	moveVirus(data.offsetLeft, data.offsetTop, data.clickTime);
 });
 
+createGame.addEventListener('click', e => {
+	username = usernameForm.username.value;
+	console.log(`Player username is ${username}`);
+	socket.emit('create:game', username, (status) => {
+		
+	console.log("Server acknowledged that user joined", status);
+
+	if (status.success) {
+		socket.emit('start:game');
+		// createBoard(gameGrid);
+		// hide form view
+		startEl.classList.add('hide');
+
+		// show game view
+		gameWrapperEl.classList.remove('hide');
+
+		// update list of users in room
+		updatePlayerList(status.playerOne, status.playerTwo);
+		}
+
+	});
+});
+
+joinGame.addEventListener('click', () => {
+	username = usernameForm.username.value;
+	console.log(`Player username is ${username}`);
+
+	socket.emit('join:game', username, (status) => {
+		
+		console.log("Server acknowledged that user joined", status);
+
+		if (status.success) {
+			socket.emit('start:game');
+			// createBoard(gameGrid);
+			// hide form view
+			startEl.classList.add('hide');
+
+			// show game view
+			gameWrapperEl.classList.remove('hide');
+
+			// update list of users in room
+			updatePlayerList(status.playerOne, status.playerTwo);
+		} else if(!status.success) {
+			socket.emit('create:game', username, (status) => {
+		
+				console.log("Server acknowledged that user joined", status);
+			
+				if (status.success) {
+					socket.emit('start:game');
+					// createBoard(gameGrid);
+					// hide form view
+					startEl.classList.add('hide');
+			
+					// show game view
+					gameWrapperEl.classList.remove('hide');
+			
+					// update list of users in room
+					updatePlayerList(status.playerOne, status.playerTwo);
+					}
+			
+				});
+		}
+	});
+});
+
+	/*
 usernameForm.addEventListener('submit', e => {
 	e.preventDefault();
 	username = usernameForm.username.value;
@@ -78,6 +154,7 @@ usernameForm.addEventListener('submit', e => {
 		}
 	});
 });
+*/
 
 // const createVirus = () => {
 	// // get a random number between 0-99
@@ -112,15 +189,12 @@ usernameForm.addEventListener('submit', e => {
 
 // How to make sure something only happens if both users pressed the virus?
 virus.addEventListener('click', () => {
-	console.log(gameGrid.clientHeight, gameGrid.clientWidth);
-	console.log(virus.clientHeight, virus.clientWidth);
 	let clickTime = new Date().getTime();
 
 	// when virus is clicked, randomise new numbers and send to socket
     socket.emit('virus:clicked', {
         offsetLeft: Math.floor(Math.random() * ((gameGrid.clientWidth- virus.clientWidth)) ),
         offsetTop: Math.floor(Math.random() * ((gameGrid.clientHeight - virus.clientHeight)) ),
-		clickTime
     });
 })
 
