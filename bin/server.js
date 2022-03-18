@@ -37,7 +37,6 @@ instrument(io, {
 
 
 io.on('connection', (socket) => {
-	socket.join('some room');
 	socket_controller(socket, io);
 });
 
@@ -58,30 +57,7 @@ io.on('connection', (socket) => {
 	 server.on('error', onError);
 	 server.on('listening', onListening);
 
-/*
-
-// find an available player number
-
-const connections = [null, null];
-
-// find an available player
-let playerIndex = -1;
-for (const i in connections){
-	if(connections[i] === null) {
-		playerIndex = i;
-		break;
-	}
-}
-
-// ignore player 3
-if (playerIndex === -1) return
-
-// tell the connecting client what player number they are
-socket.emit('player-number', playerIndex)
-
-console.log(`Player ${playerIndex} has connected`)
-*/
-
+ 
 /**
  * Normalize a port into a number, string, or false.
  */

@@ -1,69 +1,141 @@
 /* Styles */
 
-/* Starting page */
+/* Startpage */
 #start {
 	width: 100vw;
 	height: 100vh;
-	background-color: rgb(255, 174, 228);
+	background-color: #15172b;
 	display: grid;
 	grid-template-columns: repeat(5, 1fr);
 	grid-template-rows: repeat(5, 1fr);
 }
 
+/* Startpage Form-design */
+.form {
+	background-color: #303245;
+	border-radius: 20px;
+	box-sizing: border-box;
+}
+.start-img {
+	padding-top: 5px;
+}
 #username-form {
+	width: 60vw;
+	height: 80vh;
 	grid-column: 3;
 	grid-row: 3;
 	display: flex;
 	align-items: center;
-	justify-content: center;
+	justify-content: top;
 	flex-direction: column;
 }
 
-
-/* Start page - Styles for dropdown menu with avatars */
-.dropbtn {
-	background-color: #a9f3d8;
-	color: rgb(250, 0, 125);
-	padding: 2%;
-	font-size: 1rem;
-	border: none;
+.title {
+	color: #eee;
+	font-family: sans-serif;
+	font-size: 36px;
+	font-weight: 600;
+	margin-top: 10px;
 }
 
-.dropdown {
-	position: relative;
-	display: inline-block;
+.subtitle {
+	color: #eee;
+	font-family: sans-serif;
+	font-size: 16px;
+	font-weight: 600;
 }
 
-.dropdown-content {
-	display: none;
-	position: absolute;
-	background-color: #f1f1f1;
-	min-width: 140px;
-	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-	z-index: 1;
-	justify-content: space-between;
-	align-items: center;
+.ic1 {
+	margin-top: 10px;
+}
+  
+.input {
+	background-color: #15172b ;
+	border-radius: 12px;
+	border: 0;
+	box-sizing: border-box;
+	color: #eee;
+	font-size: 18px;
+	height: 100%;
+	outline: 0;
+	padding: 4px 20px 0;
+	width: 100%;
 }
 
-.dropdown-content a {
-	color: #a9f3d8;
-	padding: 2%;
-	text-decoration: none;
-	display: block;
+.username {
+	width: 20vw;
+	height: 7vh;
 }
 
-.dropdown-content a:hover {
-	background-color: #a9f3d8;
+#username {
+	width: 100%;
+	height: 100%;
+	box-shadow: 0 0 3px 2px rgb(77, 76, 76);
 }
 
-.dropdown:hover .dropdown-content {
+/* Startpage - Styles for avatars */
+.avatar-wrapper {
+	width: 100%;
 	display: flex;
-	flex-wrap: wrap;
+	justify-content: space-evenly;
 }
 
-.dropdown:hover .dropbtn {
-	background-color: rgb(250, 0, 125);
-	color: #a9f3d8;
+.avatar-content img:hover {
+	background-color: #F3DE8A;
+	box-shadow: 0 0 2px 1px #F3DE8A;
+	border-radius: 10px;
+}
+
+/* Hide radiobutton */
+[type=radio] { 
+	position: absolute;
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+  
+/* IMAGE STYLES */
+[type=radio] + img {
+	cursor: pointer;
+}
+  
+/* CHECKED STYLES */
+[type=radio]:checked + img {
+	border-bottom: 2px solid #F3DE8A;
+	padding: 5px;
+	background-color: #F3DE8A;
+	box-shadow: 0 0 2px 1px #F3DE8A;
+	border-radius: 10px;
+}
+
+/* Startpage - Styles for submit-button */
+.button-wrapper {
+	width: 15vw;
+	height: 7vh;
+}
+
+.submit-btn {
+	width: 100%;
+	height: 100%;
+	background-color: #e63947;
+	border-radius: 12px;
+	border: 0;
+	box-sizing: border-box;
+	color: #eee;
+	cursor: pointer;
+	font-size: 18px;
+	height: 50px;
+	margin-top: 38px;
+	outline: 0;
+	text-align: center;
+	width: 100%;
+	box-shadow: 0 0 2px 0 white;
+}
+
+.submit-btn:hover, .submit-btn:active {
+	background-color: #F3DE8A;
+	box-shadow: 0 0 5px 0 white;
+	color: #15172b;
 }
 
 button {
@@ -71,12 +143,21 @@ button {
 }
 
 img {
-	width: 20px;
+	width: 40px;
+	margin: 4%;
 	height: auto;
 }
 
+main{
+	width: 100%;
+	height: 100vh;
+}
 
 /* Game page */
+#game-wrapper {
+	background-color: white;
+}
+
 .content {
 	width: 80%;
 	margin: auto;
@@ -87,18 +168,21 @@ img {
 }
 
 .header {
-	background-color:rgb(164, 219, 245);
+	background-color:#F3DE8A;
 	grid-column: 1/7;
+	padding: 10px;
 }
 
 .aside {
-	background-color: blueviolet;
+	background-color: #F3DE8A;
+	padding: 10px;
 	grid-column: 5/7;
 	grid-row: 2/4;
 }
 
 .aside-below {
-	background-color: rgb(159, 105, 209);
+	background-color: #F3DE8A;
+	padding: 10px;
 	grid-column: 5/7;
 	grid-row: 4/6;
 
@@ -110,15 +194,16 @@ img {
 	align-content: center;
 	padding: 0;
 	margin: 0;
-	background-color: pink;
+	background-color: #E3DEDE;
 	justify-content: center;
 	grid-column: 1/5;
 	grid-row: 2/6;
 }
 
 .footer {
-	background-color: rgb(71, 156, 182);
+	background-color: #F3DE8A;
 	grid-column: 1/7;
+	padding: 10px;
 }
 
 .hide{
@@ -129,9 +214,36 @@ img {
 .square{
 	width: 70px;
 	height: 70px;
+	border: 1px solid grey;
 }
 
 .fa-virus-covid {
-	font-size: 70px;
 	color: green;
+	font-size: 70px;
+} 
+
+.virus{
+	position: absolute;
+	top: 43%;
+	left: 46%;
+	width: 70px;
+	transition: 0.1s ease all;
+}
+
+@keyframes shake {
+	10%, 90% {
+		transform: translate3d(-1px, 0, 0);
+	}
+	
+	20%, 80% {
+		transform: translate3d(1px, 1px, 0);
+	}
+	
+	30%, 50%, 70% {
+		transform: translate3d(-3px, -1px, 0);
+	}
+	
+	40%, 60% {
+		transform: translate3d(3px, 0, 0);
+	}
 }
