@@ -83,6 +83,7 @@
 .avatar-content img:hover {
 	background-color: #F3DE8A;
 	box-shadow: 0 0 2px 1px #F3DE8A;
+	border-radius: 10px;
 }
 
 /* Hide radiobutton */
@@ -104,6 +105,7 @@
 	padding: 5px;
 	background-color: #F3DE8A;
 	box-shadow: 0 0 2px 1px #F3DE8A;
+	border-radius: 10px;
   }
 
 /* Startpage - Styles for submit-button */
