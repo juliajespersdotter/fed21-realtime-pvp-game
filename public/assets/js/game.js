@@ -74,9 +74,12 @@ chosenAvatar.addEventListener('click', e => {
 usernameForm.addEventListener('submit', e => {
 	e.preventDefault();
 
-	username = usernameForm.username.value;
+	if(avatar && username){
+		username = usernameForm.username.value;
+		console.log(`Player username is ${username}`);
 
-	console.log(`Player username is ${username}`);
+	}
+
 
 	socket.emit('player:joined', username, (status) => {
 		console.log("Server acknowledged that user joined", status);
@@ -110,7 +113,7 @@ gameGrid.addEventListener('click', e => {
 
 function createBoard(grid) {
 	// loop to create divs inside the game element
-	for (let i = 0; i < 54; i++) {
+	for (let i = 0; i < width*width; i++) {
 		const square = document.createElement('div');
 		square.classList.add('square');
 
