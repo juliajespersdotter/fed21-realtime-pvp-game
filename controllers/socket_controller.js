@@ -53,6 +53,10 @@ const handleScore = function(playersTime, player) {
 		player,
 		room,
 	} */
+
+	usersInTheRoom = [{
+		room: []
+	}]
 	console.log(`players time from the server ${playersTime} player ${player}`)
 
 
