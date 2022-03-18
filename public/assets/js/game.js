@@ -101,15 +101,15 @@ usernameForm.addEventListener('submit', e => {
 	});
 });
 
-gameGrid.addEventListener('click', e => {
-	rounds ++;
+// gameGrid.addEventListener('click', e => {
+// 	rounds ++;
 
-	console.log(e.target);
-	if(e.target.tagName === 'I'){
-		e.target.parentNode.innerHTML = "";
-		socket.emit('randomise');
-	}
-})
+// 	console.log(e.target);
+// 	if(e.target.tagName === 'I'){
+// 		e.target.parentNode.innerHTML = "";
+// 		socket.emit('randomise');
+// 	}
+// })
 
 function createBoard(grid) {
 	// loop to create divs inside the game element
@@ -138,6 +138,24 @@ const createVirus = () => {
 		// find div with data-id with the random number
 		const virus = document.querySelector(`[data-id="${randomNumber}"]`);
 		virus.innerHTML = `${virusIcon}`;
-	socket.emit('randomise');
-	})
+		const showVirus = Date.now();
+		
+
+		//where the virus was when the player clicked
+		virus.addEventListener('click', (e) => {
+			//at what time did the virus show?
+			let time = Date.now();
+
+			//time between when the virus popped and the played clicked
+			let playersTime = time - showVirus;
+
+			//made into seconds
+			console.log(`it took ${Math.floor(playersTime / 1000)} seconds for you to catch the virus!`);
+			
+			e.target.parentNode.innerHTML = "";
+			createVirus();
+
+		});
+
+	}, Math.floor(Math.random() * 10000) + 1); //add a random time the virus shows
 }
