@@ -33,7 +33,10 @@ if (userReady) {
 // update user list
 const updatePlayerList = players => {
 	document.querySelector('#players').innerHTML = 
-	Object.values(players).map(username => `<li>${username}${avatar}</li>`).join("");
+	Object.values(players).map(username => `<li>${username}</li>`).join("");
+
+	document.querySelector('.avatar').innerHTML = 
+	Object.values(avatar).map(avatar => `<li>${avatar}</li>`).join("");
 }
 
 socket.on('player:list', players => {
