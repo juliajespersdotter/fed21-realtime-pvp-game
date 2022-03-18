@@ -226,6 +226,7 @@ main{
 	position: absolute;
 	top: 43%;
 	left: 46%;
+	width: 70px;
 	transition: 0.1s ease all;
 }
 

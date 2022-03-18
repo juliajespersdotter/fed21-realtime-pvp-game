@@ -57,30 +57,7 @@ io.on('connection', (socket) => {
 	 process.exit(1);
  })
 
-/*
-
-// find an available player number
-
-const connections = [null, null];
-
-// find an available player
-let playerIndex = -1;
-for (const i in connections){
-	if(connections[i] === null) {
-		playerIndex = i;
-		break;
-	}
-}
-
-// ignore player 3
-if (playerIndex === -1) return
-
-// tell the connecting client what player number they are
-socket.emit('player-number', playerIndex)
-
-console.log(`Player ${playerIndex} has connected`)
-*/
-
+ 
 /**
  * Normalize a port into a number, string, or false.
  */

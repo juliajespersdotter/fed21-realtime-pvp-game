@@ -7,10 +7,8 @@ const models = require('../models');
 
 let io = null;
 
-let randomNumber = 0;
-const players = {};
-let readyPlayers = 0;
 const waiting_room = [];
+// hard coded room for testing
 const rooms = [
     {
         id: "some room",
@@ -18,20 +16,12 @@ const rooms = [
         players: {},
     }
 ];
-// const rooms = ['room1', 'room2', 'room3'];
 
 // handle when user has disconnected from chat
 const handleDisconnect = function() {
 	debug(`Client ${this.id} disconnected :(`);
 
 	// find the room that this socket is part of
-	// const room = rooms.find(chatroom => chatroom.users.hasOwnProperty(this.id));
-	
-	// if socket was not in a room, don't broadcast disconnect
-	// if(!room) {
-	// 	return;
-	// }
-
     const game = rooms.find(gameRoom => gameRoom.id === 'some room');
 
 	// let everyone in the room know that user has disconnected
@@ -46,49 +36,33 @@ const handleDisconnect = function() {
 
 
 const handlePlayerJoined = function(username, callback) {
+    // waiting room serves no purpose at this point
     waiting_room.push(username);
     this.join('some room');
 
     const game = rooms.find(gameRoom => gameRoom.id === 'some room');
 
+    // sets user id to the rooms object as a player
     game.players[this.id] = username;
-    readyPlayers++
     this.broadcast.to('some room').emit('player:connected', username);
 
+    // removes waiting room players
     waiting_room.forEach(player => {
         waiting_room.pop(player);
     })
 
-    
+    // sends object to front end with info
     callback({
         success: true,
         room: 'some room',
         players: game.players,
     });
 
-
     // broadcast list of users in room to all connected sockets EXCEPT ourselves
 	this.broadcast.to('some room').emit('player:list', game.players);
 
-    }
-
-
-const handleGameLogic = function() {
-    // const game = rooms.find(gameRoom => gameRoom.id === 'some room');
-
-    // //Object.keys(game.players).length === 2
-
-    // if(game){
-    //     // get a random number between 0-99
-    //     randomNumber = Math.floor(Math.random() * 100);
-    //     console.log(randomNumber);
-        
-    //     this.broadcast.to('some room').emit('show:virus', randomNumber);
-    // } 
-
-    io.emit('start:game');
-    
 }
+
 
 module.exports = function(socket, _io) {
 	io = _io;
@@ -108,12 +82,16 @@ module.exports = function(socket, _io) {
         io.emit('start:game');
     });
 
+    // handle when virus is clicked
     socket.on('virus:clicked', (data) => {
-        
+        // accepts data for socket to get same for both players
+        // then sends back to front end
         io.emit('virus:clicked', data);
     });
 
+    // not functional
     socket.on('calculate:time', (data) => {
+        // does not work
         let playerTime = data.showVirus - data.clickTime;
 		console.log(`it took ${playerTime / 1000} seconds for you to catch the virus!`);
     })
