@@ -58,11 +58,11 @@ socket.on('player:disconnected', (username) => {
 socket.on('start:game', () => {
 	// does not do much at this point, check if players are ready?
 	console.log("game started");
-})
+});
 
 socket.on('score', (winner, looser) => {
 	addNoticeToChat(`${winner} ${looser}`);
-
+});
 
 socket.on('virus:clicked', (data) => {
     moveVirus(data.offsetLeft, data.offsetTop, data.clickTime);
@@ -163,21 +163,21 @@ virus.addEventListener('click', () => {
 // move the virus using randomised numbers 
 function moveVirus(offLeft, offTop) {
 	
-		let top, left;
-		
-		left = offLeft;
-		top = offTop;
-		console.log(top, left);
-		
-		virus.style.top = top + 'px';
-		virus.style.left = left + 'px';
-		virus.style.animation = "none";
-		
-		// showVirus = new Date().getTime();
-		// socket.emit('calculate:time', {
-		// 	showVirus: showVirus,
-		// 	clickTime: clickTime
-		// });	
+	let top, left;
+	
+	left = offLeft;
+	top = offTop;
+	console.log(top, left);
+	
+	virus.style.top = top + 'px';
+	virus.style.left = left + 'px';
+	virus.style.animation = "none";
+	
+	// showVirus = new Date().getTime();
+	// socket.emit('calculate:time', {
+	// 	showVirus: showVirus,
+	// 	clickTime: clickTime
+	// });	
 
 }
 
