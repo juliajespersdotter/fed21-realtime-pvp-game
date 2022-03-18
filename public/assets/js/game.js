@@ -120,10 +120,12 @@ const createVirus = () => {
 			let playersTime = time - showVirus;
 			
 			//made into seconds
-
-			console.log(`it took ${playersTime / 1000} seconds for you to catch the virus!`);
 			
-			socket.emit('player:time', playersTime, socket.id/*, room */)
+			player = usernameForm.username.value;
+			//room = usernameForm.room.value;
+			console.log(`it took ${playersTime / 1000} seconds for (you) player ${player} to catch the virus!`);
+			
+			socket.emit('player:time', playersTime, player);
 
 			e.target.parentNode.innerHTML = "";
 			createVirus();

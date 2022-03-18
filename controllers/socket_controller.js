@@ -38,59 +38,45 @@ const handleGame = function(room, player, callback) {
 		randdomTimeForVirusToShow,
 	};
 } */
-
+let rounds = 0;
+let maxRounds = 10;
 let compare;
-const handleScore = function(playersTime, player, room) {
+const handleScore = function(playersTime, player) {
+	rounds ++;
+	console.log('rounds played', rounds);
 
+	let usersInTheRoom = [];
+	//if (usersInTheRoom )
 	//compare time between playerA and B
 	/* let compare = {
 		playersTime,
 		player,
 		room,
 	} */
+	console.log(`players time from the server ${playersTime} player ${player}`)
 
-	let scores = [];
-
-	function getHighestTime(arr){
-		let highest = 0;
-
-		for (let i = 0; i < arr.length; i++) {
-			if (highest < arr[i] ) {
-				highest = arr[i];
-			}
-		}
-		return highest;
-	}
-
-	socket.on('connection', function(client) {
-		client.on('join', function(data) {
-			client.join("scores"); // Join socket IO Room
-		});
-	
-		client.on('playerScore', function(data){ 
-			scores.push(data);
-			//Send to all users in scores room
-			socket.in("scores").emit('scores', getHighest(scores)); 
-		});
-	});
 
 	//plocka ut playersTime, jämför playersTime med playersTime. Behåll den med lägst playersTime. Hitta var den playersTime finns och vilken player som tillhör.
 
 	//player with lowest time is the winner
-	if (theTwoScores.playersTime) {
-
-	}
+/* 	let winner = if (playersTime)
 
 	//find the room that this socket is part of
-	const room = rooms.find(chatroom => {
-		if (chatroom.users.hasOwnProperty(this.id)) {
+	const usersRoom = rooms.find(room => {
+		if (room.users.hasOwnProperty(this.id)) {
 			return true;
 		}
-	});
+	}); */
 
 	//tell the score to everyone in the room
-	this.broadcast.to(room.id).emit('winner', room.users);
+	//this.broadcast.to(usersRoom.id).emit('winner', usersRoom.users);
 	//front: when they recieve the winner 1 point should be added to score.
+	
+	if (rounds > maxRounds) {
+
+	} else if (rounds === maxRounds) {
+		io.emit('game:over', )
+	}
 }
 
 module.exports = function(socket, _io) {
