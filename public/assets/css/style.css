@@ -1,18 +1,27 @@
 /* Styles */
 
-/* Starting page */
+/* Startpage */
 #start {
 	width: 100vw;
 	height: 100vh;
-	background-color: #7E7F9A;
+	background-color: #15172b;
 	display: grid;
 	grid-template-columns: repeat(5, 1fr);
 	grid-template-rows: repeat(5, 1fr);
 }
 
+/* Startpage Form-design */
+.form {
+	background-color: #303245;
+	border-radius: 20px;
+	box-sizing: border-box;
+}
+.start-img {
+	padding-top: 5px;
+}
 #username-form {
-	width: 50vw;
-	height: 50vh;
+	width: 60vw;
+	height: 80vh;
 	grid-column: 3;
 	grid-row: 3;
 	display: flex;
@@ -21,17 +30,50 @@
 	flex-direction: column;
 }
 
+.title {
+	color: #eee;
+	font-family: sans-serif;
+	font-size: 36px;
+	font-weight: 600;
+	margin-top: 10px;
+}
+
+.subtitle {
+	color: #eee;
+	font-family: sans-serif;
+	font-size: 16px;
+	font-weight: 600;
+}
+
+.ic1 {
+	margin-top: 10px;
+}
+  
+.input {
+	background-color: #15172b ;
+	border-radius: 12px;
+	border: 0;
+	box-sizing: border-box;
+	color: #eee;
+	font-size: 18px;
+	height: 100%;
+	outline: 0;
+	padding: 4px 20px 0;
+	width: 100%;
+}
+
 .username {
 	width: 20vw;
-	height: 5vh;
+	height: 7vh;
 }
 
 #username {
 	width: 100%;
 	height: 100%;
+	box-shadow: 0 0 3px 2px rgb(77, 76, 76);
 }
 
-/* Start page - Styles for avatars */
+/* Startpage - Styles for avatars */
 .avatar-wrapper {
 	width: 100%;
 	display: flex;
@@ -43,17 +85,52 @@
 	box-shadow: 0 0 2px 1px #F3DE8A;
 }
 
+/* Hide radiobutton */
+[type=radio] { 
+	position: absolute;
+	opacity: 0;
+	width: 0;
+	height: 0;
+  }
+  
+  /* IMAGE STYLES */
+  [type=radio] + img {
+	cursor: pointer;
+  }
+  
+  /* CHECKED STYLES */
+  [type=radio]:checked + img {
+	border-bottom: 2px solid #F3DE8A;
+	padding: 5px;
+	background-color: #F3DE8A;
+	box-shadow: 0 0 2px 1px #F3DE8A;
+  }
+
+/* Startpage - Styles for submit-button */
 .button-wrapper {
 	width: 15vw;
 	height: 7vh;
 }
 
 .submit-btn {
-	background-color: lightgray;
 	width: 100%;
 	height: 100%;
+	background-color: #7E7F9A;
+	border-radius: 12px;
+	border: 0;
+	box-sizing: border-box;
+	color: #15172b;
+	cursor: pointer;
+	font-size: 18px;
+	height: 50px;
+	margin-top: 38px;
+	outline: 0;
+	text-align: center;
+	width: 100%;
+	box-shadow: 0 0 5px 0 rgb(77, 76, 76);
 }
-.submit-btn:hover {
+
+.submit-btn:hover, .submit-btn:active {
 	background-color: #F3DE8A;
 }
 
@@ -63,7 +140,7 @@ button {
 
 img {
 	width: 40px;
-	margin: 5%;
+	margin: 4%;
 	height: auto;
 }
 

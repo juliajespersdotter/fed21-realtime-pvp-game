@@ -2,8 +2,77 @@
 
 <!-- Startpage -->
 <div id="start" class="container">
-	<form id="username-form">
+	
+    <form class="form" id="username-form">
+		<div class="start-img">
+			<img src="/assets/img/virus.png" alt="">
+		</div>
 
+		<div class="title">Welcome to Socket Slayers</div>
+		<div class="subtitle">
+			<h3>Who do you feel like being today?</h2>
+		</div>
+		
+		<div class="username ic1">
+		  <input id="username" class="input" type="text" required placeholder="Enter username...">
+		</div>
+
+		<div class="subtitle">
+			<h3>Choose an avatar</h2>
+		</div>
+
+		<div class="avatar-wrapper">
+			<div class="avatar-content">
+			<label>
+				<input type="radio" name="test" value="small" checked>
+				<img src="/assets/img/meteor-solid.svg">
+			</label>
+			<label>
+				<input type="radio" name="test" value="small" checked>
+				<img src="/assets/img/baby-solid.svg">
+			</label>
+			<label>
+				<input type="radio" name="test" value="small" checked>
+				<img src="/assets/img/face-frown-solid.svg">
+			</label>
+			<label>
+				<input type="radio" name="test" value="small" checked>
+				<img src="/assets/img/face-smile-solid.svg">
+			</label>
+			<label>
+				<input type="radio" name="test" value="small" checked>
+				<img src="/assets/img/person-swimming-solid.svg">
+			</label>
+			<label>
+				<input type="radio" name="test" value="small" checked>
+				<img src="/assets/img/poo-solid.svg">
+			</label>
+			<label>
+				<input type="radio" name="test" value="small" checked>
+				<img src="/assets/img/skull-solid.svg">
+			</label>
+			<label>
+				<input type="radio" name="test" value="small" checked>
+				<img src="/assets/img/user-astronaut-solid.svg">
+			</label>
+			<label>
+				<input type="radio" name="test" value="small" checked>
+				<img src="/assets/img/user-secret-solid.svg">
+			</label>
+			<label>
+				<input type="radio" name="test" value="small" checked>
+				<img src="/assets/img/bed-solid.svg">
+			</label>
+			</div>
+		</div>
+
+		<div class="button-wrapper">
+			<button type="submit" class="submit-btn">Enter a room to play!</button>
+		</div>
+	</form>
+
+	<!--
+	<form id="username-form">
 		<div class="username">
 			<input type="text" id="username" class="" required placeholder="Enter username...">
 		</div>
@@ -31,6 +100,7 @@
 			<button class="submit-btn" type="submit">Enter a room to play!</button>
 		</div>
 	</form>
+	-->
 </div>
 
 <%- include('partials/waitingroom') %>

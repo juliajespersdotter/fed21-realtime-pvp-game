@@ -130,7 +130,6 @@ const createVirus = () => {
 	const randomNumber = Math.floor(Math.random() * 54);
 	console.log(randomNumber);
 	const virusIcon = `<img src="/assets/img/virus.svg">`;
-	//<i class="fa-solid fa-virus-covid"></i>
 
 	setTimeout(function(){
 		// find div with data-id with the random number
