@@ -40,14 +40,39 @@ const handleGame = function(room, player, callback) {
 } */
 
 let compare;
-const handleScore = function(playersTime) {
-	//the game has been played 10 times and the players have finished the game.
+const handleScore = function(playersTime, player, room) {
 
 	//compare time between playerA and B
-	let compare = {
+	/* let compare = {
 		playersTime,
 		player,
+		room,
+	} */
+
+	let scores = [];
+
+	function getHighestTime(arr){
+		let highest = 0;
+
+		for (let i = 0; i < arr.length; i++) {
+			if (highest < arr[i] ) {
+				highest = arr[i];
+			}
+		}
+		return highest;
 	}
+
+	socket.on('connection', function(client) {
+		client.on('join', function(data) {
+			client.join("scores"); // Join socket IO Room
+		});
+	
+		client.on('playerScore', function(data){ 
+			scores.push(data);
+			//Send to all users in scores room
+			socket.in("scores").emit('scores', getHighest(scores)); 
+		});
+	});
 
 	//plocka ut playersTime, jämför playersTime med playersTime. Behåll den med lägst playersTime. Hitta var den playersTime finns och vilken player som tillhör.
 
@@ -81,7 +106,7 @@ module.exports = function(socket, _io) {
 	// handle user joined
 	socket.on('player:joined', handlePlayerJoined);
 
-	socket.on('score', handleScore);
+	socket.on('player:time', handleScore);
 
 	// handle user emitting a new message
 	//socket.on('chat:message', handleChatMessage);

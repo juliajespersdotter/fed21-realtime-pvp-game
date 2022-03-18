@@ -132,6 +132,7 @@ const createVirus = () => {
 			//made into seconds
 			console.log(`it took ${Math.floor(playersTime / 1000)} seconds for you to catch the virus!`);
 
+			socket.emit('player:time', playersTime, socket.id/*, room */)
 		});
 
 	}, Math.floor(Math.random() * 10000) + 1); //add a random time the virus shows
