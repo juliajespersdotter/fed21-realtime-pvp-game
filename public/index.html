@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- Styles -->
+	<link rel="stylesheet" href="/assets/css/style.css">
+
+	<!-- Font Awesome v6 styles-->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+	<title>Socket Slayer Game</title>
+</head>
+<body>
+
+<!-- Startpage -->
+<div id="start" class="container">
+    <form class="form" id="username-form">
+		
+		<div class="start-img">
+			<img src="/assets/img/virus.png" alt="">
+		</div>
+
+		<div class="title">Welcome to Socket Slayers</div>
+		<div class="subtitle">
+			<h3>Who do you feel like being today?</h2>
+		</div>
+		
+		<div class="username ic1">
+		  <input id="username" class="input" type="text" required placeholder="Enter username...">
+		</div>
+
+		<div class="subtitle">
+			<h3>Choose an avatar</h2>
+		</div>
+
+		<div class="avatar-wrapper">
+			<div class="avatar-content">
+			<label>
+				<input class="avatar" type="radio" name="avatar" value="small">
+				<img src="/assets/img/meteor-solid.svg">
+			</label>
+			<label>
+				<input type="radio" name="avatar" value="small">
+				<img src="/assets/img/baby-solid.svg">
+			</label>
+			<label>
+				<input type="radio" name="avatar" value="small">
+				<img src="/assets/img/face-frown-solid.svg">
+			</label>
+			<label>
+				<input type="radio" name="avatar" value="small">
+				<img src="/assets/img/face-smile-solid.svg">
+			</label>
+			<label>
+				<input type="radio" name="avatar" value="small">
+				<img src="/assets/img/person-swimming-solid.svg">
+			</label>
+			<label>
+				<input type="radio" name="avatar" value="small">
+				<img src="/assets/img/poo-solid.svg">
+			</label>
+			<label>
+				<input type="radio" name="avatar" value="small">
+				<img src="/assets/img/skull-solid.svg">
+			</label>
+			<label>
+				<input type="radio" name="avatar" value="small">
+				<img src="/assets/img/user-astronaut-solid.svg">
+			</label>
+			<label>
+				<input type="radio" name="avatar" value="small">
+				<img src="/assets/img/user-secret-solid.svg">
+			</label>
+			<label>
+				<input type="radio" name="avatar" value="small">
+				<img src="/assets/img/bed-solid.svg">
+			</label>
+			</div>
+		</div>
+
+		<div class="button-wrapper">
+			<button type="submit" class="submit-btn">Enter a room to play!</button>
+		</div>
+	</form>
+</div>
+
+<!-- Gameboard -->
+<div id="game-wrapper" class="hide">
+	<div class="content">
+		<header class="header">
+			
+			<div class="header-section">
+				<div class="header-section-divider">
+					<div id="your-score">
+						<h1>1</h1>
+					</div>
+					<div>
+						<h1>Mastermind</h1><!-- username -->
+						<div id="players"></div>
+						<div id="avatar"></div>
+					</div>
+				</div>
+			</div>
+
+			<div class="header-section">
+				<div>
+					<div class="center">
+						<h2>vs</h2>
+					</div>
+					<div>
+						<h1>Socket Slayers</h1>
+					</div>
+				</div>
+			</div>
+
+			<div class="header-section">
+				<div class="header-section-divider">
+					<div>
+						<h1>Virushunter</h1><!-- username -->
+						<div id="players"></div>
+						<div id="avatar"></div>
+					</div>
+					<div id="your-score">
+						<h1>3</h1>
+					</div>
+				</div>
+			</div>
+		</header>
+	
+		<aside class="aside">
+			<h3>HOW FAST ARE YOU</h3>
+			<div id="players"></div>
+			<p>YOU</p>
+			<div>
+				<p>Your time 00:02:10</p>
+			</div>
+
+			<div id="players"></div>
+			<p>Virushunter</p>
+			<div>
+				<p>Their time 00:05:22</p>
+			</div>
+	
+		</aside>
+	
+		<aside class="aside-below">
+			<h2>Scoreboard</h2>
+			<p>Your best time:</p> <!-- Show time -->
+			<p>Your worst time:</p> <!-- Show time -->
+
+			<p>Their best time:</p> <!-- Show time -->
+			<p>Their worst time:</p> <!-- Show time -->
+
+		</aside>
+	
+		<main class="main">
+			<img class="virus" src="/assets/img/virus.svg">
+		</main>
+	
+		<footer class="footer">
+			<p>Game created by the Socket Slayers</p>
+		</footer>
+	</div>
+</div>
+	
+	<!-- Bootstrap 5 script -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+	<!-- Moment.js -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js" integrity="sha512-LGXaggshOkD/at6PFNcp2V2unf9LzFq6LE+sChH7ceMTDP0g2kn6Vxwgg7wkPP7AAtX+lmPqPdxB47A0Nz0cMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+	<!-- Socket.IO -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
+
+	<!-- Chat script -->
+	<script src="/assets/js/game.js"></script>
+</body>
+</body>
+</html>

@@ -7,9 +7,6 @@ const logger = require('morgan');
 // instantiate express
 const app = express();
 
-//view engine
-app.set('view engine', 'ejs');
-
 // middlewares
 app.use(logger('dev'));
 app.use(cors());
@@ -23,3 +20,7 @@ app.use(require('./routes'));
 app.use(express.static('public'));
 
 module.exports = app;
+
+
+
+

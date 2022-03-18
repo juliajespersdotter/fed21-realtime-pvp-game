@@ -1,5 +1,27 @@
 /* Styles */
 
+@import url('https://fonts.googleapis.com/css2?family=Bungee&family=Fredoka&family=Palette+Mosaic&display=swap');
+
+html{
+	font-size: 18;
+}
+
+body{
+	font-family: 'Fredoka', sans-serif;
+}
+
+h1{
+	font-family: 'Palette Mosaic', cursive;
+	font-size: 3rem;
+	text-align: center;
+	color:#e63947;
+}
+
+h2{
+	font-family: 'Bungee', cursive;
+	text-align: center;
+}
+
 /* Startpage */
 #start {
 	width: 100vw;
@@ -155,7 +177,8 @@ main{
 
 /* Game page */
 #game-wrapper {
-	background-color: white;
+	background-color: #E3DEDE;
+	width: 100vw;
 }
 
 .content {
@@ -168,24 +191,59 @@ main{
 }
 
 .header {
-	background-color:#F3DE8A;
+	background-color:#15172b;
 	grid-column: 1/7;
 	padding: 10px;
+	border-radius: 5px;
+	color: #eee;
+	display: flex;
+	justify-content: space-evenly;
+	justify-items: stretch;
+	
 }
 
+.header-section {
+	grid-column: 5/7;
+	grid-row: 4/6;
+	display: flex;
+	justify-content: space-evenly;
+	justify-items: stretch;
+	width: 100%;
+}
+
+.header-section-divider {
+	display: flex;
+	justify-content: space-evenly;
+	justify-items: stretch;
+	width: 100%;
+}
+
+.center {
+	display: flex;
+	justify-content: center;
+}
+
+#your-score {
+	color: #e63947;
+}
 .aside {
-	background-color: #F3DE8A;
+	background-color: #15172b;
 	padding: 10px;
+	color: white;
 	grid-column: 5/7;
 	grid-row: 2/4;
 }
 
+#players li{
+	list-style-type: none;
+	font-size: 1.5rem;
+	text-align: center;
+}
+
 .aside-below {
-	background-color: #F3DE8A;
-	padding: 10px;
+	background-color: #15172b;
 	grid-column: 5/7;
 	grid-row: 4/6;
-
 }
 
 .main {
@@ -194,14 +252,16 @@ main{
 	align-content: center;
 	padding: 0;
 	margin: 0;
-	background-color: #E3DEDE;
+	background-color: #303245;
 	justify-content: center;
+	border-radius: 10px;
 	grid-column: 1/5;
-	grid-row: 2/6;
+	grid-row: 2/7;
 }
 
 .footer {
-	background-color: #F3DE8A;
+	background-color: #15172b;
+	color: white;
 	grid-column: 1/7;
 	padding: 10px;
 }
@@ -210,7 +270,7 @@ main{
 	display: none !important;
 }
 
-
+/*
 .square{
 	width: 70px;
 	height: 70px;
@@ -221,7 +281,7 @@ main{
 	color: green;
 	font-size: 70px;
 } 
-
+*/
 .virus{
 	position: absolute;
 	top: 43%;
