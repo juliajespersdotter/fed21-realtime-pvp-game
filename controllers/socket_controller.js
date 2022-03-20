@@ -71,6 +71,17 @@ const handleGame = function(room, player, callback) {
 		randdomTimeForVirusToShow,
 	};
 } */
+let playersScore = []; //recieve socketId and time
+let playersTimes = [{
+	"ID": "eBC8RtXvh_UZYsmRAAAX",
+	"Time": 2.3423
+	}, {
+	"ID": "XeBC8RtXvh_UZYsmRAAAXsad",
+	"Time": 3.4545
+	}, {
+	"ID": "askjdeBC8RtXvh_UZYsmRAAAX",
+	"Time": 5.0070
+}]
 let rounds = 0;
 let maxRounds = 10;
 let compare;
@@ -78,31 +89,33 @@ const handleScore = function(data) {
 	rounds ++;
 	console.log('rounds played', rounds);
 
-	let usersInTheRoom = [];
-	//if (usersInTheRoom )
-	//compare time between playerA and B
-	/* let compare = {
-		playersTime,
-		player,
-		room,
-	} */
-
-	usersInTheRoom = [{
-		room: []
-	}]
 	console.log(`players time from the server ${playersTime} player ${player}`)
 
+	//check that array has 0-1 index.
+	//check lowest/highest number in each object, give them 'highest' and 'lowest
+	let lowest = Math.min.apply(null, playersTimes.map(function(score) {
+		return score.Time;
+	}));
+	
+	let highest = Math.max.apply(null, playersTimes.map(function(score) {
+		return score.Time;
+	}));
+	
+	console.log('The best time was', lowest);
+	console.log('The worst time was', highest);
+	//send to client and compare with the time that was sent to the server.
+	
 
-	//plocka ut playersTime, jämför playersTime med playersTime. Behåll den med lägst playersTime. Hitta var den playersTime finns och vilken player som tillhör.
-
-	//player with lowest time is the winner
-/* 	let winner = if (playersTime)
-
-	//find the room that this socket is part of
-	const usersRoom = rooms.find(room => {
-		if (room.users.hasOwnProperty(this.id)) {
-			return true;
-		}
+/* 	socket.on('connection', function(client) {
+		client.on('join', function(data) {
+			client.join("playersScore"); // Join socket IO Room
+		});
+	
+		client.on('playerScore', function(data){ 
+			scores.push(data);
+			//Send to all users in scores room
+			socket.in("scores").emit('scores', getHighest(scores)); 
+		});
 	}); */
 
 	//tell the score to everyone in the room

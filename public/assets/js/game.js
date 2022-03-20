@@ -163,7 +163,7 @@ virus.addEventListener('click', (status) => {
 	console.log(data);
 
 	// when virus is clicked, randomise new numbers and send to socket
-    socket.emit('virus:clicked', data, {
+    socket.emit('virus:clicked', {
         offsetLeft: Math.floor(Math.random() * ((gameGrid.clientWidth- virus.clientWidth)) ),
         offsetTop: Math.floor(Math.random() * ((gameGrid.clientHeight - virus.clientHeight)) ),
 		clickTime
@@ -183,7 +183,7 @@ function moveVirus(offLeft, offTop) {
 	virus.style.left = left + 'px';
 	virus.style.animation = "none";
 	
-	let showVirus = new Date().getTime();
+	//let showVirus = new Date().getTime();
 	// socket.emit('calculate:time', {
 	// 	showVirus: showVirus,
 	// 	clickTime: clickTime
@@ -191,4 +191,11 @@ function moveVirus(offLeft, offTop) {
 
 }
 
-
+const scores = (highest, lowest) => {
+	let myTime = time;
+	if (myTime === lowest) {
+		score++;
+	} else if (myTime === highest){
+		return;
+	}
+}
