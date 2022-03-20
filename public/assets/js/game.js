@@ -65,6 +65,7 @@ socket.on('virus:clicked', (data) => {
 });
 
 createGame.addEventListener('click', e => {
+	e.preventDefault();
 	username = usernameForm.username.value;
 	console.log(`Player username is ${username}`);
 	socket.emit('create:game', username, (status) => {
@@ -74,6 +75,7 @@ createGame.addEventListener('click', e => {
 	if (status.success) {
 		socket.emit('start:game');
 		// createBoard(gameGrid);
+		
 		// hide form view
 		startEl.classList.add('hide');
 
@@ -87,7 +89,8 @@ createGame.addEventListener('click', e => {
 	});
 });
 
-joinGame.addEventListener('click', () => {
+joinGame.addEventListener('click', e => {
+	e.preventDefault();
 	username = usernameForm.username.value;
 	console.log(`Player username is ${username}`);
 
@@ -106,85 +109,28 @@ joinGame.addEventListener('click', () => {
 
 			// update list of users in room
 			updatePlayerList(status.playerOne, status.playerTwo);
-		} else if(!status.success) {
-			socket.emit('create:game', username, (status) => {
+		} else  {
+		 	socket.emit('create:game', username, (status) => {
 		
 				console.log("Server acknowledged that user joined", status);
 			
-				if (status.success) {
-					socket.emit('start:game');
-					// createBoard(gameGrid);
-					// hide form view
-					startEl.classList.add('hide');
+		 		if (status.success) {
+		 			socket.emit('start:game');
+		 			// createBoard(gameGrid);
+		 			// hide form view
+		 			startEl.classList.add('hide');
 			
-					// show game view
-					gameWrapperEl.classList.remove('hide');
+		 			// show game view
+		 			gameWrapperEl.classList.remove('hide');
 			
-					// update list of users in room
-					updatePlayerList(status.playerOne, status.playerTwo);
-					}
+		 			// update list of users in room
+		 			updatePlayerList(status.playerOne, status.playerTwo);
+		 			}
 			
-				});
-		}
-	});
-});
-
-	/*
-usernameForm.addEventListener('submit', e => {
-	e.preventDefault();
-	username = usernameForm.username.value;
-	console.log(`Player username is ${username}`);
-
-	// make it so avatar is also sent in as a parameter in this? 
-	// socket.emit('player:joined', username, avatar, (status)=>)
-	socket.emit('player:joined', username, (status) => {
-		console.log("Server acknowledged that user joined", status);
-
-		if (status.success) {
-		socket.emit('start:game');
-		// createBoard(gameGrid);
-		// hide form view
-		startEl.classList.add('hide');
-
-		// show game view
-		gameWrapperEl.classList.remove('hide');
-
-		// update list of users in room
-		updatePlayerList(status.players);
-		}
-	});
-});
-*/
-
-// const createVirus = () => {
-	// // get a random number between 0-99
-	// const randomNumber = Math.floor(Math.random() * 54);
-	// console.log(randomNumber);
-	// const virusIcon = `<i class="fa-solid fa-virus-covid"></i>`;
-
-
-		// find div with data-id with the random number
-		// const virus = document.querySelector(`[data-id="${randomNumber}"]`);
-		// virus.innerHTML = `${virusIcon}`;
-		// let showVirus = new Date().getTime();
-		
-
-		//where the virus was when the player clicked
-		// 	//at what time did the virus show?
-		// 	let time =  new Date().getTime();
-
-		// 	//time between when the virus popped and the played clicked
-		// 	let playersTime = time - showVirus;
-
-		// 	//made into seconds
-		// 	console.log(`it took ${playersTime / 1000} seconds for you to catch the virus!`);
-
-		// 	e.target.parentNode.innerHTML = "";
-		// 	// createVirus();
-
-		// });
-
-// }
+		 		});
+		 }
+	 });
+ });
 
 
 // How to make sure something only happens if both users pressed the virus?

@@ -13,17 +13,6 @@ let gameCollection = {
     gameList: []
 };
 
-
-const waiting_room = [];
-// hard coded room for testing
-const rooms = [
-    {
-        id: "some room",
-        name: "Some room",
-        players: {},
-    }
-];
-
 // handle when user has disconnected from chat
 const handleDisconnect = function() {
 	debug(`Client ${this.id} disconnected :(`);
@@ -50,6 +39,9 @@ const handleCreateGame = function(username, callback) {
     gameCollection.gameList.push({gameObject});
 
     console.log("Game Created by "+ username + " w/ " + gameObject.id);
+    this.broadcast.to(gameObject.id).emit('player:connected', username);
+    this.emit('join', this.id);
+    
 
     callback({
         success: true,
@@ -59,45 +51,17 @@ const handleCreateGame = function(username, callback) {
     });
 
 
+
 };
-
-const gameSeeker = function(username) {
-
-    if ( gameCollection.totalGameCount === 0) {
-        handleCreateGame(username);
-    }
-     else {
-        var rndPick = Math.floor(Math.random() * gameCollection.totalGameCount);
-        if (gameCollection.gameList[rndPick]['gameObject']['playerTwo'] === null){
-            gameCollection.gameList[rndPick]['gameObject']['playerTwo'] = username;
-            const gameId = gameCollection.gameList[rndPick].gameObject.id;
-            console.log(gameId);
-
-            io.emit('join', gameId);
-            //this.join(gameId);
-
-            //const game = rooms.find(gameRoom => gameRoom.id === 'some room');
-
-            // sets user id to the rooms object as a player
-           // game.players[this.id] = username;
-           // this.broadcast.to('some room').emit('player:connected', username);
-            //io.emit('join:success', {
-
-            console.log( username + " has been added to: " + gameId);
-    
-        } 
-    }
-}
 
 const handleJoinGame = function(username, callback){
     console.log(username + " wants to join a game");
 
-    if ( gameCollection.totalGameCount === 0) {
-        callback({
+    if ( gameCollection.totalGameCount === 0 ) {
+         callback({
             success:false
         })
-    }
-     else {
+    } else {
         var rndPick = Math.floor(Math.random() * gameCollection.totalGameCount);
         if (gameCollection.gameList[rndPick]['gameObject']['playerTwo'] === null){
             gameCollection.gameList[rndPick]['gameObject']['playerTwo'] = username;
@@ -105,7 +69,8 @@ const handleJoinGame = function(username, callback){
             console.log(gameId);
             let game = gameCollection.gameList[rndPick].gameObject;
 
-            io.emit('join', gameId);
+            this.emit('join', gameId);
+            this.emit('join:success', game);
             //this.join(gameId);
 
             console.log( username + " has been added to: " + gameId);
@@ -122,40 +87,13 @@ const handleJoinGame = function(username, callback){
         
             // broadcast list of users in room to all connected sockets EXCEPT ourselves
             this.broadcast.to(gameId).emit('player:list', playerOne, playerTwo);
-        } 
+        } else{
+            callback({
+                success:false
+            })
+        }
     }
 }
-
-
-const handlePlayerJoined = function(username, callback) {
-
-    // waiting room serves no purpose at this point
-    waiting_room.push(username);
-    this.join('some room');
-
-    const game = rooms.find(gameRoom => gameRoom.id === 'some room');
-
-    // sets user id to the rooms object as a player
-    game.players[this.id] = username;
-    //this.broadcast.to('some room').emit('player:connected', username);
-
-    // removes waiting room players
-    waiting_room.forEach(player => {
-        waiting_room.pop(player);
-    })
-
-    // sends object to front end with info
-    callback({
-        success: true,
-        room: 'some room',
-        players: game.players,
-    });
-
-    // broadcast list of users in room to all connected sockets EXCEPT ourselves
-	this.broadcast.to('some room').emit('player:list', game.players);
-
-}
-
 
 module.exports = function(socket, _io) {
 	io = _io;
@@ -168,7 +106,7 @@ module.exports = function(socket, _io) {
 	socket.on('disconnect', handleDisconnect);
 
 	// handle user joined
-	socket.on('player:joined', handlePlayerJoined);
+	// socket.on('player:joined', handlePlayerJoined);
 
     socket.on('join:game', handleJoinGame);
 

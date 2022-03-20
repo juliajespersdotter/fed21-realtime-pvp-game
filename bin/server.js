@@ -40,8 +40,7 @@ io.on('connection', (socket) => {
 	socket_controller(socket, io);
 });
 
-/**
- * Connect to database
+// Connect to database
  models.connect()
  .then(() => {
 })
@@ -49,13 +48,13 @@ io.on('connection', (socket) => {
 	debug('Failed to connect to database:', e);
 	process.exit(1);
 })
- */
-	 /**
-	  * Listen on provided port, on all network interfaces.
-	  */
-	 server.listen(port);
-	 server.on('error', onError);
-	 server.on('listening', onListening);
+
+ /**
+** Listen on provided port, on all network interfaces.
+*/
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
 
  
 /**
