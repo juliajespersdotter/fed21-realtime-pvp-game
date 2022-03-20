@@ -89,39 +89,82 @@
 </div>
 
 <!-- Gameboard -->
-<div id="game-wrapper" class="content hide">
-    <header class="header">
-        <h1>Socket Slayers</h1>
-    </header>
-
-    <aside class="aside">
-        <h2>Players:</h2>
-        <div id="players"></div>
-        <ul>
-			<!-- list the two players that are playing the game -->
-		</ul> 
-
-        <h2>Avatars:</h2>
-        <div class="avatar"></div>
-		<ul>
-
-		</ul>
-    </aside>
-
-    <aside class="aside-below">
-        <h2>Points:</h2>
-        <p>
+<div id="game-wrapper" class="hide">
+	<div class="content">
+		<header class="header">
 			
-		</p><!-- show points -->
-    </aside>
+			<div class="header-section">
+				<div class="header-section-divider">
+					<div id="your-score">
+						<h1>1</h1>
+					</div>
+					<div>
+						<h1>Mastermind</h1><!-- username -->
+						<div id="players"></div>
+						<div id="avatar"></div>
+					</div>
+				</div>
+			</div>
 
-    <main class="main">
-        <img class="virus" src="/assets/img/virus.svg">
-    </main>
+			<div class="header-section">
+				<div>
+					<div class="center">
+						<h2>vs</h2>
+					</div>
+					<div>
+						<h1>Socket Slayers</h1>
+					</div>
+				</div>
+			</div>
 
-    <footer class="footer">
-        <p>Game created by the Socket Slayers</p>
-    </footer>
+			<div class="header-section">
+				<div class="header-section-divider">
+					<div>
+						<h1>Virushunter</h1><!-- username -->
+						<div id="players"></div>
+						<div id="avatar"></div>
+					</div>
+					<div id="your-score">
+						<h1>3</h1>
+					</div>
+				</div>
+			</div>
+		</header>
+	
+		<aside class="aside">
+			<h3>HOW FAST ARE YOU</h3>
+			<div id="players"></div>
+			<p>YOU</p>
+			<div>
+				<p>Your time 00:02:10</p>
+			</div>
+
+			<div id="players"></div>
+			<p>Virushunter</p>
+			<div>
+				<p>Their time 00:05:22</p>
+			</div>
+	
+		</aside>
+	
+		<aside class="aside-below">
+			<h2>Scoreboard</h2>
+			<p>Your best time:</p> <!-- Show time -->
+			<p>Your worst time:</p> <!-- Show time -->
+
+			<p>Their best time:</p> <!-- Show time -->
+			<p>Their worst time:</p> <!-- Show time -->
+
+		</aside>
+	
+		<main class="main">
+			<img class="virus" src="/assets/img/virus.svg">
+		</main>
+	
+		<footer class="footer">
+			<p>Game created by the Socket Slayers</p>
+		</footer>
+	</div>
 </div>
 	
 	<!-- Bootstrap 5 script -->
