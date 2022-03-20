@@ -199,3 +199,21 @@ const scores = (highest, lowest) => {
 		return;
 	}
 }
+
+const countdown = () => {
+	let countdownTime = 5;
+	let countdownHTML = document.querySelector('#');
+	countdownHTML.innerHTML = 'Prepare!';
+
+	let timer = setInterval(function() {
+		if(countdownTime <= 0) {
+			countdownHTML.classList.add('hide');
+			clearInterval(timer);
+			gameWrapperEl.classList.remove('hide');
+			start = Date.now();
+		} else {
+			countdownHTML.innerHTML = timeleft;
+		}
+		timeleft -= 1;
+	}, 1000);
+}
