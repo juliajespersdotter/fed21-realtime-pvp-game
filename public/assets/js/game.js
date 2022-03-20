@@ -168,7 +168,7 @@ virus.addEventListener('click', (status) => {
         offsetTop: Math.floor(Math.random() * ((gameGrid.clientHeight - virus.clientHeight)) ),
 		clickTime
     });
-})
+});
 
 // move the virus using randomised numbers 
 function moveVirus(offLeft, offTop) {
@@ -190,15 +190,15 @@ function moveVirus(offLeft, offTop) {
 	// });	
 
 }
-
-const scores = (highest, lowest) => {
+let score = 0;
+socket.on('scores', (data) => { //data innehåller winnerOfThisRound, vilket är den lägsta tiden
 	let myTime = time;
-	if (myTime === lowest) {
+	if (myTime === data) {
 		score++;
-	} else if (myTime === highest){
+	} else if (myTime === data){
 		return;
 	}
-}
+});
 
 const countdown = () => {
 	let countdownTime = 5;
@@ -217,3 +217,5 @@ const countdown = () => {
 		timeleft -= 1;
 	}, 1000);
 }
+
+//

@@ -71,7 +71,7 @@ const handleGame = function(room, player, callback) {
 		randdomTimeForVirusToShow,
 	};
 } */
-let playersScore = []; //recieve socketId and time
+//recieve socketId and time
 let playersTimes = [{
 	"ID": "eBC8RtXvh_UZYsmRAAAX",
 	"Time": 2.3423
@@ -85,7 +85,7 @@ let playersTimes = [{
 let rounds = 0;
 let maxRounds = 10;
 let compare;
-const handleScore = function(data) {
+const handleScore = function(socket) {
 	rounds ++;
 	console.log('rounds played', rounds);
 
@@ -103,8 +103,10 @@ const handleScore = function(data) {
 	
 	console.log('The best time was', lowest);
 	console.log('The worst time was', highest);
+
+	let winnerOfThisRound = lowest;
 	//send to client and compare with the time that was sent to the server.
-	
+	socket.emit('scores', winnerOfThisRound);
 
 /* 	socket.on('connection', function(client) {
 		client.on('join', function(data) {
