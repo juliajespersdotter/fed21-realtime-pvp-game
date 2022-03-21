@@ -109,12 +109,19 @@ usernameForm.addEventListener('submit', e => {
 // How to make sure something only happens if both users pressed the virus?
 virus.addEventListener('click', () => {
 	let clickTime = new Date().getTime();
+	virus.src = "./assets/img/virus-sad.svg";
+
+	setTimeout(function(){
+		virus.classList.add('hide');
+	}, 1000)
 
 	// when virus is clicked, randomise new numbers and send to socket
-    socket.emit('virus:clicked', {
-        offsetLeft: Math.floor(Math.random() * ((gameGrid.clientWidth- virus.clientWidth)) ),
-        offsetTop: Math.floor(Math.random() * ((gameGrid.clientHeight - virus.clientHeight)) ),
-    });
+	setTimeout(function(){
+		socket.emit('virus:clicked', {
+			offsetLeft: Math.floor(Math.random() * ((gameGrid.clientWidth- virus.clientWidth)) - 50),
+			offsetTop: Math.floor(Math.random() * ((gameGrid.clientHeight - virus.clientHeight)) -50 ),
+		});
+	}, Math.floor(Math.random() * 5000))
 })
 
 // move the virus using randomised numbers 
@@ -129,6 +136,11 @@ function moveVirus(offLeft, offTop) {
 		virus.style.top = top + 'px';
 		virus.style.left = left + 'px';
 		virus.style.animation = "none";
+
+		virus.src = "./assets/img/virus.svg";
+		virus.classList.remove('hide');
+
+		
 		
 		// showVirus = new Date().getTime();
 		// socket.emit('calculate:time', {
