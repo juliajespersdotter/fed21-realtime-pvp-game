@@ -24,21 +24,21 @@ if (userReady) {
 */
 
 // update user list with avatar (avatar not included as parameter now)
-const updatePlayerList = (players, avatar) => {
+const updatePlayerList = (playerOne, playerTwo, avatar) => {
 	document.querySelector('#players').innerHTML = 
-	Object.values(players).map(username => `<li>${username}</li>`).join("");
+	 `<li>${playerOne}</li><li>${playerTwo}</li>`;
 
 	// does not work
 	//document.querySelector('.avatar').innerHTML = 
 	//Object.values(avatar).map(avatar => `<li>${avatar}</li>`).join("");
 }
 
-socket.on('player:list', players => {
-	updatePlayerList(players);
+socket.on('player:list', (playerOne, playerTwo) => {
+	updatePlayerList(playerOne, playerTwo);
 })
 
-socket.on('player:connected', (username) => {
-	console.log('New player connected', username);
+socket.on('player:connected', (username, room) => {
+	console.log(`New player connected in room ${room} with username ${username}`);
 });
 
 socket.on('player:disconnected', (username) => {
@@ -48,10 +48,20 @@ socket.on('player:disconnected', (username) => {
 socket.on('start:game', () => {
 	// does not do much at this point, check if players are ready?
 	console.log("game started");
+	countdown();
 })
 
+socket.on('already:joined', data => {
+	console.log("You are already in an existing game " + data.id);
+})
+
+socket.on('join:success', data => {
+	console.log("You joined the game " + data.id);
+})
+
+
 socket.on('virus:clicked', (data) => {
-    moveVirus(data.offsetLeft, data.offsetTop, data.clickTime);
+	moveVirus(data.offsetLeft, data.offsetTop, data.clickTime);
 });
 
 usernameForm.addEventListener('submit', e => {
@@ -59,68 +69,51 @@ usernameForm.addEventListener('submit', e => {
 	username = usernameForm.username.value;
 	console.log(`Player username is ${username}`);
 
-	// make it so avatar is also sent in as a parameter in this? 
-	// socket.emit('player:joined', username, avatar, (status)=>)
-	socket.emit('player:joined', username, (status) => {
+	socket.emit('join:game', username, (status) => {
+		
 		console.log("Server acknowledged that user joined", status);
 
 		if (status.success) {
-		socket.emit('start:game');
-		// createBoard(gameGrid);
-		// hide form view
-		startEl.classList.add('hide');
+			socket.emit('start:game');
+			// hide form view
+			startEl.classList.add('hide');
 
-		// show game view
-		gameWrapperEl.classList.remove('hide');
+			// show game view
+			gameWrapperEl.classList.remove('hide');
 
-		// update list of users in room
-		updatePlayerList(status.players);
-		}
-	});
-});
-
-// const createVirus = () => {
-	// // get a random number between 0-99
-	// const randomNumber = Math.floor(Math.random() * 54);
-	// console.log(randomNumber);
-	// const virusIcon = `<i class="fa-solid fa-virus-covid"></i>`;
-
-
-		// find div with data-id with the random number
-		// const virus = document.querySelector(`[data-id="${randomNumber}"]`);
-		// virus.innerHTML = `${virusIcon}`;
-		// let showVirus = new Date().getTime();
+			// update list of users in room
+			updatePlayerList(status.playerOne, status.playerTwo);
+		} else  {
+		 	socket.emit('create:game', username, (status) => {
 		
-
-		//where the virus was when the player clicked
-		// 	//at what time did the virus show?
-		// 	let time =  new Date().getTime();
-
-		// 	//time between when the virus popped and the played clicked
-		// 	let playersTime = time - showVirus;
-
-		// 	//made into seconds
-		// 	console.log(`it took ${playersTime / 1000} seconds for you to catch the virus!`);
-
-		// 	e.target.parentNode.innerHTML = "";
-		// 	// createVirus();
-
-		// });
-
-// }
+				console.log("Server acknowledged that user joined", status);
+			
+		 		if (status.success) {
+		 			socket.emit('start:game');
+		 			// hide form view
+		 			startEl.classList.add('hide');
+			
+		 			// show game view
+		 			gameWrapperEl.classList.remove('hide');
+			
+		 			// update list of users in room
+		 			updatePlayerList(status.playerOne, status.playerTwo);
+		 			}
+			
+		 		});
+		 }
+	 });
+ });
 
 
 // How to make sure something only happens if both users pressed the virus?
 virus.addEventListener('click', () => {
-	console.log(gameGrid.clientHeight, gameGrid.clientWidth);
-	console.log(virus.clientHeight, virus.clientWidth);
 	let clickTime = new Date().getTime();
 
 	// when virus is clicked, randomise new numbers and send to socket
     socket.emit('virus:clicked', {
         offsetLeft: Math.floor(Math.random() * ((gameGrid.clientWidth- virus.clientWidth)) ),
         offsetTop: Math.floor(Math.random() * ((gameGrid.clientHeight - virus.clientHeight)) ),
-		clickTime
     });
 })
 
