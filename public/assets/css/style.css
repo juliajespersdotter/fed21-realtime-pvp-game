@@ -107,14 +107,24 @@ h3 {
 /* Startpage - Styles for avatars */
 .avatar-wrapper {
 	width: 100%;
+}
+
+.avatar-content {
+	width: 100%;
 	display: flex;
-	justify-content: space-evenly;
+	flex-direction: column;
 }
 
 .avatar-content img:hover {
 	background-color: white;
 	box-shadow: 0 0 2px 1px white;
 	border-radius: 10px;
+}
+
+.avatarSection {
+	display: flex;
+	justify-content: space-evenly;
+	margin: 5px;
 }
 
 /* Hide radiobutton */
@@ -156,7 +166,7 @@ h3 {
 	cursor: pointer;
 	font-size: 18px;
 	height: 50px;
-	margin-top: 38px;
+	margin-top: 15px;
 	outline: 0;
 	text-align: center;
 	width: 100%;
@@ -175,7 +185,7 @@ button {
 
 img {
 	width: 40px;
-	margin: 4%;
+	margin: 3%;
 	height: auto;
 }
 
