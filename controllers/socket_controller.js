@@ -187,7 +187,7 @@ module.exports = function(socket, _io) {
     socket.on('virus:clicked', (data) => {
         // accepts data for socket to get same for both players
         // then sends back to front end
-        io.emit('virus:clicked', data);
+        socket.emit('virus:clicked', data);
     });
 
     // not functional
