@@ -74,45 +74,40 @@ usernameForm.addEventListener('submit', e => {
 	console.log(`Player username is ${username}`);
 
 	let avatar = document.querySelector('input[name="avatar"]:checked').value;
-	console.log(avatar);
 
-	if(username || avatar) {
 		socket.emit('join:game', {username: username, avatar: avatar} , (status) => {
-			
-			console.log("Server acknowledged that user joined", status);
-	
-			if (status.success) {
-				socket.emit('start:game');
-				// hide form view
-				startEl.classList.add('hide');
-	
-				// show game view
-				gameWrapperEl.classList.remove('hide');
-	
-				// update list of users in room
-				updatePlayerList(status.playerOne, status.playerTwo);
-			}  else {
-				 socket.emit('create:game', {username: username, avatar: avatar}, (status) => {
-			
-					console.log("Server acknowledged that user joined", status);
-				
-					 if (status.success) {
-						 socket.emit('start:game');
-						 // hide form view
-						 startEl.classList.add('hide');
-				
-						 // show game view
-						 gameWrapperEl.classList.remove('hide');
-				
-						 // update list of users in room
-						 updatePlayerList(status.playerOne, status.playerTwo);
-						 }
-				
-					 });
-			 }
-		 });
-	}
 
+		if (status.success) {
+		console.log("Server acknowledged that user joined", status);
+		socket.emit('start:game');
+		// hide form view
+		startEl.classList.add('hide');
+
+		// show game view
+		gameWrapperEl.classList.remove('hide');
+
+		// update list of users in room
+		updatePlayerList(status.playerOne, status.playerTwo);
+	}  else {
+			socket.emit('create:game', {username: username, avatar: avatar}, (status) => {
+	
+			console.log("Server acknowledged that user joined", status);
+		
+				if (status.success) {
+					socket.emit('start:game');
+					// hide form view
+					startEl.classList.add('hide');
+		
+					// show game view
+					gameWrapperEl.classList.remove('hide');
+		
+					// update list of users in room
+					updatePlayerList(status.playerOne, status.playerTwo);
+					}
+		
+				});
+		}
+		 });
  });
 
 
@@ -121,9 +116,7 @@ virus.addEventListener('click', () => {
 	let clickTime = new Date().getTime();
 	virus.src = "./assets/img/virus-sad.svg";
 
-	setTimeout(function(){
-		virus.classList.add('hide');
-	}, 1000)
+	virus.classList.add('hide');
 
 	// when virus is clicked, randomise new numbers and send to socket
 		socket.emit('virus:clicked', {

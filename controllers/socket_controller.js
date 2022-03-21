@@ -11,6 +11,9 @@ let io = null;
 let totalGameCount = 0;
 const gameList = [];
 
+const getGameByUserId = id => {
+	return gameList.find(game => game.hasOwnProperty(id));
+}
 
 // handle when user has disconnected from chat
 const handleDisconnect = function() {
@@ -35,6 +38,8 @@ const handleCreateGame = function(data, callback) {
         playerTwo: {}
     };
     gameObject.id = (this.id);
+    gameObject.playerOne.id = this.id;
+    gameObject.playerTwo.id = null;
     gameObject.playerOne.name = data.username;
     gameObject.playerTwo.name = null;
     gameObject.playerOne.avatar = data.avatar;
@@ -45,7 +50,6 @@ const handleCreateGame = function(data, callback) {
 
     console.log("Game Created by "+ data.username + " w/ " + gameObject.id);
     this.broadcast.to(gameObject.id).emit('player:connected', data.username, gameObject.id);
-    this.emit('join', this.id);
     
     callback({
         success: true,
@@ -67,13 +71,13 @@ const handleJoinGame = function(data, callback){
         if (gameList[rndGame]['gameObject'].playerTwo['name'] === null){
             gameList[rndGame]['gameObject'].playerTwo['name'] = data.username;
             gameList[rndGame]['gameObject']['playerTwo']['avatar'] = data.avatar;
+            gameList[rndGame]['gameObject']['playerTwo']['id'] = this.id;
             const gameId = gameList[rndGame].gameObject.id;
-            console.log(gameId);
             let game = gameList[rndGame].gameObject;
 
-            this.emit('join', gameId);
+            this.join(gameId);
+            debug(`Player ${data.username} joined room ${gameId}`);
             this.emit('join:success', gameId);
-            //this.join(gameId);
 
             console.log(data.username + " has been added to: " + gameId);
             this.broadcast.to(gameId).emit('player:connected', data.username, gameId);
@@ -174,6 +178,7 @@ module.exports = function(socket, _io) {
     socket.on('create:game', handleCreateGame);
 
     socket.on('join', game => {
+        console.log("Game", game);
         this.join(game);
     })
 
@@ -188,10 +193,11 @@ module.exports = function(socket, _io) {
     socket.on('virus:clicked', (data) => {
         // accepts data for socket to get same for both players
         // then sends back to front end
-        setTimeout(function (){
-            io.emit('virus:clicked', data);
-
-        }, Math.floor(Math.random() * 5000))
+        const game = gameList.find(gameRoom => gameRoom.id === this.id);
+        //let room = getGameByUserId(this.id)
+        let room = (game.gameObject.id);
+        console.log(room);
+        io.to(room).emit('virus:clicked', data);
     });
 
     // not functional
