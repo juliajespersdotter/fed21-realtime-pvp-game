@@ -116,6 +116,7 @@ virus.addEventListener('click', () => {
 		virus.classList.add('hide');
 	}, 1000)
 
+
 	// when virus is clicked, randomise new numbers and send to socket
     socket.emit('virus:clicked', {
         offsetRow: Math.ceil(Math.random() * 12 ),
