@@ -48,6 +48,7 @@ socket.on('player:disconnected', (username) => {
 socket.on('start:game', () => {
 	// does not do much at this point, check if players are ready?
 	console.log("game started");
+	//countdown();
 	countdown();
 })
 
@@ -165,4 +166,5 @@ const countdown = () => {
 	}, 1000);
 }
 
-//
+
+
