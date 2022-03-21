@@ -62,6 +62,74 @@ const handlePlayerJoined = function(username, callback) {
 	this.broadcast.to('some room').emit('player:list', game.players);
 
 }
+/* 
+const handleGame = function(room, player, callback) {
+	//the game has been played 10 times and the players have finished the game.
+	const randdomTimeForVirusToShow = Math.floor(Math.random() * 10000) + 1;
+	
+	const gameInfo = {
+		randdomTimeForVirusToShow,
+	};
+} */
+//recieve socketId and time
+let playersTimes = [{
+	"ID": "eBC8RtXvh_UZYsmRAAAX",
+	"Time": 2.3423
+	}, {
+	"ID": "XeBC8RtXvh_UZYsmRAAAXsad",
+	"Time": 3.4545
+	}, {
+	"ID": "askjdeBC8RtXvh_UZYsmRAAAX",
+	"Time": 5.0070
+}]
+let rounds = 0;
+let maxRounds = 10;
+let compare;
+const handleScore = function(socket) {
+	rounds ++;
+	console.log('rounds played', rounds);
+
+	console.log(`players time from the server ${playersTime} player ${player}`)
+
+	//check that array has 0-1 index.
+	//check lowest/highest number in each object, give them 'highest' and 'lowest
+	let lowest = Math.min.apply(null, playersTimes.map(function(score) {
+		return score.Time;
+	}));
+	
+	let highest = Math.max.apply(null, playersTimes.map(function(score) {
+		return score.Time;
+	}));
+	
+	console.log('The best time was', lowest);
+	console.log('The worst time was', highest);
+
+	let winnerOfThisRound = lowest;
+	//send to client and compare with the time that was sent to the server.
+	socket.emit('scores', winnerOfThisRound);
+
+/* 	socket.on('connection', function(client) {
+		client.on('join', function(data) {
+			client.join("playersScore"); // Join socket IO Room
+		});
+	
+		client.on('playerScore', function(data){ 
+			scores.push(data);
+			//Send to all users in scores room
+			socket.in("scores").emit('scores', getHighest(scores)); 
+		});
+	}); */
+
+	//tell the score to everyone in the room
+	//this.broadcast.to(usersRoom.id).emit('winner', usersRoom.users);
+	//front: when they recieve the winner 1 point should be added to score.
+	
+	if (rounds > maxRounds) {
+
+	} else if (rounds === maxRounds) {
+		io.emit('game:over', )
+	}
+}
 
 
 module.exports = function(socket, _io) {
@@ -77,6 +145,10 @@ module.exports = function(socket, _io) {
 	// handle user joined
 	socket.on('player:joined', handlePlayerJoined);
 
+	socket.on('player:time', handleScore);
+
+	// handle user emitting a new message
+	//socket.on('chat:message', handleChatMessage);
 	// handle game start logic
 	socket.on('start:game', () => {
         io.emit('start:game');
@@ -86,7 +158,7 @@ module.exports = function(socket, _io) {
     socket.on('virus:clicked', (data) => {
         // accepts data for socket to get same for both players
         // then sends back to front end
-        io.emit('virus:clicked', data);
+        io.to(socket.id).emit('virus:clicked', data);
     });
 
     // not functional
