@@ -39,8 +39,8 @@ socket.on('player:list', (playerOne, playerTwo) => {
 	updatePlayerList(playerOne, playerTwo);
 })
 
-socket.on('player:connected', (username) => {
-	console.log('New player connected', username);
+socket.on('player:connected', (username, room) => {
+	console.log(`New player connected in room ${room} with username ${username}`);
 });
 
 socket.on('player:disconnected', (username) => {

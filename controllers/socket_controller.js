@@ -39,7 +39,7 @@ const handleCreateGame = function(username, callback) {
     gameCollection.gameList.push({gameObject});
 
     console.log("Game Created by "+ username + " w/ " + gameObject.id);
-    this.broadcast.to(gameObject.id).emit('player:connected', username);
+    this.broadcast.to(gameObject.id).emit('player:connected', username, gameObject.id);
     this.emit('join', this.id);
     
 
@@ -74,6 +74,7 @@ const handleJoinGame = function(username, callback){
             //this.join(gameId);
 
             console.log( username + " has been added to: " + gameId);
+            this.broadcast.to(gameObject.id).emit('player:connected', username, gameObject.id);
             let playerOne = game.playerOne;
             let playerTwo = game.playerTwo;
     
