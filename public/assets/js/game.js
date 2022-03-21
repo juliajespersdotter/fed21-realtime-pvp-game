@@ -61,7 +61,7 @@ socket.on('join:success', data => {
 
 
 socket.on('virus:clicked', (data) => {
-	moveVirus(data.offsetLeft, data.offsetTop, data.clickTime);
+	moveVirus(data.offsetRow, data.offsetColumn, data.clickTime);
 });
 
 usernameForm.addEventListener('submit', e => {
@@ -112,8 +112,8 @@ virus.addEventListener('click', () => {
 
 	// when virus is clicked, randomise new numbers and send to socket
     socket.emit('virus:clicked', {
-        offsetRow: Math.floor(Math.random() * 13 ),
-        offsetColumn: Math.floor(Math.random() * 13 ),
+        offsetRow: Math.ceil(Math.random() * 12 ),
+        offsetColumn: Math.ceil(Math.random() * 12 ),
     });
 });
 
@@ -122,7 +122,7 @@ function moveVirus(offsetRow, offsetColumn) {
 	
 		let row = offsetRow;
 		let column = offsetColumn;
-		console.log('row and column', row, column, Math.floor(Math.random() * 13 ));
+		console.log('row and column', row, column);
 		
 		virus.style.gridColumn = column;
 		virus.style.gridRow = row;

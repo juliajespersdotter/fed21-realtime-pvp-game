@@ -314,7 +314,7 @@ main{
 } 
 */
 .virus{
-	position: absolute;
+	/* position: absolute; */
 	grid-row: 3;
 	grid-column: 3;
 	width: 70px;
