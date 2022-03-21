@@ -48,6 +48,7 @@ socket.on('player:disconnected', (username) => {
 socket.on('start:game', () => {
 	// does not do much at this point, check if players are ready?
 	console.log("game started");
+	countdown();
 })
 
 socket.on('already:joined', data => {
@@ -73,7 +74,7 @@ usernameForm.addEventListener('submit', e => {
 		console.log("Server acknowledged that user joined", status);
 
 		if (status.success) {
-			// socket.emit('start:game');
+			socket.emit('start:game');
 			// hide form view
 			startEl.classList.add('hide');
 
@@ -88,7 +89,7 @@ usernameForm.addEventListener('submit', e => {
 				console.log("Server acknowledged that user joined", status);
 			
 		 		if (status.success) {
-		 			// socket.emit('start:game');
+		 			socket.emit('start:game');
 		 			// hide form view
 		 			startEl.classList.add('hide');
 			

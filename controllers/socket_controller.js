@@ -182,7 +182,7 @@ module.exports = function(socket, _io) {
         // accepts data for socket to get same for both players
         // then sends back to front end
         io.emit('virus:clicked', data);
-    });n
+    });
 
     // not functional
     socket.on('calculate:time', (data) => {
