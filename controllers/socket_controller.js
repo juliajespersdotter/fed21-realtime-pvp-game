@@ -71,7 +71,8 @@ const handleGame = function(room, player, callback) {
 		randdomTimeForVirusToShow,
 	};
 } */
-//recieve socketId and time
+
+//recieve socketId and time --- hårdkodat sålänge
 let playersTimes = [{
 	"ID": "eBC8RtXvh_UZYsmRAAAX",
 	"Time": 2.3423
@@ -83,15 +84,15 @@ let playersTimes = [{
 	"Time": 5.0070
 }]
 let rounds = 0;
-let maxRounds = 10;
-let compare;
-const handleScore = function(socket) {
+//let maxRounds = 10;
+const handleScore = function(socket, data) {
 	rounds ++;
 	console.log('rounds played', rounds);
+	console.log('data', data);
 
-	console.log(`players time from the server ${playersTime} player ${player}`)
+	let playersClicktime = data.clickTime;
+	console.log(`players time from the server ${playersClicktime} player ${socket.id}`)
 
-	//check that array has 0-1 index.
 	//check lowest/highest number in each object, give them 'highest' and 'lowest
 	let lowest = Math.min.apply(null, playersTimes.map(function(score) {
 		return score.Time;
@@ -106,29 +107,13 @@ const handleScore = function(socket) {
 
 	let winnerOfThisRound = lowest;
 	//send to client and compare with the time that was sent to the server.
-	socket.emit('scores', winnerOfThisRound);
-
-/* 	socket.on('connection', function(client) {
-		client.on('join', function(data) {
-			client.join("playersScore"); // Join socket IO Room
-		});
+	io.emit('scores', winnerOfThisRound, playersClicktime);
 	
-		client.on('playerScore', function(data){ 
-			scores.push(data);
-			//Send to all users in scores room
-			socket.in("scores").emit('scores', getHighest(scores)); 
-		});
-	}); */
-
-	//tell the score to everyone in the room
-	//this.broadcast.to(usersRoom.id).emit('winner', usersRoom.users);
-	//front: when they recieve the winner 1 point should be added to score.
-	
-	if (rounds > maxRounds) {
+	/* if (rounds > maxRounds) {
 
 	} else if (rounds === maxRounds) {
 		io.emit('game:over', )
-	}
+	} */
 }
 
 
@@ -145,19 +130,18 @@ module.exports = function(socket, _io) {
 	// handle user joined
 	socket.on('player:joined', handlePlayerJoined);
 
-	socket.on('player:time', handleScore);
+	//socket.on('player:time', handleScore);
 
-	// handle user emitting a new message
-	//socket.on('chat:message', handleChatMessage);
 	// handle game start logic
 	socket.on('start:game', () => {
         io.emit('start:game');
     });
 
     // handle when virus is clicked
-    socket.on('virus:clicked', (data) => {
+    socket.on('virus:clicked', handleScore, (data) => {
         // accepts data for socket to get same for both players
         // then sends back to front end
+
         io.to(socket.id).emit('virus:clicked', data);
     });
 

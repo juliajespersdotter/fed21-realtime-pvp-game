@@ -163,7 +163,7 @@ virus.addEventListener('click', (status) => {
 	console.log(data);
 
 	// when virus is clicked, randomise new numbers and send to socket
-    socket.emit('virus:clicked', {
+    socket.emit('virus:clicked', data, {
         offsetLeft: Math.floor(Math.random() * ((gameGrid.clientWidth- virus.clientWidth)) ),
         offsetTop: Math.floor(Math.random() * ((gameGrid.clientHeight - virus.clientHeight)) ),
 		clickTime
@@ -191,12 +191,13 @@ function moveVirus(offLeft, offTop) {
 
 }
 let score = 0;
-socket.on('scores', (data) => { //data innehåller winnerOfThisRound, vilket är den lägsta tiden
-	let myTime = time;
-	if (myTime === data) {
+socket.on('scores', (winnerOfThisRound, playersClicktime) => { //data innehåller winnerOfThisRound, vilket är den lägsta tiden
+	let myTime = playersClicktime;
+	if (myTime === winnerOfThisRound) {
 		score++;
-	} else if (myTime === data){
-		return;
+		console.log('the score', score)
+	} else if (myTime === winnerOfThisRound){
+		console.log('youre a loozaaa')
 	}
 });
 
@@ -217,5 +218,3 @@ const countdown = () => {
 		timeleft -= 1;
 	}, 1000);
 }
-
-//
