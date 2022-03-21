@@ -7,20 +7,28 @@ html{
 }
 
 body{
-	color: white;
 	font-family: 'Fredoka', sans-serif;
+	font-size: 16px;
 }
 
 h1{
 	font-family: 'Palette Mosaic', cursive;
-	font-size: 3rem;
+	font-size: 2rem;
 	text-align: center;
-	color:#e63947;
+	color: white;
 }
 
-h2, h3{
+h2{
+	font-family: 'Palette Mosaic', cursive;
+	text-align: center;
+	font-size: 2rem;
+	color: #e63947;
+}
+
+h3 {
 	font-family: 'Bungee', cursive;
 	text-align: center;
+	color: white;
 }
 
 /* Startpage */
@@ -104,8 +112,8 @@ h2, h3{
 }
 
 .avatar-content img:hover {
-	background-color: #F3DE8A;
-	box-shadow: 0 0 2px 1px #F3DE8A;
+	background-color: white;
+	box-shadow: 0 0 2px 1px white;
 	border-radius: 10px;
 }
 
@@ -124,10 +132,10 @@ h2, h3{
   
 /* CHECKED STYLES */
 [type=radio]:checked + img {
-	border-bottom: 2px solid #F3DE8A;
+	border-bottom: 2px solid white;
 	padding: 5px;
-	background-color: #F3DE8A;
-	box-shadow: 0 0 2px 1px #F3DE8A;
+	background-color: white;
+	box-shadow: 0 0 2px 1px white;
 	border-radius: 10px;
 }
 
@@ -205,18 +213,34 @@ main{
 
 .header-section {
 	grid-column: 5/7;
-	/*grid-row: 4/6;*/
 	display: flex;
 	justify-content: space-evenly;
 	justify-items: stretch;
 	width: 100%;
 }
 
-.header-section-divider {
+.header-section-left-right {
 	display: flex;
+	flex-direction: column;
 	justify-content: space-evenly;
 	justify-items: stretch;
 	width: 100%;
+}
+
+.wrapper-avatar-player {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+	padding-top: 0;
+	align-items:flex-end;
+}
+ 
+#avatar1, #player1, #avatar2, #player2 {
+	justify-items: stretch;
+}
+
+#avatar1, #avatar2 {
+	color: white;
 }
 
 .center {
@@ -226,6 +250,7 @@ main{
 
 #player1-score, #player2-score {
 	color: #e63947;
+
 }
 .aside {
 	background-color: #15172b;
@@ -245,7 +270,7 @@ main{
 	background-color: #15172b;
 	color:white;
 	grid-column: 5/7;
-	grid-row: 4/6;
+	grid-row: 4/7;
 }
 
 .main {

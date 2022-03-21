@@ -82,7 +82,7 @@
 		</div>
 
 		<div class="button-wrapper">
-			<button type="submit" class="submit-btn">Enter a room to play!</button>
+			<button type="submit" class="submit-btn" id="joinGame">Enter a room to play!</button>
 		</div>
 	</form>
 </div>
@@ -93,13 +93,14 @@
 		<header class="header">
 			
 			<div class="header-section">
-				<div class="header-section-divider">
-					<div id="player1-score">
+				<div class="header-section-left-right">
+					<div class="wrapper-avatar-player">
+						<img src="/assets/img/person-swimming-solid.svg" id="avatar1" alt="">
+						<div>
+							<h2 id="player1">player 1</h2><!-- player 1 username -->
+						</div>
 					</div>
-					<div>
-						<h1>Mastermind</h1><!-- username -->
-						<div id="players"></div>
-						<div id="avatar"></div>
+					<div id="player1-score">
 					</div>
 				</div>
 			</div>
@@ -107,7 +108,7 @@
 			<div class="header-section">
 				<div>
 					<div class="center">
-						<h2>vs</h2>
+						<h1>vs</h1>
 					</div>
 					<div>
 						<h1>Socket Slayers</h1>
@@ -116,14 +117,19 @@
 			</div>
 
 			<div class="header-section">
-				<div class="header-section-divider">
-					<div>
-						<h1>Virushunter</h1><!-- username -->
-						<div id="players"></div>
-						<div id="avatar"></div>
+				<div class="header-section-left-right">
+					<div class="wrapper-avatar-player">
+						<img src="assets/img/baby-solid.svg" id="avatar2" alt="">
+						<div>
+							<h2 id="player2">player 3</h2><!-- player 1 username -->
+						</div>
 					</div>
 					<div id="player2-score">
+<<<<<<< HEAD
 						<h1>3</h1>
+=======
+						<h2>3</h2>
+>>>>>>> main
 					</div>
 				</div>
 			</div>
@@ -131,13 +137,13 @@
 	
 		<aside class="aside">
 			<h3>HOW FAST ARE YOU</h3>
-			<div id="players"></div>
+			<div id="player1"></div>
 			<p>YOU</p>
 			<div>
 				<p>Your time 00:02:10</p>
 			</div>
 
-			<div id="players"></div>
+			<div id="player2"></div>
 			<p>Virushunter</p>
 			<div>
 				<p>Their time 00:05:22</p>
@@ -146,7 +152,7 @@
 		</aside>
 	
 		<aside class="aside-below">
-			<h2>Scoreboard</h2>
+			<h3>Scoreboard</h3>
 			<p>Your best time:</p> <!-- Show time -->
 			<p>Your worst time:</p> <!-- Show time -->
 
