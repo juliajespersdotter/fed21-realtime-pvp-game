@@ -6,7 +6,6 @@ const debug = require('debug')('game:socket_controller');
 const models = require('../models');
 
 let io = null;
-let clicks = 0;
 
 let gameCollection = {
     totalGameCount: 0,
@@ -49,9 +48,6 @@ const handleCreateGame = function(username, callback) {
         playerOne: gameObject.playerOne,
         playerTwo: null
     });
-
-
-
 };
 
 const handleJoinGame = function(username, callback){
@@ -62,7 +58,7 @@ const handleJoinGame = function(username, callback){
             success:false
         })
     } else {
-        var rndPick = Math.floor(Math.random() * gameCollection.totalGameCount);
+        let rndPick = Math.floor(Math.random() * gameCollection.totalGameCount);
         if (gameCollection.gameList[rndPick]['gameObject']['playerTwo'] === null){
             gameCollection.gameList[rndPick]['gameObject']['playerTwo'] = username;
             const gameId = gameCollection.gameList[rndPick].gameObject.id;
@@ -74,7 +70,7 @@ const handleJoinGame = function(username, callback){
             //this.join(gameId);
 
             console.log( username + " has been added to: " + gameId);
-            this.broadcast.to(gameObject.id).emit('player:connected', username, gameObject.id);
+            this.broadcast.to(gameId).emit('player:connected', username, gameId);
             let playerOne = game.playerOne;
             let playerTwo = game.playerTwo;
     
@@ -106,9 +102,6 @@ module.exports = function(socket, _io) {
 	// handle user disconnect
 	socket.on('disconnect', handleDisconnect);
 
-	// handle user joined
-	// socket.on('player:joined', handlePlayerJoined);
-
     socket.on('join:game', handleJoinGame);
 
     socket.on('create:game', handleCreateGame);
@@ -126,13 +119,7 @@ module.exports = function(socket, _io) {
     socket.on('virus:clicked', (data) => {
         // accepts data for socket to get same for both players
         // then sends back to front end
-        clicks ++;
-        console.log(clicks);
-        console.log("Waiting for player to click...");
-        if(clicks === 2){
-            io.emit('virus:clicked', data);
-            clicks = 0;
-        }
+        io.emit('virus:clicked', data);
     });
 
     // not functional

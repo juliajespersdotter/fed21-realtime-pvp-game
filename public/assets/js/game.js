@@ -9,8 +9,6 @@ const gameWrapperEl = document.querySelector('#game-wrapper');
 const usernameForm = document.querySelector('#username-form');
 const chosenAvatar = document.querySelector('.avatar-wrapper');
 const virus = document.querySelector('.virus');
-const createGame = document.querySelector('#createGame');
-const joinGame = document.querySelector('#joinGame');
 
 let username = null;
 let avatar = null;
@@ -53,43 +51,19 @@ socket.on('start:game', () => {
 })
 
 socket.on('already:joined', data => {
-	console.log("You are already in an existing game " + data.gameId);
+	console.log("You are already in an existing game " + data.id);
 })
 
 socket.on('join:success', data => {
-	console.log("You joined the game " + data.gameId);
+	console.log("You joined the game " + data.id);
 })
+
 
 socket.on('virus:clicked', (data) => {
 	moveVirus(data.offsetLeft, data.offsetTop, data.clickTime);
 });
 
-createGame.addEventListener('click', e => {
-	e.preventDefault();
-	username = usernameForm.username.value;
-	console.log(`Player username is ${username}`);
-	socket.emit('create:game', username, (status) => {
-		
-	console.log("Server acknowledged that user joined", status);
-
-	if (status.success) {
-		socket.emit('start:game');
-		// createBoard(gameGrid);
-		
-		// hide form view
-		startEl.classList.add('hide');
-
-		// show game view
-		gameWrapperEl.classList.remove('hide');
-
-		// update list of users in room
-		updatePlayerList(status.playerOne, status.playerTwo);
-		}
-
-	});
-});
-
-joinGame.addEventListener('click', e => {
+usernameForm.addEventListener('submit', e => {
 	e.preventDefault();
 	username = usernameForm.username.value;
 	console.log(`Player username is ${username}`);
@@ -99,8 +73,7 @@ joinGame.addEventListener('click', e => {
 		console.log("Server acknowledged that user joined", status);
 
 		if (status.success) {
-			socket.emit('start:game');
-			// createBoard(gameGrid);
+			// socket.emit('start:game');
 			// hide form view
 			startEl.classList.add('hide');
 
@@ -115,8 +88,7 @@ joinGame.addEventListener('click', e => {
 				console.log("Server acknowledged that user joined", status);
 			
 		 		if (status.success) {
-		 			socket.emit('start:game');
-		 			// createBoard(gameGrid);
+		 			// socket.emit('start:game');
 		 			// hide form view
 		 			startEl.classList.add('hide');
 			
