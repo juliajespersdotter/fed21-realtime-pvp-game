@@ -266,7 +266,7 @@ img {
 	padding: 10px;
 	color: white;
 	grid-column: 5/7;
-	grid-row: 2/4;
+	grid-row: 2/3;
 	border-radius: 10px;
 }
 
@@ -276,11 +276,20 @@ img {
 	text-align: center;
 }
 
+#timerPlayer1, #timerPlayer2 {
+	display: flex;
+	justify-content: center;
+}
+
+#player1, #player2 {
+	color: #e63947;
+}
+
 .aside-below {
 	background-color: #15172b;
 	color:white;
 	grid-column: 5/7;
-	grid-row: 4/6;
+	grid-row: 3/5;
 	border-radius: 10px;
 }
 
