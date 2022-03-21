@@ -65,7 +65,7 @@ socket.on('join:success', data => {
 })
 
 socket.on('virus:clicked', (data) => {
-	moveVirus(data.offsetLeft, data.offsetTop, data.clickTime);
+	moveVirus(data.offsetRow, data.offsetColumn, data.clickTime);
 });
 
 usernameForm.addEventListener('submit', e => {
@@ -123,28 +123,24 @@ virus.addEventListener('click', () => {
 
 	setTimeout(function(){
 		virus.classList.add('hide');
-	}, 1000)
+	}, Math.floor(Math.random() * 5000))
 
 	// when virus is clicked, randomise new numbers and send to socket
-	setTimeout(function(){
-		socket.emit('virus:clicked', {
-			offsetLeft: Math.floor(Math.random() * ((gameGrid.clientWidth- virus.clientWidth)) - 50),
-			offsetTop: Math.floor(Math.random() * ((gameGrid.clientHeight - virus.clientHeight)) -50 ),
-		});
-	}, Math.floor(Math.random() * 5000))
-})
+    socket.emit('virus:clicked', {
+        offsetRow: Math.ceil(Math.random() * 12 ),
+        offsetColumn: Math.ceil(Math.random() * 12 ),
+    });
+});
 
 // move the virus using randomised numbers 
-function moveVirus(offLeft, offTop) {
+function moveVirus(offsetRow, offsetColumn) {
 	
-		let top, left;
+		let row = offsetRow;
+		let column = offsetColumn;
+		console.log('row and column', row, column);
 		
-		left = offLeft;
-		top = offTop;
-		console.log(top, left);
-		
-		virus.style.top = top + 'px';
-		virus.style.left = left + 'px';
+		virus.style.gridColumn = column;
+		virus.style.gridRow = row;
 		virus.style.animation = "none";
 
 		virus.src = "./assets/img/virus.svg";

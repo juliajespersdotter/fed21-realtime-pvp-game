@@ -154,6 +154,7 @@ const handleScore = function(socket) {
 
     } else if (rounds === maxRounds) {
         io.emit('game:over', )
+		rounds = 0;
     }
 }
 

@@ -288,6 +288,10 @@ main{
 	border-radius: 10px;
 	grid-column: 1/5;
 	grid-row: 2/7;
+
+	display: grid;
+	grid-template-columns: repeat(12, 1fr);
+	grid-template-rows: repeat(12, 1fr);
 }
 
 .footer {
@@ -314,9 +318,9 @@ main{
 } 
 */
 .virus{
-	position: absolute;
-	top: 43%;
-	left: 46%;
+	/* position: absolute; */
+	grid-row: 3;
+	grid-column: 3;
 	width: 70px;
 	transition: 0.1s ease all;
 }
