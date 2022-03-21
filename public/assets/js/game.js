@@ -159,8 +159,8 @@ socket.on('scores', (data) => { //data innehåller winnerOfThisRound, vilket är
 
 const countdown = () => {
 	let countdownTime = 5;
-	let countdownHTML = document.querySelector('#');
-	countdownHTML.innerHTML = 'Prepare!';
+	let countdownHTML = document.getElementById("countdown");
+	countdownHTML.innerHTML = `<h2>Prepare!</h2>`;
 
 	let timer = setInterval(function() {
 		if(countdownTime <= 0) {
@@ -169,7 +169,7 @@ const countdown = () => {
 			gameWrapperEl.classList.remove('hide');
 			start = Date.now();
 		} else {
-			countdownHTML.innerHTML = timeleft;
+			countdownHTML.innerHTML = `<h2>${timeleft} seconds left</h2>`;
 		}
 		timeleft -= 1;
 	}, 1000);
