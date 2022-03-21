@@ -19,7 +19,7 @@ h1{
 }
 
 h2{
-	font-family: 'Palette Mosaic', cursive;
+	font-family: 'Bungee', cursive;
 	text-align: center;
 	font-size: 2rem;
 	color: #e63947;
@@ -185,9 +185,14 @@ main{
 }
 
 /* Game page */
-#game-wrapper {
+#game-wrapper, #waitingForPlayer-wrapper {
 	background-color: #E3DEDE;
 	width: 100vw;
+}
+
+#waitingForPlayer {
+	background-color: #15172b;
+	width: 80vw;
 }
 
 .content {
@@ -232,7 +237,6 @@ main{
 	flex-direction: row;
 	justify-content: space-evenly;
 	padding-top: 0;
-	align-items:flex-end;
 }
  
 #avatar1, #player1, #avatar2, #player2 {
