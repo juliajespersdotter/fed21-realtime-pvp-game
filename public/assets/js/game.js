@@ -48,7 +48,8 @@ socket.on('player:disconnected', (username) => {
 socket.on('start:game', () => {
 	// does not do much at this point, check if players are ready?
 	console.log("game started");
-	countdown();
+	//countdown();
+	startTimer();
 })
 
 socket.on('already:joined', data => {
@@ -109,6 +110,11 @@ usernameForm.addEventListener('submit', e => {
 // How to make sure something only happens if both users pressed the virus?
 virus.addEventListener('click', () => {
 	let clickTime = new Date().getTime();
+	virus.src = "./assets/img/virus-sad.svg";
+
+	setTimeout(function(){
+		virus.classList.add('hide');
+	}, Math.floor(Math.random() * 5000))
 
 	// when virus is clicked, randomise new numbers and send to socket
     socket.emit('virus:clicked', {
@@ -127,6 +133,11 @@ function moveVirus(offsetRow, offsetColumn) {
 		virus.style.gridColumn = column;
 		virus.style.gridRow = row;
 		virus.style.animation = "none";
+
+		virus.src = "./assets/img/virus.svg";
+		virus.classList.remove('hide');
+
+		
 		
 		// showVirus = new Date().getTime();
 		// socket.emit('calculate:time', {
@@ -163,4 +174,31 @@ const countdown = () => {
 	}, 1000);
 }
 
-//
+const startTimer = () => { 
+	let minutesLabelPlayer1 = document.getElementById("minutesPlayer1");
+	let secondsLabelPlayer1 = document.getElementById("secondsPlayer1");
+	let minutesLabelPlayer2 = document.getElementById("minutesPlayer2");
+	let secondsLabelPlayer2 = document.getElementById("secondsPlayer2");
+	let totalSeconds = 0;
+	setInterval(setTime, 1000);
+
+	function setTime() {
+ 	++totalSeconds;
+  	secondsLabelPlayer1.innerHTML = pad(totalSeconds % 60);
+  	minutesLabelPlayer1.innerHTML = pad(parseInt(totalSeconds / 60));
+
+	secondsLabelPlayer2.innerHTML = pad(totalSeconds % 60);
+  	minutesLabelPlayer2.innerHTML = pad(parseInt(totalSeconds / 60));
+	}
+
+	function pad(val) {
+  		let valString = val + "";
+  		if (valString.length < 2) {
+    		return "0" + valString;
+  		} else {
+    		return valString;
+  		}
+	}
+}
+
+        

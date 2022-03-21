@@ -58,12 +58,12 @@ const handleJoinGame = function(username, callback){
             success:false
         })
     } else {
-        let rndPick = Math.floor(Math.random() * gameCollection.totalGameCount);
-        if (gameCollection.gameList[rndPick]['gameObject']['playerTwo'] === null){
-            gameCollection.gameList[rndPick]['gameObject']['playerTwo'] = username;
-            const gameId = gameCollection.gameList[rndPick].gameObject.id;
+        let rndGame = Math.floor(Math.random() * gameCollection.totalGameCount);
+        if (gameCollection.gameList[rndGame]['gameObject']['playerTwo'] === null){
+            gameCollection.gameList[rndGame]['gameObject']['playerTwo'] = username;
+            const gameId = gameCollection.gameList[rndGame].gameObject.id;
             console.log(gameId);
-            let game = gameCollection.gameList[rndPick].gameObject;
+            let game = gameCollection.gameList[rndGame].gameObject;
 
             this.emit('join', gameId);
             this.emit('join:success', game);
