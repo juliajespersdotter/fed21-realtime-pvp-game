@@ -114,7 +114,7 @@ virus.addEventListener('click', () => {
 
 	setTimeout(function(){
 		virus.classList.add('hide');
-	}, Math.floor(Math.random() * 5000))
+	}, Math.floor(Math.random() * 5000));
 
 	// when virus is clicked, randomise new numbers and send to socket
     socket.emit('virus:clicked', {
