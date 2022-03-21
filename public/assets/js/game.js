@@ -141,7 +141,7 @@ socket.on('scores', (data) => { //data innehåller winnerOfThisRound, vilket är
 	let myTime = time;
 	if (myTime === data) {
 		const addScore = document.getElementById("player1-score");
-		addScore.innerHTML = `<h1>${score++}</h1>`;
+		addScore.innerHTML = `<h2>${score++}</h2>`;
 	} else if (myTime === data){
 		return;
 	}
