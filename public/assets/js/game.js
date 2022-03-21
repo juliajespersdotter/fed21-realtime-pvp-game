@@ -135,5 +135,32 @@ function moveVirus(offLeft, offTop) {
 		// 	clickTime: clickTime
 		// });	
 }
+let score = 0;
+socket.on('scores', (data) => { //data innehåller winnerOfThisRound, vilket är den lägsta tiden
+	let myTime = time;
+	if (myTime === data) {
+		score++;
+	} else if (myTime === data){
+		return;
+	}
+});
 
+const countdown = () => {
+	let countdownTime = 5;
+	let countdownHTML = document.querySelector('#');
+	countdownHTML.innerHTML = 'Prepare!';
 
+	let timer = setInterval(function() {
+		if(countdownTime <= 0) {
+			countdownHTML.classList.add('hide');
+			clearInterval(timer);
+			gameWrapperEl.classList.remove('hide');
+			start = Date.now();
+		} else {
+			countdownHTML.innerHTML = timeleft;
+		}
+		timeleft -= 1;
+	}, 1000);
+}
+
+//
