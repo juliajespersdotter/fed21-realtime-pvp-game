@@ -262,6 +262,7 @@ main{
 	color: white;
 	grid-column: 5/7;
 	grid-row: 2/4;
+	border-radius: 10px;
 }
 
 #players li{
@@ -274,7 +275,17 @@ main{
 	background-color: #15172b;
 	color:white;
 	grid-column: 5/7;
-	grid-row: 4/7;
+	grid-row: 4/6;
+	border-radius: 10px;
+}
+
+#imageWrapper {
+	display: flex;
+	justify-content: center;
+}
+
+.aside-below img {
+	width: 80%;
 }
 
 .main {
@@ -288,7 +299,6 @@ main{
 	border-radius: 10px;
 	grid-column: 1/5;
 	grid-row: 2/7;
-
 	display: grid;
 	grid-template-columns: repeat(12, 1fr);
 	grid-template-rows: repeat(12, 1fr);
@@ -299,6 +309,7 @@ main{
 	color: white;
 	grid-column: 1/7;
 	padding: 10px;
+	border-radius: 10px;
 }
 
 .hide{

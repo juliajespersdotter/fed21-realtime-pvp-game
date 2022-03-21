@@ -87,6 +87,16 @@
 	</form>
 </div>
 
+<!-- Waiting for another player to join the game -->
+<div id="waitingForPlayer-wrapper" class="hide">
+	<div id="waitingForPlayer">
+		<div>
+			<h2>Waiting for another player to join the game</h2>
+			<p>The game will start once player number 2 has joined!</p>
+		</div>
+	</div>
+</div>
+
 <!-- Gameboard -->
 <div id="game-wrapper" class="hide">
 	<div class="content">
@@ -134,6 +144,7 @@
 	
 		<aside class="aside">
 			<h3>HOW FAST ARE YOU</h3>
+			<div id="player1"></div>
 			<div id="timerPlayer1"></div>
 			<div>
 				<label id="minutesPlayer1">00</label>:<label id="secondsPlayer1">00</label>
@@ -148,12 +159,10 @@
 		</aside>
 	
 		<aside class="aside-below">
-			<h3>Scoreboard</h3>
-			<p>Your best time:</p> <!-- Show time -->
-			<p>Your worst time:</p> <!-- Show time -->
-
-			<p>Their best time:</p> <!-- Show time -->
-			<p>Their worst time:</p> <!-- Show time -->
+			<h3>Catch me if you can</h3>
+			<div id="imageWrapper">
+				<img src="/assets/img/virus-sad.svg" alt="">
+			</div>
 
 		</aside>
 	
@@ -167,16 +176,7 @@
 	</div>
 </div>
 
-<div id="waitingForPlayer-wrapper" class="hide">
-	<div id="waitingForPlayer">
-		<div>
-			<h2>Waiting for another player to join the game</h2>
-			<p>The game will start once player number 2 has joined!</p>
-		</div>
 
-	</div>
-
-</div>
 	
 	<!-- Bootstrap 5 script -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
