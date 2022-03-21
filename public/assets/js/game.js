@@ -24,13 +24,17 @@ if (userReady) {
 */
 
 // update user list with avatar (avatar not included as parameter now)
-const updatePlayerList = (playerOne, playerTwo, avatar) => {
-	document.querySelector('#players').innerHTML = 
-	 `<li>${playerOne}</li><li>${playerTwo}</li>`;
+const updatePlayerList = (playerOne, playerTwo) => {
+	document.querySelector('#player1').innerText = `${playerOne.name}`;
+	document.querySelector('#avatar1').src = playerOne.avatar;
 
-	// does not work
-	//document.querySelector('.avatar').innerHTML = 
-	//Object.values(avatar).map(avatar => `<li>${avatar}</li>`).join("");
+	if(playerTwo.name === null){
+		document.querySelector('#player2').innerText = `Waiting for player..`;
+
+	} else{
+		document.querySelector('#player2').innerText = `${playerTwo.name}`;
+		document.querySelector('#avatar2').src = playerTwo.avatar;
+	}
 }
 
 socket.on('player:list', (playerOne, playerTwo) => {
@@ -57,12 +61,11 @@ socket.on('already:joined', data => {
 })
 
 socket.on('join:success', data => {
-	console.log("You joined the game " + data.id);
+	console.log("You joined the game " + data);
 })
 
-
 socket.on('virus:clicked', (data) => {
-	moveVirus(data.offsetLeft, data.offsetTop, data.clickTime);
+	moveVirus(data.offsetRow, data.offsetColumn, data.clickTime);
 });
 
 usernameForm.addEventListener('submit', e => {
@@ -70,40 +73,46 @@ usernameForm.addEventListener('submit', e => {
 	username = usernameForm.username.value;
 	console.log(`Player username is ${username}`);
 
-	socket.emit('join:game', username, (status) => {
-		
-		console.log("Server acknowledged that user joined", status);
+	let avatar = document.querySelector('input[name="avatar"]:checked').value;
+	console.log(avatar);
 
-		if (status.success) {
-			socket.emit('start:game');
-			// hide form view
-			startEl.classList.add('hide');
+	if(username || avatar) {
+		socket.emit('join:game', {username: username, avatar: avatar} , (status) => {
+			
+			console.log("Server acknowledged that user joined", status);
+	
+			if (status.success) {
+				socket.emit('start:game');
+				// hide form view
+				startEl.classList.add('hide');
+	
+				// show game view
+				gameWrapperEl.classList.remove('hide');
+	
+				// update list of users in room
+				updatePlayerList(status.playerOne, status.playerTwo);
+			}  else {
+				 socket.emit('create:game', {username: username, avatar: avatar}, (status) => {
+			
+					console.log("Server acknowledged that user joined", status);
+				
+					 if (status.success) {
+						 socket.emit('start:game');
+						 // hide form view
+						 startEl.classList.add('hide');
+				
+						 // show game view
+						 gameWrapperEl.classList.remove('hide');
+				
+						 // update list of users in room
+						 updatePlayerList(status.playerOne, status.playerTwo);
+						 }
+				
+					 });
+			 }
+		 });
+	}
 
-			// show game view
-			gameWrapperEl.classList.remove('hide');
-
-			// update list of users in room
-			updatePlayerList(status.playerOne, status.playerTwo);
-		} else  {
-		 	socket.emit('create:game', username, (status) => {
-		
-				console.log("Server acknowledged that user joined", status);
-			
-		 		if (status.success) {
-		 			socket.emit('start:game');
-		 			// hide form view
-		 			startEl.classList.add('hide');
-			
-		 			// show game view
-		 			gameWrapperEl.classList.remove('hide');
-			
-		 			// update list of users in room
-		 			updatePlayerList(status.playerOne, status.playerTwo);
-		 			}
-			
-		 		});
-		 }
-	 });
  });
 
 
@@ -117,25 +126,21 @@ virus.addEventListener('click', () => {
 	}, 1000)
 
 	// when virus is clicked, randomise new numbers and send to socket
-	setTimeout(function(){
 		socket.emit('virus:clicked', {
-			offsetLeft: Math.floor(Math.random() * ((gameGrid.clientWidth- virus.clientWidth)) - 50),
-			offsetTop: Math.floor(Math.random() * ((gameGrid.clientHeight - virus.clientHeight)) -50 ),
+			offsetRow: Math.ceil(Math.random() * 12 ),
+			offsetColumn: Math.ceil(Math.random() * 12 ),
 		});
-	}, Math.floor(Math.random() * 5000))
-})
+});
 
 // move the virus using randomised numbers 
-function moveVirus(offLeft, offTop) {
+function moveVirus(offsetRow, offsetColumn) {
 	
-		let top, left;
+		let row = offsetRow;
+		let column = offsetColumn;
+		console.log('row and column', row, column);
 		
-		left = offLeft;
-		top = offTop;
-		console.log(top, left);
-		
-		virus.style.top = top + 'px';
-		virus.style.left = left + 'px';
+		virus.style.gridColumn = column;
+		virus.style.gridRow = row;
 		virus.style.animation = "none";
 
 		virus.src = "./assets/img/virus.svg";
@@ -149,6 +154,7 @@ function moveVirus(offLeft, offTop) {
 		// 	clickTime: clickTime
 		// });	
 }
+
 let score = 0;
 socket.on('scores', (data) => { //data innehåller winnerOfThisRound, vilket är den lägsta tiden
 	let myTime = time;

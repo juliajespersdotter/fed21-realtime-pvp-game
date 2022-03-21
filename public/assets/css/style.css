@@ -189,11 +189,6 @@ img {
 	height: auto;
 }
 
-main{
-	width: 100%;
-	height: 100vh;
-}
-
 /* Game page */
 #game-wrapper, #waitingForPlayer-wrapper {
 	background-color: #E3DEDE;
@@ -210,7 +205,7 @@ main{
 	margin: auto;
 	display: grid;
 	grid-template-columns: repeat(6, 1fr);
-	grid-template-rows: repeat(6, minmax(100px, auto));
+	grid-template-rows: repeat(6, 1fr);
 	grid-gap: 2%;
 }
 
@@ -272,6 +267,7 @@ main{
 	color: white;
 	grid-column: 5/7;
 	grid-row: 2/4;
+	border-radius: 10px;
 }
 
 #players li{
@@ -284,7 +280,17 @@ main{
 	background-color: #15172b;
 	color:white;
 	grid-column: 5/7;
-	grid-row: 4/7;
+	grid-row: 4/6;
+	border-radius: 10px;
+}
+
+#imageWrapper {
+	display: flex;
+	justify-content: center;
+}
+
+.aside-below img {
+	width: 80%;
 }
 
 .main {
@@ -298,6 +304,9 @@ main{
 	border-radius: 10px;
 	grid-column: 1/5;
 	grid-row: 2/7;
+	display: grid;
+	grid-template-columns: repeat(12, 1fr);
+	grid-template-rows: repeat(12, 1fr);
 }
 
 .footer {
@@ -305,6 +314,7 @@ main{
 	color: white;
 	grid-column: 1/7;
 	padding: 10px;
+	border-radius: 10px;
 }
 
 .hide{
@@ -324,9 +334,9 @@ main{
 } 
 */
 .virus{
-	position: absolute;
-	top: 43%;
-	left: 46%;
+	/* position: absolute; */
+	grid-row: 3;
+	grid-column: 3;
 	width: 70px;
 	transition: 0.1s ease all;
 }
