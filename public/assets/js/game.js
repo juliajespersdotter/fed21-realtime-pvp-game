@@ -61,7 +61,7 @@ socket.on('already:joined', data => {
 })
 
 socket.on('join:success', data => {
-	console.log("You joined the game " + data.id);
+	console.log("You joined the game " + data);
 })
 
 socket.on('virus:clicked', (data) => {
@@ -123,13 +123,13 @@ virus.addEventListener('click', () => {
 
 	setTimeout(function(){
 		virus.classList.add('hide');
-	}, Math.floor(Math.random() * 5000))
+	}, 1000)
 
 	// when virus is clicked, randomise new numbers and send to socket
-    socket.emit('virus:clicked', {
-        offsetRow: Math.ceil(Math.random() * 12 ),
-        offsetColumn: Math.ceil(Math.random() * 12 ),
-    });
+		socket.emit('virus:clicked', {
+			offsetRow: Math.ceil(Math.random() * 12 ),
+			offsetColumn: Math.ceil(Math.random() * 12 ),
+		});
 });
 
 // move the virus using randomised numbers 
@@ -154,6 +154,7 @@ function moveVirus(offsetRow, offsetColumn) {
 		// 	clickTime: clickTime
 		// });	
 }
+
 let score = 0;
 socket.on('scores', (data) => { //data innehåller winnerOfThisRound, vilket är den lägsta tiden
 	let myTime = time;
