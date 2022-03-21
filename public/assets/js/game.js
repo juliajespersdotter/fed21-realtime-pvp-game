@@ -24,13 +24,17 @@ if (userReady) {
 */
 
 // update user list with avatar (avatar not included as parameter now)
-const updatePlayerList = (playerOne, playerTwo, avatar) => {
-	document.querySelector('#players').innerHTML = 
-	 `<li>${playerOne}</li><li>${playerTwo}</li>`;
+const updatePlayerList = (playerOne, playerTwo) => {
+	document.querySelector('#player1').innerText = `${playerOne.name}`;
+	document.querySelector('#avatar1').src = playerOne.avatar;
 
-	// does not work
-	//document.querySelector('.avatar').innerHTML = 
-	//Object.values(avatar).map(avatar => `<li>${avatar}</li>`).join("");
+	if(playerTwo.name === null){
+		document.querySelector('#player2').innerText = `Waiting for player..`;
+
+	} else{
+		document.querySelector('#player2').innerText = `${playerTwo.name}`;
+		document.querySelector('#avatar2').src = playerTwo.avatar;
+	}
 }
 
 socket.on('player:list', (playerOne, playerTwo) => {
@@ -60,7 +64,6 @@ socket.on('join:success', data => {
 	console.log("You joined the game " + data.id);
 })
 
-
 socket.on('virus:clicked', (data) => {
 	moveVirus(data.offsetLeft, data.offsetTop, data.clickTime);
 });
@@ -70,40 +73,46 @@ usernameForm.addEventListener('submit', e => {
 	username = usernameForm.username.value;
 	console.log(`Player username is ${username}`);
 
-	socket.emit('join:game', username, (status) => {
-		
-		console.log("Server acknowledged that user joined", status);
+	let avatar = document.querySelector('input[name="avatar"]:checked').value;
+	console.log(avatar);
 
-		if (status.success) {
-			socket.emit('start:game');
-			// hide form view
-			startEl.classList.add('hide');
+	if(username || avatar) {
+		socket.emit('join:game', {username: username, avatar: avatar} , (status) => {
+			
+			console.log("Server acknowledged that user joined", status);
+	
+			if (status.success) {
+				socket.emit('start:game');
+				// hide form view
+				startEl.classList.add('hide');
+	
+				// show game view
+				gameWrapperEl.classList.remove('hide');
+	
+				// update list of users in room
+				updatePlayerList(status.playerOne, status.playerTwo);
+			}  else {
+				 socket.emit('create:game', {username: username, avatar: avatar}, (status) => {
+			
+					console.log("Server acknowledged that user joined", status);
+				
+					 if (status.success) {
+						 socket.emit('start:game');
+						 // hide form view
+						 startEl.classList.add('hide');
+				
+						 // show game view
+						 gameWrapperEl.classList.remove('hide');
+				
+						 // update list of users in room
+						 updatePlayerList(status.playerOne, status.playerTwo);
+						 }
+				
+					 });
+			 }
+		 });
+	}
 
-			// show game view
-			gameWrapperEl.classList.remove('hide');
-
-			// update list of users in room
-			updatePlayerList(status.playerOne, status.playerTwo);
-		} else  {
-		 	socket.emit('create:game', username, (status) => {
-		
-				console.log("Server acknowledged that user joined", status);
-			
-		 		if (status.success) {
-		 			socket.emit('start:game');
-		 			// hide form view
-		 			startEl.classList.add('hide');
-			
-		 			// show game view
-		 			gameWrapperEl.classList.remove('hide');
-			
-		 			// update list of users in room
-		 			updatePlayerList(status.playerOne, status.playerTwo);
-		 			}
-			
-		 		});
-		 }
-	 });
  });
 
 

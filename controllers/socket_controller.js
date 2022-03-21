@@ -7,17 +7,17 @@ const models = require('../models');
 
 let io = null;
 
-let gameCollection = {
-    totalGameCount: 0,
-    gameList: []
-};
+
+let totalGameCount = 0;
+const gameList = [];
+
 
 // handle when user has disconnected from chat
 const handleDisconnect = function() {
 	debug(`Client ${this.id} disconnected :(`);
 
 	// find the room that this socket is part of
-    const game = gameCollection.gameList.find(gameRoom => gameRoom.id === this.id);
+    const game = gameList.find(gameRoom => gameRoom.id === this.id);
 
 	// let everyone in the room know that user has disconnected
 	this.broadcast.to(game).emit('player:disconnected', this.id);
@@ -29,48 +29,54 @@ const handleDisconnect = function() {
 	// this.broadcast.to('some room').emit('player:list', game.players);
 }
 
-const handleCreateGame = function(username, callback) {
+const handleCreateGame = function(data, callback) {
     let gameObject = {};
+    let playerOne = {};
+    let playerTwo = {};
     gameObject.id = (this.id);
-    gameObject.playerOne = username;
-    gameObject.playerTwo = null;
-    gameCollection.totalGameCount++;
-    gameCollection.gameList.push({gameObject});
+    playerOne.name = data.username;
+    playerTwo.name = null;
+    playerOne.avatar = data.avatar;
+    playerTwo.avatar = null;
+    totalGameCount++;
+    gameObject = {playerOne, playerTwo};
+    gameList.push({gameObject});
 
-    console.log("Game Created by "+ username + " w/ " + gameObject.id);
-    this.broadcast.to(gameObject.id).emit('player:connected', username, gameObject.id);
+    console.log("Game Created by "+ data.username + " w/ " + gameObject.id);
+    this.broadcast.to(gameObject.id).emit('player:connected', data.username, gameObject.id);
     this.emit('join', this.id);
     
 
     callback({
         success: true,
         room: gameObject.id,
-        playerOne: gameObject.playerOne,
-        playerTwo: null
+        playerOne: playerOne,
+        playerTwo: playerTwo
     });
 };
 
-const handleJoinGame = function(username, callback){
-    console.log(username + " wants to join a game");
+const handleJoinGame = function(data, callback){
+    console.log(data.username + " wants to join a game");
 
-    if ( gameCollection.totalGameCount === 0 ) {
+    if ( totalGameCount === 0 ) {
          callback({
             success:false
         })
     } else {
-        let rndGame = Math.floor(Math.random() * gameCollection.totalGameCount);
-        if (gameCollection.gameList[rndGame]['gameObject']['playerTwo'] === null){
-            gameCollection.gameList[rndGame]['gameObject']['playerTwo'] = username;
-            const gameId = gameCollection.gameList[rndGame].gameObject.id;
+        let rndGame = Math.floor(Math.random() * totalGameCount);
+        if (gameList[rndGame].gameObject.playerTwo.name === null){
+            gameList[rndGame].gameObject.playerTwo.name = data.username;
+            gameList[rndGame]['gameObject']['playerTwo'].avatar = data.avatar;
+            const gameId = gameList[rndGame].gameObject.id;
             console.log(gameId);
-            let game = gameCollection.gameList[rndGame].gameObject;
+            let game = gameList[rndGame].gameObject;
 
             this.emit('join', gameId);
             this.emit('join:success', game);
             //this.join(gameId);
 
-            console.log( username + " has been added to: " + gameId);
-            this.broadcast.to(gameId).emit('player:connected', username, gameId);
+            console.log(data.username + " has been added to: " + gameId);
+            this.broadcast.to(gameId).emit('player:connected', data.username, gameId);
             let playerOne = game.playerOne;
             let playerTwo = game.playerTwo;
     
@@ -93,14 +99,14 @@ const handleJoinGame = function(username, callback){
 }
 
 let playersTimes = [{
-    "ID": "eBC8RtXvh_UZYsmRAAAX",
-    "Time": 2.3423
+    ID: "eBC8RtXvh_UZYsmRAAAX",
+    Time: 2.3423
     }, {
-    "ID": "XeBC8RtXvh_UZYsmRAAAXsad",
-    "Time": 3.4545
+    ID: "XeBC8RtXvh_UZYsmRAAAXsad",
+    Time: 3.4545
     }, {
-    "ID": "askjdeBC8RtXvh_UZYsmRAAAX",
-    "Time": 5.0070
+    ID: "askjdeBC8RtXvh_UZYsmRAAAX",
+    Time: 5.0070
 }]
 let rounds = 0;
 let maxRounds = 10;
