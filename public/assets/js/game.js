@@ -147,7 +147,8 @@ let score = 0;
 socket.on('scores', (data) => { //data innehåller winnerOfThisRound, vilket är den lägsta tiden
 	let myTime = time;
 	if (myTime === data) {
-		score++;
+		const addScore = document.getElementById("player1-score");
+		addScore.innerHTML = `<h1>${score++}</h1>`;
 	} else if (myTime === data){
 		return;
 	}

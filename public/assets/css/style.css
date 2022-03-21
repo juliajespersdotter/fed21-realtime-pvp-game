@@ -224,7 +224,7 @@ main{
 	justify-content: center;
 }
 
-#your-score {
+#player1-score, #player2-score {
 	color: #e63947;
 }
 .aside {
