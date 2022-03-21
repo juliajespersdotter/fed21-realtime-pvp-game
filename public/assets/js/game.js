@@ -25,15 +25,15 @@ if (userReady) {
 
 // update user list with avatar (avatar not included as parameter now)
 const updatePlayerList = (playerOne, playerTwo) => {
-	document.querySelector('#player1').innerText = `${playerOne.name}`;
-	document.querySelector('#avatar1').src = playerOne.avatar;
+	document.querySelector('.player1').innerText = `${playerOne.name}`;
+	document.querySelector('.avatar1').src = playerOne.avatar;
 
 	if(playerTwo.name === null){
-		document.querySelector('#player2').innerText = `Waiting for player..`;
+		document.querySelector('.player2').innerText = `Waiting for player..`;
 
 	} else{
-		document.querySelector('#player2').innerText = `${playerTwo.name}`;
-		document.querySelector('#avatar2').src = playerTwo.avatar;
+		document.querySelector('.player2').innerText = `${playerTwo.name}`;
+		document.querySelector('.avatar2').src = playerTwo.avatar;
 	}
 }
 
