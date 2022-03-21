@@ -112,22 +112,20 @@ virus.addEventListener('click', () => {
 
 	// when virus is clicked, randomise new numbers and send to socket
     socket.emit('virus:clicked', {
-        offsetLeft: Math.floor(Math.random() * ((gameGrid.clientWidth- virus.clientWidth)) ),
-        offsetTop: Math.floor(Math.random() * ((gameGrid.clientHeight - virus.clientHeight)) ),
+        offsetRow: Math.floor(Math.random() * 13 ),
+        offsetColumn: Math.floor(Math.random() * 13 ),
     });
-})
+});
 
 // move the virus using randomised numbers 
-function moveVirus(offLeft, offTop) {
+function moveVirus(offsetRow, offsetColumn) {
 	
-		let top, left;
+		let row = offsetRow;
+		let column = offsetColumn;
+		console.log('row and column', row, column, Math.floor(Math.random() * 13 ));
 		
-		left = offLeft;
-		top = offTop;
-		console.log(top, left);
-		
-		virus.style.top = top + 'px';
-		virus.style.left = left + 'px';
+		virus.style.gridColumn = column;
+		virus.style.gridRow = row;
 		virus.style.animation = "none";
 		
 		// showVirus = new Date().getTime();
