@@ -7,7 +7,6 @@ html{
 }
 
 body{
-	color: white;
 	font-family: 'Fredoka', sans-serif;
 }
 
@@ -18,7 +17,7 @@ h1{
 	color:#e63947;
 }
 
-h2, h3{
+h2{
 	font-family: 'Bungee', cursive;
 	text-align: center;
 }
@@ -205,7 +204,7 @@ main{
 
 .header-section {
 	grid-column: 5/7;
-	/*grid-row: 4/6;*/
+	grid-row: 4/6;
 	display: flex;
 	justify-content: space-evenly;
 	justify-items: stretch;
