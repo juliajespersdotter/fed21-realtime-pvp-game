@@ -112,7 +112,6 @@ usernameForm.addEventListener('submit', e => {
 			 }
 		 });
 	}
-
  });
 
 
