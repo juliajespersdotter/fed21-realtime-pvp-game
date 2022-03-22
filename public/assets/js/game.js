@@ -180,6 +180,7 @@ const countdown = () => {
 		}
 		countdownTime -= 1;
 	}, 1000);
+	// 100
 }
 
 const startTimer = () => { 
