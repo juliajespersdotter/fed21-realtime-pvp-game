@@ -24,7 +24,7 @@ if (userReady) {
 */
 
 // update user list with avatar (avatar not included as parameter now)
-const updatePlayerList = (playerOne, playerTwo) => {
+/*const updatePlayerList = (playerOne, playerTwo) => {
 	document.querySelector('.player1').innerText = `${playerOne.name}`;
 	document.querySelector('.avatar1').src = playerOne.avatar;
 
@@ -33,6 +33,31 @@ const updatePlayerList = (playerOne, playerTwo) => {
 
 	} else{
 		document.querySelector('.player2').innerText = `${playerTwo.name}`;
+		document.querySelector('.avatar2').src = playerTwo.avatar;
+	}
+}*/
+
+const updatePlayerList = (playerOne, playerTwo) => {
+	let playerOne_list = document.querySelectorAll('.player1'); 
+	console.log(playerOne_list);
+	playerOne_list.forEach(player1 => {
+		player1.innerText = `${playerOne.name}`;
+	});
+	document.querySelector('.avatar1').src = playerOne.avatar;
+
+	if(playerTwo.name === null){
+		let playerTwo_list = document.querySelectorAll('.player2');
+		console.log(playerTwo_list);
+		playerTwo_list.forEach(player2 => {
+			player2.innerText = `Waiting for player..`;
+		});
+
+	} else{
+		let playerTwo_list = document.querySelectorAll('.player2');
+		console.log(playerTwo_list);
+		playerTwo_list.forEach(player2 => {
+			player2.innerText = `${playerTwo.name}`;
+		});
 		document.querySelector('.avatar2').src = playerTwo.avatar;
 	}
 }
