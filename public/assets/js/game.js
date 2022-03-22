@@ -194,7 +194,7 @@ const startTimer = () => {
 
 	function setTime() {
  	++totalSeconds;
-  	secondsLabelPlayer1.innerHTML = pad(totalSeconds % 60);
+  	secondsLabelPlayer1.innerHTML = pad(totalSeconds % 60); // .toFixed(3)
   	minutesLabelPlayer1.innerHTML = pad(parseInt(totalSeconds / 60));
 
 	secondsLabelPlayer2.innerHTML = pad(totalSeconds % 60);
