@@ -3,17 +3,12 @@
  */
 
 const debug = require('debug')('game:socket_controller');
-const models = require('../models');
 
 let io = null;
 
 
 let totalGameCount = 0;
 const gameList = [];
-
-const getGameByUserId = id => {
-	return gameList.find(game => game.hasOwnProperty(id));
-}
 
 // handle when user has disconnected from chat
 const handleDisconnect = function() {
@@ -84,7 +79,7 @@ const handleJoinGame = function(data, callback){
         })
     } else {
         let rndGame = Math.floor(Math.random() * totalGameCount);
-        if (gameList[rndGame]['gameObject']['playerTwo']['name'] === null){
+        if (gameList[rndGame]['gameObject'].playerTwo['id'] === null){
             gameList[rndGame]['gameObject']['playerTwo']['name'] = data.username;
             gameList[rndGame]['gameObject']['playerTwo']['avatar'] = data.avatar;
             gameList[rndGame]['gameObject']['playerTwo']['id'] = this.id;

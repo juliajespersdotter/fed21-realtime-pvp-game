@@ -229,45 +229,54 @@ img {
 .header {
 	background-color:#15172b;
 	grid-column: 1/7;
-	padding: 10px;
 	border-radius: 5px;
 	color: #eee;
 	display: flex;
 	justify-content: space-evenly;
 	justify-items: stretch;
-	
 }
 
 .header-section {
-	grid-column: 5/7;
 	display: flex;
-	justify-content: space-evenly;
+	flex-direction: row;
+	justify-content: center;
 	justify-items: stretch;
 	width: 100%;
 }
 
-.header-section-left-right {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-evenly;
-	justify-items: stretch;
-	width: 100%;
-}
-
-.wrapper-avatar-player {
+.header-section-content {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-evenly;
-	padding-top: 0;
-}
- 
-#avatar1, #player1, #avatar2, #player2 {
+	justify-items: center;
+	width: 100%;
 	justify-items: stretch;
 }
 
-#avatar1, #avatar2 {
-	color: white;
+#playerScore-wrapper, #player-avatar-wrapper {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
 }
+
+#player-avatar-wrapper {
+	width: 100%;
+}
+ 
+.avatar1, .avatar2{
+	width: 40px;
+	margin-right: 20px;
+	height: auto;
+	display: inline;
+}
+
+.player1, .player2  {
+	display: inline;
+	height: auto;
+}
+
 
 .center {
 	display: flex;
@@ -276,6 +285,7 @@ img {
 
 #player1-score, #player2-score {
 	color: #e63947;
+	display: inline;
 
 }
 .aside {
