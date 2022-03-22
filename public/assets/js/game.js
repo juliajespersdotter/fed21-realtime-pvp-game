@@ -39,7 +39,6 @@ if (userReady) {
 
 const updatePlayerList = (playerOne, playerTwo) => {
 	let playerOne_list = document.querySelectorAll('.player1'); 
-	console.log(playerOne_list);
 	playerOne_list.forEach(player1 => {
 		player1.innerText = `${playerOne.name}`;
 	});
@@ -47,14 +46,12 @@ const updatePlayerList = (playerOne, playerTwo) => {
 
 	if(playerTwo.name === null){
 		let playerTwo_list = document.querySelectorAll('.player2');
-		console.log(playerTwo_list);
 		playerTwo_list.forEach(player2 => {
 			player2.innerText = `Waiting for player..`;
 		});
 
 	} else{
 		let playerTwo_list = document.querySelectorAll('.player2');
-		console.log(playerTwo_list);
 		playerTwo_list.forEach(player2 => {
 			player2.innerText = `${playerTwo.name}`;
 		});
