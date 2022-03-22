@@ -61,6 +61,8 @@ const updatePlayerList = (playerOne, playerTwo) => {
 		waitingForPlayerWrapperEl.classList.add('hide');
 		// show game view
 		gameWrapperEl.classList.remove('hide')
+
+		startTimer();
 	}
 }
 
@@ -80,7 +82,7 @@ socket.on('start:game', () => {
 	// does not do much at this point, check if players are ready?
 	console.log("game started");
 	//countdown();
-	startTimer();
+	// startTimer();
 })
 
 socket.on('already:joined', data => {
@@ -106,7 +108,7 @@ usernameForm.addEventListener('submit', e => {
 
 		if (status.success) {
 		console.log("Server acknowledged that user joined", status);
-		socket.emit('start:game');
+		// socket.emit('start:game');
 		// hide form view
 		startEl.classList.add('hide');
 
@@ -121,7 +123,7 @@ usernameForm.addEventListener('submit', e => {
 			console.log("Server acknowledged that user joined", status);
 		
 				if (status.success) {
-					socket.emit('start:game');
+					// socket.emit('start:game');
 					// hide form view
 					startEl.classList.add('hide');
 		
@@ -130,12 +132,11 @@ usernameForm.addEventListener('submit', e => {
 		
 					// update list of users in room
 					updatePlayerList(status.playerOne, status.playerTwo);
-					}
-		
-				});
+				}
+			});
 		}
-		 });
- });
+	});
+});
 
 
 // How to make sure something only happens if both users pressed the virus?
