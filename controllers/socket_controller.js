@@ -91,17 +91,12 @@ const handleJoinGame = function(data, callback){
             }
         });
 
-        // 
-        // let rndGame = Math.floor(Math.random() * totalGameCount);
-        // let gameObj = gameList[rndGame]['gameObject'];
-        // if (gameObj.playerTwo['id'] === null){
         if(game){
         console.log('Open game:',game);
         game.gameObject['playerTwo']['name'] = data.username;
         game.gameObject['playerTwo']['avatar'] = data.avatar;
         game.gameObject['playerTwo']['id'] = this.id;
         const gameId = game.gameObject.playerOne.id;
-        // let game = gameList[rndGame].gameObject;
 
         this.join(gameId);
         debug(`Player ${data.username} joined room ${gameId}`);
