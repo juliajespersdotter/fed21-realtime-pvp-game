@@ -84,7 +84,7 @@ const handleJoinGame = function(data, callback){
             success:false
         })
     } else {
-        
+
        const game = gameList.find(gameRoom => {
             if(gameRoom.gameObject.playerTwo.id === null){
                 return true;
@@ -217,13 +217,6 @@ module.exports = function(socket, _io) {
 	socket.on('start:game', () => {
         io.emit('start:game');
     });
-
-    socket.on('game:board', () => {
-        let id = socket.id
-        const game = fetchGame(id);
-        let room = (game.gameObject.id);
-        io.to(room).emit('game:board');
-    })
 
     // handle when virus is clicked
     socket.on('virus:clicked', (data) => {
