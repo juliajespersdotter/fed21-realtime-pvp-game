@@ -51,18 +51,16 @@ const updatePlayerList = (playerOne, playerTwo) => {
 		// show waitingForPlayer view
 		waitingForPlayerWrapperEl.classList.remove('hide');
 
-
 	} else{
-		// hide waitingForPlayer view
-		waitingForPlayerWrapperEl.classList.hide('hide');
-		// show game view
-		gameWrapperEl.classList.show('hide')
-		
 		let playerTwo_list = document.querySelectorAll('.player2');
 		playerTwo_list.forEach(player2 => {
 			player2.innerText = `${playerTwo.name}`;
 		});
 		document.querySelector('.avatar2').src = playerTwo.avatar;
+		// hide waitingForPlayer view
+		waitingForPlayerWrapperEl.classList.hide('hide');
+		// show game view
+		gameWrapperEl.classList.show('hide')
 	}
 }
 
