@@ -6,6 +6,7 @@ const socket = io();
 const startEl = document.querySelector('#start');
 const gameGrid = document.querySelector('.main');
 const gameWrapperEl = document.querySelector('#game-wrapper');
+const waitingForPlayerWrapperEl = document.querySelector('#waitingForPlayer-wrapper');
 const usernameForm = document.querySelector('#username-form');
 const chosenAvatar = document.querySelector('.avatar-wrapper');
 const virus = document.querySelector('.virus');
@@ -24,16 +25,42 @@ if (userReady) {
 */
 
 // update user list with avatar (avatar not included as parameter now)
-const updatePlayerList = (playerOne, playerTwo) => {
-	document.querySelector('#player1').innerText = `${playerOne.name}`;
-	document.querySelector('#avatar1').src = playerOne.avatar;
+/*const updatePlayerList = (playerOne, playerTwo) => {
+	document.querySelector('.player1').innerText = `${playerOne.name}`;
+	document.querySelector('.avatar1').src = playerOne.avatar;
 
 	if(playerTwo.name === null){
-		document.querySelector('#player2').innerText = `Waiting for player..`;
+		document.querySelector('.player2').innerText = `Waiting for player..`;
 
 	} else{
-		document.querySelector('#player2').innerText = `${playerTwo.name}`;
-		document.querySelector('#avatar2').src = playerTwo.avatar;
+		document.querySelector('.player2').innerText = `${playerTwo.name}`;
+		document.querySelector('.avatar2').src = playerTwo.avatar;
+	}
+}*/
+
+const updatePlayerList = (playerOne, playerTwo) => {
+	let playerOne_list = document.querySelectorAll('.player1'); 
+	playerOne_list.forEach(player1 => {
+		player1.innerText = `${playerOne.name}`;
+	});
+	document.querySelector('.avatar1').src = playerOne.avatar;
+
+	if(playerTwo.name === null){
+		// hide game view
+		gameWrapperEl.classList.add('hide')
+		// show waitingForPlayer view
+		waitingForPlayerWrapperEl.classList.remove('hide');
+
+	} else{
+		let playerTwo_list = document.querySelectorAll('.player2');
+		playerTwo_list.forEach(player2 => {
+			player2.innerText = `${playerTwo.name}`;
+		});
+		document.querySelector('.avatar2').src = playerTwo.avatar;
+		// hide waitingForPlayer view
+		waitingForPlayerWrapperEl.classList.hide('hide');
+		// show game view
+		gameWrapperEl.classList.show('hide')
 	}
 }
 
@@ -186,7 +213,7 @@ const startTimer = () => {
 
 	function setTime() {
  	++totalSeconds;
-  	secondsLabelPlayer1.innerHTML = pad(totalSeconds % 60);
+  	secondsLabelPlayer1.innerHTML = pad(totalSeconds % 60); // .toFixed(3)
   	minutesLabelPlayer1.innerHTML = pad(parseInt(totalSeconds / 60));
 
 	secondsLabelPlayer2.innerHTML = pad(totalSeconds % 60);

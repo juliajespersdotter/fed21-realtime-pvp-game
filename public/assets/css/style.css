@@ -107,14 +107,24 @@ h3 {
 /* Startpage - Styles for avatars */
 .avatar-wrapper {
 	width: 100%;
+}
+
+.avatar-content {
+	width: 100%;
 	display: flex;
-	justify-content: space-evenly;
+	flex-direction: column;
 }
 
 .avatar-content img:hover {
 	background-color: white;
 	box-shadow: 0 0 2px 1px white;
 	border-radius: 10px;
+}
+
+.avatarSection {
+	display: flex;
+	justify-content: space-evenly;
+	margin: 5px;
 }
 
 /* Hide radiobutton */
@@ -156,7 +166,7 @@ h3 {
 	cursor: pointer;
 	font-size: 18px;
 	height: 50px;
-	margin-top: 38px;
+	margin-top: 15px;
 	outline: 0;
 	text-align: center;
 	width: 100%;
@@ -175,19 +185,36 @@ button {
 
 img {
 	width: 40px;
-	margin: 4%;
+	margin: 3%;
 	height: auto;
 }
 
 /* Game page */
-#game-wrapper, #waitingForPlayer-wrapper {
+#game-wrapper {
 	background-color: #E3DEDE;
 	width: 100vw;
 }
 
+#waitingForPlayer-wrapper {
+	width: 100vw;
+	height: 100vh;
+	background-color: white;
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	grid-template-rows: repeat(5, 1fr);
+}
+
 #waitingForPlayer {
 	background-color: #15172b;
-	width: 80vw;
+	width: 60vw;
+	height: 60vh;
+	grid-column: 3;
+	grid-row: 3;
+	display: flex;
+	align-items: center;
+	justify-content: top;
+	padding-top: 100px;
+	flex-direction: column;
 }
 
 .content {
@@ -256,7 +283,7 @@ img {
 	padding: 10px;
 	color: white;
 	grid-column: 5/7;
-	grid-row: 2/4;
+	grid-row: 2/3;
 	border-radius: 10px;
 }
 
@@ -266,11 +293,20 @@ img {
 	text-align: center;
 }
 
+#timerPlayer1, #timerPlayer2 {
+	display: flex;
+	justify-content: center;
+}
+
+#player1, #player2 {
+	color: #e63947;
+}
+
 .aside-below {
 	background-color: #15172b;
 	color:white;
 	grid-column: 5/7;
-	grid-row: 4/6;
+	grid-row: 3/5;
 	border-radius: 10px;
 }
 
