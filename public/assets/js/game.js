@@ -115,6 +115,8 @@ virus.addEventListener('click', () => {
 	let clickTime = new Date().getTime();
 	virus.src = "./assets/img/virus-sad.svg";
 
+	// const reactionTime = Date.now() - virusShowedAt;
+
 	setTimeout(function () {
 		virus.classList.add('hide');
 
@@ -129,6 +131,9 @@ virus.addEventListener('click', () => {
 
 // move the virus using randomised numbers 
 function moveVirus(offsetRow, offsetColumn) {
+
+		// let virusShowedAt = Date.now();
+		// 
 	
 		let row = offsetRow;
 		let column = offsetColumn;
