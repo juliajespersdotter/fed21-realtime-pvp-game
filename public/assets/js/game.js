@@ -65,7 +65,7 @@ socket.on('join:success', data => {
 })
 
 socket.on('virus:clicked', (data) => {
-	moveVirus(data.offsetRow, data.offsetColumn, data.clickTime);
+		moveVirus(data.offsetRow, data.offsetColumn, data.clickTime);
 });
 
 usernameForm.addEventListener('submit', e => {
@@ -130,7 +130,6 @@ function moveVirus(offsetRow, offsetColumn) {
 	
 		let row = offsetRow;
 		let column = offsetColumn;
-		console.log('row and column', row, column);
 		
 		virus.style.gridColumn = column;
 		virus.style.gridRow = row;

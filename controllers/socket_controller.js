@@ -44,6 +44,8 @@ const handleCreateGame = function(data, callback) {
     gameObject.playerTwo.name = null;
     gameObject.playerOne.avatar = data.avatar;
     gameObject.playerTwo.avatar = null;
+    gameObject.playerTwo.hasClicked = false;
+    gameObject.playerOne.hasClicked = false;
     totalGameCount++;
     console.log(gameObject);
     gameList.push({gameObject});
@@ -68,8 +70,8 @@ const handleJoinGame = function(data, callback){
         })
     } else {
         let rndGame = Math.floor(Math.random() * totalGameCount);
-        if (gameList[rndGame]['gameObject'].playerTwo['name'] === null){
-            gameList[rndGame]['gameObject'].playerTwo['name'] = data.username;
+        if (gameList[rndGame]['gameObject']['playerTwo']['name'] === null){
+            gameList[rndGame]['gameObject']['playerTwo']['name'] = data.username;
             gameList[rndGame]['gameObject']['playerTwo']['avatar'] = data.avatar;
             gameList[rndGame]['gameObject']['playerTwo']['id'] = this.id;
             const gameId = gameList[rndGame].gameObject.id;
@@ -193,11 +195,36 @@ module.exports = function(socket, _io) {
     socket.on('virus:clicked', (data) => {
         // accepts data for socket to get same for both players
         // then sends back to front end
-        const game = gameList.find(gameRoom => gameRoom.id === this.id);
-        //let room = getGameByUserId(this.id)
+        console.log('Socket id: ' + socket.id);
+
+        // looks for room that matches this socked it
+        const game = gameList.find(gameRoom => {
+            if(gameRoom.gameObject.playerOne.id === socket.id || gameRoom.gameObject.playerTwo.id === socket.id){
+                return true;
+            }
+        });
+
+        // get room id
         let room = (game.gameObject.id);
-        console.log(room);
-        io.to(room).emit('virus:clicked', data);
+        let playerOne = game.gameObject.playerOne;
+        let playerTwo = game.gameObject.playerTwo;
+        console.log('Player id: ' + socket.id + ' players id', playerOne.id + ' ' + playerTwo.id);
+
+        // check if both players clicked
+        if(playerOne.id === socket.id){
+            playerOne.hasClicked = true;
+        } else if(playerTwo.id === socket.id){
+            playerTwo.hasClicked  = true;
+        }
+
+        // if both players clicked, only then mode the virus
+        if(playerOne.hasClicked && playerTwo.hasClicked){
+            playerOne.hasClicked = false;
+            playerTwo.hasClicked = false;
+            io.to(room).emit('virus:clicked', data);
+        } else{
+            console.log('Waiting for player');
+        }
     });
 
     // not functional
