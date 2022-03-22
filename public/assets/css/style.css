@@ -195,7 +195,7 @@ img {
 	width: 100vw;
 }
 
-#waitingForPlayer-wrapper {
+#waitingForPlayer-wrapper, #countdown-wrapper {
 	width: 100vw;
 	height: 100vh;
 	background-color: white;
@@ -204,7 +204,7 @@ img {
 	grid-template-rows: repeat(5, 1fr);
 }
 
-#waitingForPlayer {
+#waitingForPlayer, .countdown {
 	background-color: #15172b;
 	width: 60vw;
 	height: 60vh;
@@ -229,45 +229,54 @@ img {
 .header {
 	background-color:#15172b;
 	grid-column: 1/7;
-	padding: 10px;
 	border-radius: 5px;
 	color: #eee;
 	display: flex;
 	justify-content: space-evenly;
 	justify-items: stretch;
-	
 }
 
 .header-section {
-	grid-column: 5/7;
 	display: flex;
-	justify-content: space-evenly;
+	flex-direction: row;
+	justify-content: center;
 	justify-items: stretch;
 	width: 100%;
 }
 
-.header-section-left-right {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-evenly;
-	justify-items: stretch;
-	width: 100%;
-}
-
-.wrapper-avatar-player {
+.header-section-content {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-evenly;
-	padding-top: 0;
-}
- 
-#avatar1, #player1, #avatar2, #player2 {
+	justify-items: center;
+	width: 100%;
 	justify-items: stretch;
 }
 
-#avatar1, #avatar2 {
-	color: white;
+#playerScore-wrapper, #player-avatar-wrapper {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
 }
+
+#player-avatar-wrapper {
+	width: 100%;
+}
+ 
+.avatar1, .avatar2{
+	width: 40px;
+	margin-right: 20px;
+	height: auto;
+	display: inline;
+}
+
+.player1, .player2  {
+	display: inline;
+	height: auto;
+}
+
 
 .center {
 	display: flex;
@@ -276,6 +285,7 @@ img {
 
 #player1-score, #player2-score {
 	color: #e63947;
+	display: inline;
 
 }
 .aside {
@@ -306,7 +316,7 @@ img {
 	background-color: #15172b;
 	color:white;
 	grid-column: 5/7;
-	grid-row: 3/5;
+	grid-row: 3/4;
 	border-radius: 10px;
 }
 
@@ -329,7 +339,8 @@ img {
 	justify-content: center;
 	border-radius: 10px;
 	grid-column: 1/5;
-	grid-row: 2/7;
+	grid-row: 2/4;
+
 	display: grid;
 	grid-template-columns: repeat(12, 1fr);
 	grid-template-rows: repeat(12, 1fr);

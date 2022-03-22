@@ -102,46 +102,52 @@
 	</div>
 </div>
 
+<!-- Countdown for game to begin -->
+<div id="countdown-wrapper" class="hide">
+	<div class="countdown">
+		<div id="countdownId">
+			<h2>Prepare!</h2>
+		</div>
+	</div>
+</div>
+
 <!-- Gameboard -->
 <div id="game-wrapper" class="hide">
 	<div class="content">
 		<header class="header">
 			
 			<div class="header-section">
-				<div class="header-section-left-right">
-					<div class="wrapper-avatar-player">
-						<img src="/assets/img/person-swimming-solid.svg" class="avatar1" alt="">
+				<div class="header-section-content">
+					<div id="player-avatar-wrapper">
+						<div>
+							<img src="/assets/img/person-swimming-solid.svg" class="avatar1" alt="">
+						</div>
 						<div>
 							<h2 class="player1">player 1</h2><!-- player 1 username -->
 						</div>
 					</div>
-					<div id="player1-score">
-						<h2>1</h2>
+				</div>
+			</div>
+
+			<div class="header-section">
+				<div class="header-section-content">
+					<div id="playerScore-wrapper">
+						<h2 id="player1-score">0</h2>
+						<h2>-</h2>
+						<h2 id="player2-score">0</h2>
 					</div>
 				</div>
 			</div>
 
 			<div class="header-section">
-				<div>
-					<div class="center">
-						<h1>vs</h1>
-					</div>
-					<div>
-						<h1>Socket Slayers</h1>
-					</div>
-				</div>
-			</div>
-
-			<div class="header-section">
-				<div class="header-section-left-right">
-					<div class="wrapper-avatar-player">
-						<img src="assets/img/baby-solid.svg" class="avatar2" alt="">
+				<div class="header-section-content">
+					<div id="player-avatar-wrapper">
+						<div>
+							<img src="/assets/img/person-swimming-solid.svg" class="avatar2" alt="">
+						</div>
 						<div>
 							<h2 class="player2">player 2</h2><!-- player 2 username -->
 						</div>
-					</div>
-					<div id="player2-score">
-						<h2>3</h2>
 					</div>
 				</div>
 			</div>
@@ -149,21 +155,27 @@
 	
 		<aside class="aside">
 			<h3>HOW FAST ARE YOU</h3>
-			<div>
-				<h3 class="player1">player 1</h3><!-- player 1 username -->
+			<div class="wrapper-timer">
+				
+				<div class="wrapper-timer-player">
+					<h3 class="player1">player 1</h3><!-- player 1 username -->
+				</div>
+
+				<div id="timerPlayer1">
+					<label id="minutesPlayer1">00</label>:<label id="secondsPlayer1">00</label>
+				</div>
 			</div>
 
-			<div id="timerPlayer1">
-				<label id="minutesPlayer1">00</label>:<label id="secondsPlayer1">00</label>
-			</div>
+			<div class="wrapper-timer">
+				
+				<div class="wrapper-timer-player">
+					<h3 class="player2">player 2</h3><!-- player 2 username -->
+				</div>
 
-			<div>
-				<h3 class="player2">player 2</h3><!-- player 2 username -->
+				<div id="timerPlayer2">
+					<label id="minutesPlayer2">00</label>:<label id="secondsPlayer2">00</label>
+				</div>
 			</div>
-			<div id="timerPlayer2">
-				<label id="minutesPlayer2">00</label>:<label id="secondsPlayer2">00</label>
-			</div>
-	
 		</aside>
 	
 		<aside class="aside-below">

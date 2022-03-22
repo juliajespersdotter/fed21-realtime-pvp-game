@@ -7,6 +7,7 @@ const startEl = document.querySelector('#start');
 const gameGrid = document.querySelector('.main');
 const gameWrapperEl = document.querySelector('#game-wrapper');
 const waitingForPlayerWrapperEl = document.querySelector('#waitingForPlayer-wrapper');
+const countdownWrapperEl = document.querySelector('#countdown-wrapper');
 const usernameForm = document.querySelector('#username-form');
 const chosenAvatar = document.querySelector('.avatar-wrapper');
 const virus = document.querySelector('.virus');
@@ -23,11 +24,11 @@ const updatePlayerList = (playerOne, playerTwo) => {
 
 	if(playerTwo.name === null){
 		// hide game view
-		gameWrapperEl.classList.add('hide')
+		gameWrapperEl.classList.add('hide');
 		// show waitingForPlayer view
 		waitingForPlayerWrapperEl.classList.remove('hide');
 
-	} else{
+	} else {
 		let playerTwo_list = document.querySelectorAll('.player2');
 		playerTwo_list.forEach(player2 => {
 			player2.innerText = `${playerTwo.name}`;
@@ -35,11 +36,15 @@ const updatePlayerList = (playerOne, playerTwo) => {
 		document.querySelector('.avatar2').src = playerTwo.avatar;
 		// hide waitingForPlayer view
 		waitingForPlayerWrapperEl.classList.add('hide');
+		// show countdown
+		countdownWrapperEl.classList.remove('hide');
+		//start countdown
+		countdown();
 		// show game view
 		gameWrapperEl.classList.remove('hide')
 
 		startTimer();
-	}
+	}	
 }
 
 socket.on('player:list', (playerOne, playerTwo) => {
@@ -155,21 +160,20 @@ socket.on('scores', (data) => { //data innehåller winnerOfThisRound, vilket är
 	}
 });
 
+let countdownTime = 3;
 const countdown = () => {
-	let countdownTime = 5;
-	let countdownHTML = document.querySelector('#');
-	countdownHTML.innerHTML = 'Prepare!';
+	let countdownHTML = document.getElementById("countdownId");
 
 	let timer = setInterval(function() {
 		if(countdownTime <= 0) {
-			countdownHTML.classList.add('hide');
 			clearInterval(timer);
 			gameWrapperEl.classList.remove('hide');
+			countdownWrapperEl.classList.add('hide');
 			start = Date.now();
 		} else {
-			countdownHTML.innerHTML = timeleft;
+			countdownHTML.innerHTML = `<h2>${countdownTime} seconds left</h2>`;
 		}
-		timeleft -= 1;
+		countdownTime -= 1;
 	}, 1000);
 }
 
