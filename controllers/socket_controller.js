@@ -227,14 +227,18 @@ module.exports = function(socket, _io) {
         let room = (game.gameObject.id);
         let playerOne = game.gameObject.playerOne;
         let playerTwo = game.gameObject.playerTwo;
-        console.log('Player id: ' + socket.id + ' players id', playerOne.id + ' ' + playerTwo.id);
+        // console.log('Player id: ' + socket.id + ' players id', playerOne.id + ' ' + playerTwo.id);
 
         // check if both players clicked
         if(playerOne.id === socket.id){
             playerOne.hasClicked = true;
+            playerOne['clickTime'] = data.clickTime;
+            console.log("Player one click time " + data.clickTime);
             
         } else if(playerTwo.id === socket.id){
             playerTwo.hasClicked  = true;
+            playerTwo['clickTime'] = data.clickTime;
+            console.log("Player two click time " + data.clickTime);
         }
 
         // if both players clicked, only then mode the virus

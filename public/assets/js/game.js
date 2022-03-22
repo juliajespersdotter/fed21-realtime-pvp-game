@@ -68,7 +68,7 @@ socket.on('start:game', () => {
 })
 
 socket.on('virus:clicked', (data) => {
-	moveVirus(data.offsetRow, data.offsetColumn, data.clickTime);
+	moveVirus(data.offsetRow, data.offsetColumn, data.reactionTime);
 	saveTime(); 
 });
 
@@ -114,32 +114,28 @@ usernameForm.addEventListener('submit', e => {
 
 // How to make sure something only happens if both users pressed the virus?
 virus.addEventListener('click', () => {
-	let clickTime = new Date().getTime();
 	virus.src = "./assets/img/virus-sad.svg";
 
-	// const reactionTime = Date.now() - virusShowedAt;
+	let clickTime = Date.now();
+	// console.log(clickTime);
 
 	setTimeout(function () {
 		virus.classList.add('hide');
-
-
 
 	// when virus is clicked, randomise new numbers and send to socket
 		socket.emit('virus:clicked', {
 			offsetRow: Math.ceil(Math.random() * 12 ),
 			offsetColumn: Math.ceil(Math.random() * 12 ),
+			clickTime: clickTime,
 		});
 	}, 1000)
+
 
 	// when virus is clicked, randomise new numbers and send to socket
 });
 
 // move the virus using randomised numbers 
-function moveVirus(offsetRow, offsetColumn) {
-
-		// let virusShowedAt = Date.now();
-		// 
-	
+function moveVirus(offsetRow, offsetColumn, clickTime) {
 		let row = offsetRow;
 		let column = offsetColumn;
 		
@@ -151,8 +147,10 @@ function moveVirus(offsetRow, offsetColumn) {
 		virus.classList.remove('hide');
 
 		
-		
-		// showVirus = new Date().getTime();
+		let showVirus = Date.now();
+		let reactionTime = (showVirus - clickTime)/1000;
+		console.log('Your reaction time ', reactionTime);
+
 		// socket.emit('calculate:time', {
 		// 	showVirus: showVirus,
 		// 	clickTime: clickTime
