@@ -211,3 +211,11 @@ const saveTime  = () => {
 	// här kollar vi ifall spelare 1 klickat på virus -> i så fall ska tiden sparas. När båda spelare klickat på samma virus så kallar vi på funktionen startTimer(). Om det gått 10 spelomgångar, break ut från loop. 
 }
         
+/* const gameover = () => {
+	let gameoverHTML = document.getElementById("gameoverId");
+	if (playerOne.totalScore > playerTwo.totalScore) {
+		gameoverHTML.innerHTML = `<h2>${playerOne} is the winner</h2>`
+	} else (playerOne.totalScore < playerTwo.totalScore) {
+		gameoverHTML.innerHTML = `<h2>${playerTwo} is the winner</h2>`
+	}
+} */
