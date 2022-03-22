@@ -40,7 +40,6 @@ const updatePlayerList = (playerOne, playerTwo) => {
 		countdownWrapperEl.classList.remove('hide');
 
 		gameWrapperEl.classList.add('hide');
-
 		//start countdown
 		countdown();
 	}	
@@ -73,36 +72,29 @@ socket.on('virus:clicked', (data) => {
 usernameForm.addEventListener('submit', e => {
 	e.preventDefault();
 	username = usernameForm.username.value;
-	console.log(`Player username is ${username}`);
 
 	let avatar = document.querySelector('input[name="avatar"]:checked').value;
 
-		socket.emit('join:game', {username: username, avatar: avatar} , (status) => {
-		console.log(status);
+	socket.emit('join:game', {username: username, avatar: avatar} , (status) => {
 
-		if (status.success) {
+	if (status.success) {
 		console.log("Server acknowledged that user joined", status);
 		
 		startEl.classList.add('hide');
-
-		// show game view
 		gameWrapperEl.classList.remove('hide');
 
 		updatePlayerList(status.playerOne, status.playerTwo);
 
 	}  else if(!status.success) {
-			socket.emit('create:game', {username: username, avatar: avatar}, (status) => {
+		socket.emit('create:game', {username: username, avatar: avatar}, (status) => {
 	
 			console.log("Server acknowledged that user joined", status);
 		
-				if (status.success) {
-					// update list of users in room
-					startEl.classList.add('hide');
+			if (status.success) {
+				startEl.classList.add('hide');
+				gameWrapperEl.classList.remove('hide');
 
-					// show game view
-					gameWrapperEl.classList.remove('hide');
-
-					updatePlayerList(status.playerOne, status.playerTwo);
+				updatePlayerList(status.playerOne, status.playerTwo);
 				}
 			});
 		}
@@ -120,8 +112,6 @@ virus.addEventListener('click', () => {
 	setTimeout(function () {
 		virus.classList.add('hide');
 
-
-
 	// when virus is clicked, randomise new numbers and send to socket
 		socket.emit('virus:clicked', {
 			offsetRow: Math.ceil(Math.random() * 12 ),
@@ -134,27 +124,24 @@ virus.addEventListener('click', () => {
 
 // move the virus using randomised numbers 
 function moveVirus(offsetRow, offsetColumn) {
-
-		// let virusShowedAt = Date.now();
-		// 
+	// let virusShowedAt = Date.now();
+	// 
 	
-		let row = offsetRow;
-		let column = offsetColumn;
+	let row = offsetRow;
+	let column = offsetColumn;
 		
-		virus.style.gridColumn = column;
-		virus.style.gridRow = row;
-		virus.style.animation = "none";
+	virus.style.gridColumn = column;
+	virus.style.gridRow = row;
+	virus.style.animation = "none";
 
-		virus.src = "./assets/img/virus.svg";
-		virus.classList.remove('hide');
+	virus.src = "./assets/img/virus.svg";
+	virus.classList.remove('hide');
 
-		
-		
-		// showVirus = new Date().getTime();
-		// socket.emit('calculate:time', {
-		// 	showVirus: showVirus,
-		// 	clickTime: clickTime
-		// });	
+	// showVirus = new Date().getTime();
+	// socket.emit('calculate:time', {
+	// 	showVirus: showVirus,
+	// 	clickTime: clickTime
+	// });	
 }
 
 let score = 0;
@@ -177,7 +164,6 @@ const countdown = () => {
 			clearInterval(timer);
 			gameWrapperEl.classList.remove('hide');
 			countdownWrapperEl.classList.add('hide');
-			start = Date.now();
 
 			startTimerPlayer1();
 			startTimerPlayer2();
@@ -186,11 +172,10 @@ const countdown = () => {
 		}
 		countdownTime -= 1;
 	}, 1000);
-	// 100
 }
 
 const startTimerPlayer1 = () => {
-	var startTimestamp = moment().startOf("day");
+	let startTimestamp = moment().startOf("day");
     setInterval(function() {
         startTimestamp.add(1, 'second');
         document.getElementById('timerPlayer1').innerHTML = 
@@ -199,7 +184,7 @@ const startTimerPlayer1 = () => {
 }
     
 const startTimerPlayer2 = () => {
-	var startTimestamp = moment().startOf("day");
+	let startTimestamp = moment().startOf("day");
     setInterval(function() {
         startTimestamp.add(1, 'second');
         document.getElementById('timerPlayer2').innerHTML = 
