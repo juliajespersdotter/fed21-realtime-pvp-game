@@ -222,6 +222,7 @@ module.exports = function(socket, _io) {
         // check if both players clicked
         if(playerOne.id === socket.id){
             playerOne.hasClicked = true;
+            
         } else if(playerTwo.id === socket.id){
             playerTwo.hasClicked  = true;
         }

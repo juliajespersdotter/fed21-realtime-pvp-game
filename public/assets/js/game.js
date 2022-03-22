@@ -67,7 +67,8 @@ const updatePlayerList = (playerOne, playerTwo) => {
 		// show game view
 		gameWrapperEl.classList.remove('hide')
 
-		startTimer();
+		startTimerPlayer1();
+		startTimerPlayer2();
 	}	
 }
 
@@ -152,6 +153,8 @@ virus.addEventListener('click', () => {
 
 	virus.classList.add('hide');
 
+
+
 	// when virus is clicked, randomise new numbers and send to socket
 		socket.emit('virus:clicked', {
 			offsetRow: Math.ceil(Math.random() * 12 ),
@@ -185,7 +188,7 @@ let score = 0;
 socket.on('scores', (data) => { //data innehåller winnerOfThisRound, vilket är den lägsta tiden
 	let myTime = time;
 	if (myTime === data) {
-		const addScore = document.getElementById("player1-score");
+		const addScore = document.getElementById("player1-score"); // #player1-score?
 		addScore.innerHTML = `<h2>${score++}</h2>`;
 	} else if (myTime === data){
 		return;
@@ -209,31 +212,22 @@ const countdown = () => {
 	}, 1000);
 }
 
-const startTimer = () => { 
-	let minutesLabelPlayer1 = document.getElementById("minutesPlayer1");
-	let secondsLabelPlayer1 = document.getElementById("secondsPlayer1");
-	let minutesLabelPlayer2 = document.getElementById("minutesPlayer2");
-	let secondsLabelPlayer2 = document.getElementById("secondsPlayer2");
-	let totalSeconds = 0;
-	setInterval(setTime, 1000);
-
-	function setTime() {
- 	++totalSeconds;
-  	secondsLabelPlayer1.innerHTML = pad(totalSeconds % 60); // .toFixed(3)
-  	minutesLabelPlayer1.innerHTML = pad(parseInt(totalSeconds / 60));
-
-	secondsLabelPlayer2.innerHTML = pad(totalSeconds % 60);
-  	minutesLabelPlayer2.innerHTML = pad(parseInt(totalSeconds / 60));
-	}
-
-	function pad(val) {
-  		let valString = val + "";
-  		if (valString.length < 2) {
-    		return "0" + valString;
-  		} else {
-    		return valString;
-  		}
-	}
+const startTimerPlayer1 = () => {
+	var startTimestamp = moment().startOf("day");
+    setInterval(function() {
+        startTimestamp.add(1, 'second');
+        document.getElementById('timerPlayer1').innerHTML = 
+            startTimestamp.format('mm:ss');
+    }, 1000);
+}
+    
+const startTimerPlayer2 = () => {
+	var startTimestamp = moment().startOf("day");
+    setInterval(function() {
+        startTimestamp.add(1, 'second');
+        document.getElementById('timerPlayer2').innerHTML = 
+            startTimestamp.format('mm:ss');
+    }, 1000);
 }
 
 const saveTime  = () => {
