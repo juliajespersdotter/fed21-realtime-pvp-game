@@ -6,6 +6,7 @@ const socket = io();
 const startEl = document.querySelector('#start');
 const gameGrid = document.querySelector('.main');
 const gameWrapperEl = document.querySelector('#game-wrapper');
+const waitingForPlayerWrapperEl = document.querySelector('#waitingForPlayer-wrapper');
 const usernameForm = document.querySelector('#username-form');
 const chosenAvatar = document.querySelector('.avatar-wrapper');
 const virus = document.querySelector('.virus');
@@ -45,10 +46,10 @@ const updatePlayerList = (playerOne, playerTwo) => {
 	document.querySelector('.avatar1').src = playerOne.avatar;
 
 	if(playerTwo.name === null){
-		let playerTwo_list = document.querySelectorAll('.player2');
-		playerTwo_list.forEach(player2 => {
-			player2.innerText = `Waiting for player..`;
-		});
+		// hide game view
+		gameWrapperEl.classList.add('hide')
+		// show waitingForPlayer view
+		waitingForPlayerWrapperEl.classList.remove('hide');
 
 	} else{
 		let playerTwo_list = document.querySelectorAll('.player2');
@@ -56,6 +57,10 @@ const updatePlayerList = (playerOne, playerTwo) => {
 			player2.innerText = `${playerTwo.name}`;
 		});
 		document.querySelector('.avatar2').src = playerTwo.avatar;
+		// hide waitingForPlayer view
+		waitingForPlayerWrapperEl.classList.hide('hide');
+		// show game view
+		gameWrapperEl.classList.show('hide')
 	}
 }
 

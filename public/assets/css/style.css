@@ -190,14 +190,31 @@ img {
 }
 
 /* Game page */
-#game-wrapper, #waitingForPlayer-wrapper {
+#game-wrapper {
 	background-color: #E3DEDE;
 	width: 100vw;
 }
 
+#waitingForPlayer-wrapper {
+	width: 100vw;
+	height: 100vh;
+	background-color: white;
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	grid-template-rows: repeat(5, 1fr);
+}
+
 #waitingForPlayer {
 	background-color: #15172b;
-	width: 80vw;
+	width: 60vw;
+	height: 60vh;
+	grid-column: 3;
+	grid-row: 3;
+	display: flex;
+	align-items: center;
+	justify-content: top;
+	padding-top: 100px;
+	flex-direction: column;
 }
 
 .content {
