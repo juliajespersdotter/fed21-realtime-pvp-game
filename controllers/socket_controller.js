@@ -20,7 +20,7 @@ const handleDisconnect = function() {
 	debug(`Client ${this.id} disconnected :(`);
 
 	// find the room that this socket is part of
-    const game = gameList.find(gameRoom => gameRoom.id === this.id);
+    const game = gameList.find(gameRoom => gameRoom.gameObject.id === this.id);
 
 	// let everyone in the room know that user has disconnected
 	this.broadcast.to(game).emit('player:disconnected', this.id);
