@@ -221,14 +221,15 @@ img {
 	width: 80%;
 	margin: auto;
 	display: grid;
-	grid-template-columns: repeat(6, 1fr);
-	grid-template-rows: repeat(6, 1fr);
+	grid-template-columns: repeat(12, 1fr);
+	grid-template-rows: repeat(6, minmax(auto, 130px));
 	grid-gap: 2%;
 }
 
 .header {
 	background-color:#15172b;
-	grid-column: 1/7;
+	grid-column: 1/13;
+	grid-row: 1/2;
 	border-radius: 5px;
 	color: #eee;
 	display: flex;
@@ -260,10 +261,10 @@ img {
 	justify-content: center;
 	width: 100%;
 }
-
+/* 
 #player-avatar-wrapper {
 	width: 100%;
-}
+} */
  
 .avatar1, .avatar2{
 	width: 40px;
@@ -292,8 +293,8 @@ img {
 	background-color: #15172b;
 	padding: 10px;
 	color: white;
-	grid-column: 5/7;
-	grid-row: 2/3;
+	grid-column: 10/13;
+	grid-row: 2/4;
 	border-radius: 10px;
 }
 
@@ -306,6 +307,7 @@ img {
 #timerPlayer1, #timerPlayer2 {
 	display: flex;
 	justify-content: center;
+	display: inline;
 }
 
 #player1, #player2 {
@@ -315,8 +317,8 @@ img {
 .aside-below {
 	background-color: #15172b;
 	color:white;
-	grid-column: 5/7;
-	grid-row: 3/4;
+	grid-column: 10/13;
+	grid-row: 4/6;
 	border-radius: 10px;
 }
 
@@ -338,40 +340,19 @@ img {
 	background-color: #303245;
 	justify-content: center;
 	border-radius: 10px;
-	grid-column: 1/5;
-	grid-row: 2/4;
+	grid-column: 1/10;
+	grid-row: 2/6;
 
 	display: grid;
 	grid-template-columns: repeat(12, 1fr);
 	grid-template-rows: repeat(12, 1fr);
 }
 
-.footer {
-	background-color: #15172b;
-	color: white;
-	grid-column: 1/7;
-	padding: 10px;
-	border-radius: 10px;
-}
-
-.hide{
+.hide {
 	display: none !important;
 }
 
-/*
-.square{
-	width: 70px;
-	height: 70px;
-	border: 1px solid grey;
-}
-
-.fa-virus-covid {
-	color: green;
-	font-size: 70px;
-} 
-*/
 .virus{
-	/* position: absolute; */
 	grid-row: 3;
 	grid-column: 3;
 	width: 70px;
