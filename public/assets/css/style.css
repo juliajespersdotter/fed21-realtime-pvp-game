@@ -195,7 +195,7 @@ img {
 	width: 100vw;
 }
 
-#waitingForPlayer-wrapper {
+#waitingForPlayer-wrapper, #countdown-wrapper {
 	width: 100vw;
 	height: 100vh;
 	background-color: white;
@@ -204,7 +204,7 @@ img {
 	grid-template-rows: repeat(5, 1fr);
 }
 
-#waitingForPlayer {
+#waitingForPlayer, .countdown {
 	background-color: #15172b;
 	width: 60vw;
 	height: 60vh;
@@ -316,7 +316,7 @@ img {
 	background-color: #15172b;
 	color:white;
 	grid-column: 5/7;
-	grid-row: 3/5;
+	grid-row: 3/4;
 	border-radius: 10px;
 }
 
@@ -339,7 +339,8 @@ img {
 	justify-content: center;
 	border-radius: 10px;
 	grid-column: 1/5;
-	grid-row: 2/7;
+	grid-row: 2/4;
+
 	display: grid;
 	grid-template-columns: repeat(12, 1fr);
 	grid-template-rows: repeat(12, 1fr);
