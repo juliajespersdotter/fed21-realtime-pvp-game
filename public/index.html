@@ -38,46 +38,51 @@
 
 		<div class="avatar-wrapper">
 			<div class="avatar-content">
-			<label>
-				<input class="avatar" type="radio" name="avatar" value="/assets/img/meteor-solid.svg">
-				<img src="/assets/img/meteor-solid.svg">
-			</label>
-			<label>
-				<input type="radio" name="avatar" value="/assets/img/baby-solid.svg">
-				<img src="/assets/img/baby-solid.svg">
-			</label>
-			<label>
-				<input type="radio" name="avatar" value="/assets/img/face-frown-solid.svg">
-				<img src="/assets/img/face-frown-solid.svg">
-			</label>
-			<label>
-				<input type="radio" name="avatar" value="/assets/img/face-smile-solid.svg">
-				<img src="/assets/img/face-smile-solid.svg">
-			</label>
-			<label>
-				<input type="radio" name="avatar" value="/assets/img/person-swimming-solid.svg">
-				<img src="/assets/img/person-swimming-solid.svg">
-			</label>
-			<label>
-				<input type="radio" name="avatar" value="/assets/img/poo-solid.svg">
-				<img src="/assets/img/poo-solid.svg">
-			</label>
-			<label>
-				<input type="radio" name="avatar" value="/assets/img/skull-solid.svg">
-				<img src="/assets/img/skull-solid.svg">
-			</label>
-			<label>
-				<input type="radio" name="avatar" value="/assets/img/user-astronaut-solid.svg">
-				<img src="/assets/img/user-astronaut-solid.svg">
-			</label>
-			<label>
-				<input type="radio" name="avatar" value="/assets/img/user-secret-solid.svg">
-				<img src="/assets/img/user-secret-solid.svg">
-			</label>
-			<label>
-				<input type="radio" name="avatar" value="/assets/img/bed-solid.svg">
-				<img src="/assets/img/bed-solid.svg">
-			</label>
+				<div class="avatarSection">
+					<label>
+						<input class="avatar" type="radio" name="avatar" value="/assets/img/meteor-solid.svg">
+						<img src="/assets/img/meteor-solid.svg">
+					</label>
+					<label>
+						<input type="radio" name="avatar" value="/assets/img/baby-solid.svg">
+						<img src="/assets/img/baby-solid.svg">
+					</label>
+					<label>
+						<input type="radio" name="avatar" value="/assets/img/face-frown-solid.svg">
+						<img src="/assets/img/face-frown-solid.svg">
+					</label>
+					<label>
+						<input type="radio" name="avatar" value="/assets/img/face-smile-solid.svg">
+						<img src="/assets/img/face-smile-solid.svg">
+					</label>
+					<label>
+						<input type="radio" name="avatar" value="/assets/img/person-swimming-solid.svg">
+						<img src="/assets/img/person-swimming-solid.svg">
+					</label>
+				</div>
+				
+				<div class="avatarSection">
+					<label>
+						<input type="radio" name="avatar" value="/assets/img/poo-solid.svg">
+						<img src="/assets/img/poo-solid.svg">
+					</label>
+					<label>
+						<input type="radio" name="avatar" value="/assets/img/skull-solid.svg">
+						<img src="/assets/img/skull-solid.svg">
+					</label>
+					<label>
+						<input type="radio" name="avatar" value="/assets/img/user-astronaut-solid.svg" checked>
+						<img src="/assets/img/user-astronaut-solid.svg">
+					</label>
+					<label>
+						<input type="radio" name="avatar" value="/assets/img/user-secret-solid.svg">
+						<img src="/assets/img/user-secret-solid.svg">
+					</label>
+					<label>
+						<input type="radio" name="avatar" value="/assets/img/bed-solid.svg">
+						<img src="/assets/img/bed-solid.svg">
+					</label>
+				</div>
 			</div>
 		</div>
 
@@ -92,7 +97,7 @@
 	<div id="waitingForPlayer">
 		<div>
 			<h2>Waiting for another player to join the game</h2>
-			<p>The game will start once player number 2 has joined!</p>
+			<h3>The game will start once player number 2 has joined!</h3>
 		</div>
 	</div>
 </div>
@@ -113,9 +118,9 @@
 			<div class="header-section">
 				<div class="header-section-left-right">
 					<div class="wrapper-avatar-player">
-						<img src="/assets/img/person-swimming-solid.svg" id="avatar1" alt="">
+						<img src="/assets/img/person-swimming-solid.svg" class="avatar1" alt="">
 						<div>
-							<h2 id="player1">player 1</h2><!-- player 1 username -->
+							<h2 class="player1">player 1</h2><!-- player 1 username -->
 						</div>
 					</div>
 					<div id="player1-score">
@@ -138,9 +143,9 @@
 			<div class="header-section">
 				<div class="header-section-left-right">
 					<div class="wrapper-avatar-player">
-						<img src="assets/img/baby-solid.svg" id="avatar2" alt="">
+						<img src="assets/img/baby-solid.svg" class="avatar2" alt="">
 						<div>
-							<h2 id="player2">player 3</h2><!-- player 1 username -->
+							<h2 class="player2">player 2</h2><!-- player 2 username -->
 						</div>
 					</div>
 					<div id="player2-score">
@@ -152,15 +157,18 @@
 	
 		<aside class="aside">
 			<h3>HOW FAST ARE YOU</h3>
-			<div id="player1"></div>
-			<div id="timerPlayer1"></div>
 			<div>
+				<h3 class="player1">player 1</h3><!-- player 1 username -->
+			</div>
+
+			<div id="timerPlayer1">
 				<label id="minutesPlayer1">00</label>:<label id="secondsPlayer1">00</label>
 			</div>
 
-			<div id="player2"></div>
-			<div id="timerPlayer2"></div>
 			<div>
+				<h3 class="player2">player 2</h3><!-- player 2 username -->
+			</div>
+			<div id="timerPlayer2">
 				<label id="minutesPlayer2">00</label>:<label id="secondsPlayer2">00</label>
 			</div>
 	
@@ -169,7 +177,7 @@
 		<aside class="aside-below">
 			<h3>Catch me if you can</h3>
 			<div id="imageWrapper">
-				<img src="/assets/img/virus-sad.svg" alt="">
+				<img src="/assets/img/virus.svg" alt="">
 			</div>
 
 		</aside>
