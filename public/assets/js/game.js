@@ -38,13 +38,11 @@ const updatePlayerList = (playerOne, playerTwo) => {
 		waitingForPlayerWrapperEl.classList.add('hide');
 		// show countdown
 		countdownWrapperEl.classList.remove('hide');
+
+		gameWrapperEl.classList.add('hide');
+
 		//start countdown
 		countdown();
-		// show game view
-		gameWrapperEl.classList.remove('hide')
-
-		startTimerPlayer1();
-		startTimerPlayer2();
 	}	
 }
 
@@ -180,6 +178,9 @@ const countdown = () => {
 			gameWrapperEl.classList.remove('hide');
 			countdownWrapperEl.classList.add('hide');
 			start = Date.now();
+
+			startTimerPlayer1();
+			startTimerPlayer2();
 		} else {
 			countdownHTML.innerHTML = `<h2>${countdownTime} seconds left</h2>`;
 		}
