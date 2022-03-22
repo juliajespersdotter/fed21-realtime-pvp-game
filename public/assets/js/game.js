@@ -15,30 +15,6 @@ const virus = document.querySelector('.virus');
 let username = null;
 let avatar = null;
 
-/*
-Efter att användare fyllt i användarnamn och valt avatar kontrolleras ifall det finns en spelare som är redo att spela.
-typ....
-if (userReady) {
-	prompt('Are you ready?');
-} else {
-	sätt diven som håller waitingroom till 'show' 
-} och igen när det kommer in en spelare som vill spela så måste prompten komma upp....
-*/
-
-// update user list with avatar (avatar not included as parameter now)
-/*const updatePlayerList = (playerOne, playerTwo) => {
-	document.querySelector('.player1').innerText = `${playerOne.name}`;
-	document.querySelector('.avatar1').src = playerOne.avatar;
-
-	if(playerTwo.name === null){
-		document.querySelector('.player2').innerText = `Waiting for player..`;
-
-	} else{
-		document.querySelector('.player2').innerText = `${playerTwo.name}`;
-		document.querySelector('.avatar2').src = playerTwo.avatar;
-	}
-}*/
-
 const updatePlayerList = (playerOne, playerTwo) => {
 	let playerOne_list = document.querySelectorAll('.player1'); 
 	playerOne_list.forEach(player1 => {
@@ -91,14 +67,6 @@ socket.on('start:game', () => {
 	// startTimer();
 })
 
-socket.on('already:joined', data => {
-	console.log("You are already in an existing game " + data.id);
-})
-
-socket.on('join:success', data => {
-	console.log("You joined the game " + data);
-})
-
 socket.on('virus:clicked', (data) => {
 	moveVirus(data.offsetRow, data.offsetColumn, data.clickTime);
 	saveTime(); 
@@ -112,32 +80,30 @@ usernameForm.addEventListener('submit', e => {
 	let avatar = document.querySelector('input[name="avatar"]:checked').value;
 
 		socket.emit('join:game', {username: username, avatar: avatar} , (status) => {
+		console.log(status);
 
 		if (status.success) {
 		console.log("Server acknowledged that user joined", status);
-		// socket.emit('start:game');
-		// hide form view
+		
 		startEl.classList.add('hide');
 
 		// show game view
 		gameWrapperEl.classList.remove('hide');
 
-		// update list of users in room
 		updatePlayerList(status.playerOne, status.playerTwo);
-	}  else {
+
+	}  else if(!status.success) {
 			socket.emit('create:game', {username: username, avatar: avatar}, (status) => {
 	
 			console.log("Server acknowledged that user joined", status);
 		
 				if (status.success) {
-					// socket.emit('start:game');
-					// hide form view
+					// update list of users in room
 					startEl.classList.add('hide');
-		
+
 					// show game view
 					gameWrapperEl.classList.remove('hide');
-		
-					// update list of users in room
+
 					updatePlayerList(status.playerOne, status.playerTwo);
 				}
 			});
@@ -151,7 +117,8 @@ virus.addEventListener('click', () => {
 	let clickTime = new Date().getTime();
 	virus.src = "./assets/img/virus-sad.svg";
 
-	virus.classList.add('hide');
+	setTimeout(function () {
+		virus.classList.add('hide');
 
 
 
@@ -160,6 +127,9 @@ virus.addEventListener('click', () => {
 			offsetRow: Math.ceil(Math.random() * 12 ),
 			offsetColumn: Math.ceil(Math.random() * 12 ),
 		});
+	}, 1000)
+
+	// when virus is clicked, randomise new numbers and send to socket
 });
 
 // move the virus using randomised numbers 
