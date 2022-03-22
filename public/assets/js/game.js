@@ -88,6 +88,7 @@ socket.on('join:success', data => {
 
 socket.on('virus:clicked', (data) => {
 	moveVirus(data.offsetRow, data.offsetColumn, data.clickTime);
+	saveTime(); 
 });
 
 usernameForm.addEventListener('submit', e => {
@@ -232,4 +233,7 @@ const startTimer = () => {
 	}
 }
 
+const saveTime  = () => {
+	// här kollar vi ifall spelare 1 klickat på virus -> i så fall ska tiden sparas. När båda spelare klickat på samma virus så kallar vi på funktionen startTimer(). Om det gått 10 spelomgångar, break ut från loop. 
+}
         
