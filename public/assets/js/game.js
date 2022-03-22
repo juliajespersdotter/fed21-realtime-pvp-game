@@ -58,9 +58,11 @@ const updatePlayerList = (playerOne, playerTwo) => {
 		});
 		document.querySelector('.avatar2').src = playerTwo.avatar;
 		// hide waitingForPlayer view
-		waitingForPlayerWrapperEl.classList.hide('hide');
+		waitingForPlayerWrapperEl.classList.add('hide');
 		// show game view
-		gameWrapperEl.classList.show('hide')
+		gameWrapperEl.classList.remove('hide')
+
+		startTimer();
 	}
 }
 
@@ -80,7 +82,7 @@ socket.on('start:game', () => {
 	// does not do much at this point, check if players are ready?
 	console.log("game started");
 	//countdown();
-	startTimer();
+	// startTimer();
 })
 
 socket.on('already:joined', data => {
@@ -92,7 +94,7 @@ socket.on('join:success', data => {
 })
 
 socket.on('virus:clicked', (data) => {
-	moveVirus(data.offsetRow, data.offsetColumn, data.clickTime);
+		moveVirus(data.offsetRow, data.offsetColumn, data.clickTime);
 });
 
 usernameForm.addEventListener('submit', e => {
@@ -101,45 +103,40 @@ usernameForm.addEventListener('submit', e => {
 	console.log(`Player username is ${username}`);
 
 	let avatar = document.querySelector('input[name="avatar"]:checked').value;
-	console.log(avatar);
 
-	if(username || avatar) {
 		socket.emit('join:game', {username: username, avatar: avatar} , (status) => {
-			
+
+		if (status.success) {
+		console.log("Server acknowledged that user joined", status);
+		// socket.emit('start:game');
+		// hide form view
+		startEl.classList.add('hide');
+
+		// show game view
+		gameWrapperEl.classList.remove('hide');
+
+		// update list of users in room
+		updatePlayerList(status.playerOne, status.playerTwo);
+	}  else {
+			socket.emit('create:game', {username: username, avatar: avatar}, (status) => {
+	
 			console.log("Server acknowledged that user joined", status);
-	
-			if (status.success) {
-				socket.emit('start:game');
-				// hide form view
-				startEl.classList.add('hide');
-	
-				// show game view
-				gameWrapperEl.classList.remove('hide');
-	
-				// update list of users in room
-				updatePlayerList(status.playerOne, status.playerTwo);
-			}  else {
-				 socket.emit('create:game', {username: username, avatar: avatar}, (status) => {
-			
-					console.log("Server acknowledged that user joined", status);
-				
-					 if (status.success) {
-						 socket.emit('start:game');
-						 // hide form view
-						 startEl.classList.add('hide');
-				
-						 // show game view
-						 gameWrapperEl.classList.remove('hide');
-				
-						 // update list of users in room
-						 updatePlayerList(status.playerOne, status.playerTwo);
-						 }
-				
-					 });
-			 }
-		 });
-	}
- });
+		
+				if (status.success) {
+					// socket.emit('start:game');
+					// hide form view
+					startEl.classList.add('hide');
+		
+					// show game view
+					gameWrapperEl.classList.remove('hide');
+		
+					// update list of users in room
+					updatePlayerList(status.playerOne, status.playerTwo);
+				}
+			});
+		}
+	});
+});
 
 
 // How to make sure something only happens if both users pressed the virus?
@@ -147,9 +144,7 @@ virus.addEventListener('click', () => {
 	let clickTime = new Date().getTime();
 	virus.src = "./assets/img/virus-sad.svg";
 
-	setTimeout(function(){
-		virus.classList.add('hide');
-	}, 1000)
+	virus.classList.add('hide');
 
 	// when virus is clicked, randomise new numbers and send to socket
 		socket.emit('virus:clicked', {
@@ -163,7 +158,6 @@ function moveVirus(offsetRow, offsetColumn) {
 	
 		let row = offsetRow;
 		let column = offsetColumn;
-		console.log('row and column', row, column);
 		
 		virus.style.gridColumn = column;
 		virus.style.gridRow = row;
