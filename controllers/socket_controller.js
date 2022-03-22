@@ -19,17 +19,31 @@ const getGameByUserId = id => {
 const handleDisconnect = function() {
 	debug(`Client ${this.id} disconnected :(`);
 
-	// find the room that this socket is part of
-    const game = gameList.find(gameRoom => gameRoom.gameObject.id === this.id);
+    if ( totalGameCount === 0 ) {
+        console.log('no');
+    } else {
 
-	// let everyone in the room know that user has disconnected
-	this.broadcast.to(game).emit('player:disconnected', this.id);
+        // find the room that this socket is part of
+        const game = gameList.find(gameRoom => {
+            if(gameRoom.gameObject.playerOne.id === this.id || gameRoom.gameObject.playerTwo.id === this.id){
+                return true;
+            } 
+        });
 
-	// remove user from list of connected users in that room
-	// delete game[this.id];
-
-	// broadcast list of users in room to all connected sockets EXCEPT ourselves
-	// this.broadcast.to('some room').emit('player:list', game.players);
+        if(game){
+            let room = (game.gameObject.id);
+            // let everyone in the room know that user has disconnected
+            this.broadcast.to(room).emit('player:disconnected', this.id);
+        
+            // remove user from list of connected users in that room
+            delete game[this.id];
+        
+            // broadcast list of users in room to all connected sockets EXCEPT ourselves
+            this.broadcast.to(room).emit('player:list', game.gameObject.playerOne, game.gameObject.playerTwo);
+        } else{
+            console.log('no game found');
+        }
+    }
 }
 
 const handleCreateGame = function(data, callback) {

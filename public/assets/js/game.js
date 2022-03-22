@@ -58,9 +58,9 @@ const updatePlayerList = (playerOne, playerTwo) => {
 		});
 		document.querySelector('.avatar2').src = playerTwo.avatar;
 		// hide waitingForPlayer view
-		waitingForPlayerWrapperEl.classList.hide('hide');
+		waitingForPlayerWrapperEl.classList.add('hide');
 		// show game view
-		gameWrapperEl.classList.show('hide')
+		gameWrapperEl.classList.remove('hide')
 	}
 }
 
