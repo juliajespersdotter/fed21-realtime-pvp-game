@@ -89,8 +89,10 @@ socket.on('already:joined', data => {
 	console.log("You are already in an existing game " + data.id);
 })
 
-socket.on('join:success', data => {
-	console.log("You joined the game " + data);
+socket.on('game:board', data => {
+	// console.log("You joined the game " + data);
+
+	
 })
 
 socket.on('virus:clicked', (data) => {
@@ -105,32 +107,30 @@ usernameForm.addEventListener('submit', e => {
 	let avatar = document.querySelector('input[name="avatar"]:checked').value;
 
 		socket.emit('join:game', {username: username, avatar: avatar} , (status) => {
+		console.log(status);
 
 		if (status.success) {
 		console.log("Server acknowledged that user joined", status);
-		// socket.emit('start:game');
-		// hide form view
+		
 		startEl.classList.add('hide');
 
 		// show game view
 		gameWrapperEl.classList.remove('hide');
 
-		// update list of users in room
 		updatePlayerList(status.playerOne, status.playerTwo);
-	}  else {
+
+	}  else if(!status.success) {
 			socket.emit('create:game', {username: username, avatar: avatar}, (status) => {
 	
 			console.log("Server acknowledged that user joined", status);
 		
 				if (status.success) {
-					// socket.emit('start:game');
-					// hide form view
+					// update list of users in room
 					startEl.classList.add('hide');
-		
+
 					// show game view
 					gameWrapperEl.classList.remove('hide');
-		
-					// update list of users in room
+					
 					updatePlayerList(status.playerOne, status.playerTwo);
 				}
 			});

@@ -10,6 +10,15 @@ let io = null;
 let totalGameCount = 0;
 const gameList = [];
 
+
+const fetchGame = id => {
+    return gameList.find(gameRoom => {
+        if(gameRoom.gameObject.playerOne.id === id || gameRoom.gameObject.playerTwo.id === id){
+            return true;
+        }
+    });
+}
+
 // handle when user has disconnected from chat
 const handleDisconnect = function() {
 	debug(`Client ${this.id} disconnected :(`);
@@ -19,11 +28,8 @@ const handleDisconnect = function() {
     } else {
 
         // find the room that this socket is part of
-        const game = gameList.find(gameRoom => {
-            if(gameRoom.gameObject.playerOne.id === this.id || gameRoom.gameObject.playerTwo.id === this.id){
-                return true;
-            } 
-        });
+        let id = this.id
+        const game = fetchGame(id);
 
         if(game){
             let room = (game.gameObject.id);
@@ -78,34 +84,46 @@ const handleJoinGame = function(data, callback){
             success:false
         })
     } else {
-        let rndGame = Math.floor(Math.random() * totalGameCount);
-        if (gameList[rndGame]['gameObject'].playerTwo['id'] === null){
-            gameList[rndGame]['gameObject']['playerTwo']['name'] = data.username;
-            gameList[rndGame]['gameObject']['playerTwo']['avatar'] = data.avatar;
-            gameList[rndGame]['gameObject']['playerTwo']['id'] = this.id;
-            const gameId = gameList[rndGame].gameObject.id;
-            let game = gameList[rndGame].gameObject;
-
-            this.join(gameId);
-            debug(`Player ${data.username} joined room ${gameId}`);
-            this.emit('join:success', gameId);
-
-            console.log(data.username + " has been added to: " + gameId);
-            this.broadcast.to(gameId).emit('player:connected', data.username, gameId);
-            let playerOne = game.playerOne;
-            let playerTwo = game.playerTwo;
-    
-            // sends object to front end with info
-            callback({
-                success: true,
-                room: gameId,
-                playerOne: playerOne,
-                playerTwo: playerTwo
-            });
         
-            // broadcast list of users in room to all connected sockets EXCEPT ourselves
-            this.broadcast.to(gameId).emit('player:list', playerOne, playerTwo);
+       const game = gameList.find(gameRoom => {
+            if(gameRoom.gameObject.playerTwo.id === null){
+                return true;
+            }
+        });
+
+        // 
+        // let rndGame = Math.floor(Math.random() * totalGameCount);
+        // let gameObj = gameList[rndGame]['gameObject'];
+        // if (gameObj.playerTwo['id'] === null){
+        if(game){
+        console.log('Open game:',game);
+        game.gameObject['playerTwo']['name'] = data.username;
+        game.gameObject['playerTwo']['avatar'] = data.avatar;
+        game.gameObject['playerTwo']['id'] = this.id;
+        const gameId = game.gameObject.playerOne.id;
+        // let game = gameList[rndGame].gameObject;
+
+        this.join(gameId);
+        debug(`Player ${data.username} joined room ${gameId}`);
+        this.emit('join:success', gameId);
+
+        console.log(data.username + " has been added to: " + gameId);
+        this.broadcast.to(gameId).emit('player:connected', data.username, gameId);
+        let playerOne = game.gameObject.playerOne;
+        let playerTwo = game.gameObject.playerTwo;
+
+        // sends object to front end with info
+        callback({
+            success: true,
+            room: gameId,
+            playerOne: playerOne,
+            playerTwo: playerTwo
+        });
+    
+        // broadcast list of users in room to all connected sockets EXCEPT ourselves
+        this.broadcast.to(gameId).emit('player:list', playerOne, playerTwo);
         } else{
+            console.log('NO GAME FOUND, CREATING GAME');
             callback({
                 success:false
             })
@@ -200,6 +218,13 @@ module.exports = function(socket, _io) {
         io.emit('start:game');
     });
 
+    socket.on('game:board', () => {
+        let id = socket.id
+        const game = fetchGame(id);
+        let room = (game.gameObject.id);
+        io.to(room).emit('game:board');
+    })
+
     // handle when virus is clicked
     socket.on('virus:clicked', (data) => {
         // accepts data for socket to get same for both players
@@ -207,11 +232,8 @@ module.exports = function(socket, _io) {
         console.log('Socket id: ' + socket.id);
 
         // looks for room that matches this socked it
-        const game = gameList.find(gameRoom => {
-            if(gameRoom.gameObject.playerOne.id === socket.id || gameRoom.gameObject.playerTwo.id === socket.id){
-                return true;
-            }
-        });
+        let id = socket.id
+        const game = fetchGame(id);
 
         // get room id
         let room = (game.gameObject.id);
