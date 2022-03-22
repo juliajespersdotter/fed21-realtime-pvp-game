@@ -2,6 +2,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Bungee&family=Fredoka&family=Palette+Mosaic&display=swap');
 
+/******** General styles ********/
 html{
 	font-size: 18;
 }
@@ -31,7 +32,17 @@ h3 {
 	color: white;
 }
 
-/* Startpage */
+button {
+	margin-top: 2rem;
+}
+
+img {
+	width: 40px;
+	margin: 3%;
+	height: auto;
+}
+
+/******** Startpage styles ********/
 #start {
 	width: 100vw;
 	height: 100vh;
@@ -41,15 +52,6 @@ h3 {
 	grid-template-rows: repeat(5, 1fr);
 }
 
-/* Startpage Form-design */
-.form {
-	background-color: #303245;
-	border-radius: 20px;
-	box-sizing: border-box;
-}
-.start-img {
-	padding-top: 5px;
-}
 #username-form {
 	width: 60vw;
 	height: 80vh;
@@ -59,6 +61,15 @@ h3 {
 	align-items: center;
 	justify-content: top;
 	flex-direction: column;
+}
+
+.form {
+	background-color: #303245;
+	border-radius: 20px;
+	box-sizing: border-box;
+}
+.start-img {
+	padding-top: 5px;
 }
 
 .title {
@@ -104,7 +115,6 @@ h3 {
 	box-shadow: 0 0 3px 2px rgb(77, 76, 76);
 }
 
-/* Startpage - Styles for avatars */
 .avatar-wrapper {
 	width: 100%;
 }
@@ -149,7 +159,6 @@ h3 {
 	border-radius: 10px;
 }
 
-/* Startpage - Styles for submit-button */
 .button-wrapper {
 	width: 15vw;
 	height: 7vh;
@@ -174,27 +183,12 @@ h3 {
 }
 
 .submit-btn:hover, .submit-btn:active {
-	background-color: #F3DE8A;
+	background-color: white;
 	box-shadow: 0 0 5px 0 white;
 	color: #15172b;
 }
 
-button {
-	margin-top: 2rem;
-}
-
-img {
-	width: 40px;
-	margin: 3%;
-	height: auto;
-}
-
-/* Game page */
-#game-wrapper {
-	background-color: #E3DEDE;
-	width: 100vw;
-}
-
+/******** Waiting & countdown styles ********/
 #waitingForPlayer-wrapper, #countdown-wrapper {
 	width: 100vw;
 	height: 100vh;
@@ -215,6 +209,12 @@ img {
 	justify-content: top;
 	padding-top: 100px;
 	flex-direction: column;
+}
+
+/******** Game styles ********/
+#game-wrapper {
+	background-color: #E3DEDE;
+	width: 100vw;
 }
 
 .content {
@@ -261,10 +261,6 @@ img {
 	justify-content: center;
 	width: 100%;
 }
-/* 
-#player-avatar-wrapper {
-	width: 100%;
-} */
  
 .avatar1, .avatar2{
 	width: 40px;
@@ -278,7 +274,6 @@ img {
 	height: auto;
 }
 
-
 .center {
 	display: flex;
 	justify-content: center;
@@ -287,8 +282,8 @@ img {
 #player1-score, #player2-score {
 	color: #e63947;
 	display: inline;
-
 }
+
 .aside {
 	background-color: #15172b;
 	padding: 10px;
@@ -298,20 +293,10 @@ img {
 	border-radius: 10px;
 }
 
-#players li{
-	list-style-type: none;
-	font-size: 1.5rem;
-	text-align: center;
-}
-
 #timerPlayer1, #timerPlayer2 {
 	display: flex;
 	justify-content: center;
 	display: inline;
-}
-
-#player1, #player2 {
-	color: #e63947;
 }
 
 .aside-below {
@@ -324,11 +309,14 @@ img {
 
 #imageWrapper {
 	display: flex;
+	align-content: center;
 	justify-content: center;
+	width: 100%;
 }
 
 .aside-below img {
 	width: 80%;
+	height: auto;
 }
 
 .main {
@@ -342,7 +330,6 @@ img {
 	border-radius: 10px;
 	grid-column: 1/10;
 	grid-row: 2/6;
-
 	display: grid;
 	grid-template-columns: repeat(12, 1fr);
 	grid-template-rows: repeat(12, 1fr);

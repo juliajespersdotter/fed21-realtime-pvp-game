@@ -106,7 +106,7 @@ const handleJoinGame = function(data, callback){
                 playerOne: playerOne,
                 playerTwo: playerTwo
             });
-    
+        this.broadcast.to(gameId).emit('player:list', playerOne, playerTwo);
         } else{
             callback({
                 success:false
