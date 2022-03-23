@@ -8,6 +8,7 @@ const gameGrid = document.querySelector('.main');
 const gameWrapperEl = document.querySelector('#game-wrapper');
 const waitingForPlayerWrapperEl = document.querySelector('#waitingForPlayer-wrapper');
 const countdownWrapperEl = document.querySelector('#countdown-wrapper');
+const gameoverWrapperEl = document.querySelector('#gameover-wrapper');
 const usernameForm = document.querySelector('#username-form');
 const chosenAvatar = document.querySelector('.avatar-wrapper');
 const virus = document.querySelector('.virus');
@@ -195,14 +196,14 @@ const startTimerPlayer2 = () => {
 const saveTime  = () => {
 	// här kollar vi ifall spelare 1 klickat på virus -> i så fall ska tiden sparas. När båda spelare klickat på samma virus så kallar vi på funktionen startTimer(). Om det gått 10 spelomgångar, break ut från loop. 
 }
-        
-const gameover = () => {
+
+socket.on('gameover', (winnerOfTheGame, room) => {
 	let gameoverHTML = document.getElementById("gameoverId");
-	if (playerOne.totalScore > playerTwo.totalScore) {
-		gameoverHTML.innerHTML = `<h2>${playerOne} is the winner! Better luck next time, ${playerTwo}.</h2>`
-	} else if (playerOne.totalScore < playerTwo.totalScore) {
-		gameoverHTML.innerHTML = `<h2>${playerTwo} is the winner! Better luck next time, ${playerOne}.</h2>`
-	} else if (playerOne.totalScore === playerTwo.totalScore) {
-		gameoverHTML.innerHTML = `<h2>It's a tie!</h2>`
+	gameoverWrapperEl.classList.remove('hide');
+
+	if (winnerOfTheGame === socket.id) {
+		gameoverHTML.innerHTML = `<h2>You're the winner!</h2>`
+	} else {
+		gameoverHTML.innerHTML = `<h2>You lost :( Better luck next time!</h2>`
 	}
-}
+}); //i några sekunder - sen skickas tillbaka till start page (för username)
