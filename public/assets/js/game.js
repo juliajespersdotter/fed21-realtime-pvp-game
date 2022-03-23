@@ -19,8 +19,6 @@ const gameWrapperEl = document.querySelector('#game-wrapper');
 const waitingForPlayerWrapperEl = document.querySelector('#waitingForPlayer-wrapper');
 const countdownWrapperEl = document.querySelector('#countdown-wrapper');
 const gameoverWrapperEl = document.querySelector('#gameover-wrapper');
-const usernameForm = document.querySelector('#username-form');
-const chosenAvatar = document.querySelector('.avatar-wrapper');
 const virus = document.querySelector('.virus');
 
 
@@ -79,7 +77,9 @@ const countdown = () => {
 			gameWrapperEl.classList.remove('hide');
 			countdownWrapperEl.classList.add('hide');
 		} else {
-			countdownHTML.innerHTML = `<h2>Get ready to catch the virus! It can appear at any time!</h2><h2>${countdownTime} seconds left...</h2>`;
+			countdownHTML.innerHTML = `<h2>Get ready to catch the virus! It can appear at any time!</h2>
+			<img src="/assets/img/virus.png" alt="">
+			<h2>${countdownTime} seconds left...</h2>`;
 		}
 		countdownTime -= 1;
 	}, 1000);
