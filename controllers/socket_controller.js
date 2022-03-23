@@ -12,7 +12,6 @@ let totalGameCount = 0;
 const gameList = [];
 
 
-
 //********** CREATE GAME **********/
 const handleCreateGame = function(data, callback) { // data is username and avatar from the start-form
     let gameObject = {
@@ -86,13 +85,13 @@ const handleJoinGame = function(data, callback){
             let playerTwo = game.gameObject.playerTwo;
 
             // sends object to front end with info
+            io.to(gameId).emit('player:list', playerOne, playerTwo);
             callback({
                 success: true,
                 room: gameId,
                 playerOne: playerOne,
                 playerTwo: playerTwo
             });
-        io.to(gameId).emit('player:list', playerOne, playerTwo);
         } else{
             callback({
                 success:false
@@ -134,22 +133,23 @@ const handleKilledVirus = function(reactionTime) {
 
         // if both players clicked, only then mode the virus
         if(playerOne.hasClicked && playerTwo.hasClicked){
-            let winner;
             playerOne.hasClicked = false;
             playerTwo.hasClicked = false;
 
             if(playerTwo.clickTime < playerOne.clickTime){
                 playerTwo.points++;
-                winner = playerTwo.name;
+                playerTwo.clickTime = 0;
+                let winner = playerTwo.name;
+                io.to(room).emit('round:over', winner);
                 // io.to(room).emit('round:over', playerTwo);
             }
 
             else if(playerOne.clickTime < playerTwo.clickTime){
                 playerOne.points++;
-                winner = playerOne.name;
+                playerOne.clickTime = 0;
+                let winner = playerOne.name;
+                io.to(room).emit('round:over', winner);
             }
-
-            io.to(room).emit('round:over', winner);
         }
 }
 
@@ -277,7 +277,7 @@ module.exports = function(socket, _io) {
         io.to(room).emit('new:round', {
             offsetRow: Math.ceil(Math.random() * 12 ),
 			offsetColumn: Math.ceil(Math.random() * 12 ),
-            randomTime:  Math.ceil(Math.random() * (5000 + 1000) + 1000)
+            // randomTime:  Math.ceil(Math.random() * (5000 + 1000) + 1000)
         });
     });
 
