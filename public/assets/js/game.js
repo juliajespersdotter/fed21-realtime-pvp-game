@@ -1,24 +1,101 @@
 /**
- * Game
+ * * SOCKET SLAYERS
+ * * game.js
  */
 
 const socket = io();
+
+//********** USERNAME AND AVATAR **********/
+const usernameForm = document.querySelector('#username-form');
+const chosenAvatar = document.querySelector('.avatar-wrapper');
+let username = null;
+let avatar = null;
+
+
+//********** GAME COMPONENTS **********/
 const startEl = document.querySelector('#start');
 const gameGrid = document.querySelector('.main');
 const gameWrapperEl = document.querySelector('#game-wrapper');
 const waitingForPlayerWrapperEl = document.querySelector('#waitingForPlayer-wrapper');
 const countdownWrapperEl = document.querySelector('#countdown-wrapper');
-const usernameForm = document.querySelector('#username-form');
-const chosenAvatar = document.querySelector('.avatar-wrapper');
 const virus = document.querySelector('.virus');
 
-let username = null;
-let avatar = null;
 
-//* TIMER
+//********** TIMER **********/
 let intervalPlayer1;
 let intervalPlayer2;
 
+
+
+//********** USER JOINS GAME **********/
+usernameForm.addEventListener('submit', e => {
+	e.preventDefault();
+	username = usernameForm.username.value;
+
+	let avatar = document.querySelector('input[name="avatar"]:checked').value;
+
+	socket.emit('join:game', {username: username, avatar: avatar} , (status) => {
+
+	if (status.success) {
+		console.log("Server acknowledged that user joined", status);
+		
+		startEl.classList.add('hide');
+		gameWrapperEl.classList.remove('hide');
+
+		updatePlayerList(status.playerOne, status.playerTwo);
+
+		socket.emit('start:game');
+
+	}  else if(!status.success) {
+		socket.emit('create:game', {username: username, avatar: avatar}, (status) => {
+	
+			console.log("Server acknowledged that user joined", status);
+		
+			if (status.success) {
+				socket.emit('start:game');
+				startEl.classList.add('hide');
+				gameWrapperEl.classList.remove('hide');
+
+				updatePlayerList(status.playerOne, status.playerTwo);
+				}
+			});
+		}
+	});
+});
+
+
+
+//********** COUNTDOWN FOR GAME TO START **********/
+let countdownTime = 3;
+const countdown = () => {
+	let countdownHTML = document.getElementById("countdownId");
+
+	let timer = setInterval(function() {
+		if(countdownTime <= 0) {
+			clearInterval(timer);
+			gameWrapperEl.classList.remove('hide');
+			countdownWrapperEl.classList.add('hide');
+		} else {
+			countdownHTML.innerHTML = `<h2>${countdownTime} seconds left</h2>`;
+		}
+		countdownTime -= 1;
+	}, 1000);
+}
+
+
+//********** START GAME **********/
+socket.on('start:game', () => {
+	// does not do much at this point, check if players are ready?
+	console.log("game started");
+	//countdown();
+})
+
+socket.on('player:connected', (username, room) => {
+	console.log(`New player connected in room ${room} with username ${username}`);
+});
+
+
+//********** UPDATE PLAYERLIST **********/
 const updatePlayerList = (playerOne, playerTwo) => {
 	let playerOne_list = document.querySelectorAll('.player1'); 
 	playerOne_list.forEach(player1 => {
@@ -55,67 +132,19 @@ socket.on('player:list', (playerOne, playerTwo) => {
 	updatePlayerList(playerOne, playerTwo);
 })
 
-socket.on('player:connected', (username, room) => {
-	console.log(`New player connected in room ${room} with username ${username}`);
-});
 
+
+//********** USER DISCONNECTS **********/
 socket.on('player:disconnected', (username) => {
 	console.log('Player disconnected', username);
 });
 
-socket.on('start:game', () => {
-	// does not do much at this point, check if players are ready?
-	console.log("game started");
-	//countdown();
-})
 
-socket.on('stop:timer1'), () => {
-	stopTimerPlayer1();
-};
 
-socket.on('stop:timer2'), () => {
-	stopTimerPlayer2();
-};
-
+//********** USER CLICKS ON VIRUS **********/
 socket.on('virus:clicked', (data) => {
 	moveVirus(data.offsetRow, data.offsetColumn, data.clickTime);
 });
-
-usernameForm.addEventListener('submit', e => {
-	e.preventDefault();
-	username = usernameForm.username.value;
-
-	let avatar = document.querySelector('input[name="avatar"]:checked').value;
-
-	socket.emit('join:game', {username: username, avatar: avatar} , (status) => {
-
-	if (status.success) {
-		console.log("Server acknowledged that user joined", status);
-		
-		startEl.classList.add('hide');
-		gameWrapperEl.classList.remove('hide');
-
-		updatePlayerList(status.playerOne, status.playerTwo);
-
-		socket.emit('start:game');
-
-	}  else if(!status.success) {
-		socket.emit('create:game', {username: username, avatar: avatar}, (status) => {
-	
-			console.log("Server acknowledged that user joined", status);
-		
-			if (status.success) {
-				socket.emit('start:game');
-				startEl.classList.add('hide');
-				gameWrapperEl.classList.remove('hide');
-
-				updatePlayerList(status.playerOne, status.playerTwo);
-				}
-			});
-		}
-	});
-});
-
 
 // How to make sure something only happens if both users pressed the virus?
 virus.addEventListener('click', () => {
@@ -162,6 +191,9 @@ function moveVirus(offsetRow, offsetColumn) {
 	// });	
 }
 
+
+
+//********** SCORE **********/
 let score = 0;
 socket.on('scores', (data) => { //data innehåller winnerOfThisRound, vilket är den lägsta tiden
 	let myTime = time;
@@ -173,24 +205,17 @@ socket.on('scores', (data) => { //data innehåller winnerOfThisRound, vilket är
 	}
 });
 
-let countdownTime = 3;
-const countdown = () => {
-	let countdownHTML = document.getElementById("countdownId");
 
-	let timer = setInterval(function() {
-		if(countdownTime <= 0) {
-			clearInterval(timer);
-			gameWrapperEl.classList.remove('hide');
-			countdownWrapperEl.classList.add('hide');
 
-		} else {
-			countdownHTML.innerHTML = `<h2>${countdownTime} seconds left</h2>`;
-		}
-		countdownTime -= 1;
-	}, 1000);
-}
+//********** TIMER **********/
+socket.on('stop:timer1'), () => {
+	stopTimerPlayer1();
+};
 
-//* TIMER FUNCTIONS
+socket.on('stop:timer2'), () => {
+	stopTimerPlayer2();
+};
+
 const startTimerPlayer1 = () => {
 	stopTimerPlayer1();
 	let startTimestamp = Date.now();
