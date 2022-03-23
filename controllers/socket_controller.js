@@ -159,15 +159,11 @@ const handleScore = function(socket) {
             socket.in("scores").emit('scores', getHighest(scores)); 
         });
     }); */
-
-    //tell the score to everyone in the room
-    //this.broadcast.to(usersRoom.id).emit('winner', usersRoom.users);
-    //front: when they recieve the winner 1 point should be added to score.
     
     if (rounds > maxRounds) {
-		
+		io.to(room).emit('new-round');
     } else if (rounds === maxRounds) {
-        io.emit('game:over', )
+        io.to(room).emit('game:over');
 		rounds = 0;
     }
 }
