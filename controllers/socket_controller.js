@@ -133,6 +133,13 @@ let rounds = 0;
 let maxRounds = 10;
 let compare;
 const handleScore = function(socket) {
+	//check if both players are here
+	//find the room
+	//the room with player1 is here?
+	//the room with player2 is here?
+	//if both are here then we can compare the times
+
+
     rounds ++;
     console.log('rounds played', rounds);
 
@@ -166,15 +173,11 @@ const handleScore = function(socket) {
             socket.in("scores").emit('scores', getHighest(scores)); 
         });
     }); */
-
-    //tell the score to everyone in the room
-    //this.broadcast.to(usersRoom.id).emit('winner', usersRoom.users);
-    //front: when they recieve the winner 1 point should be added to score.
     
     if (rounds > maxRounds) {
-
+		io.to(room).emit('new-round');
     } else if (rounds === maxRounds) {
-        io.emit('game:over', )
+        io.to(room).emit('game:over');
 		rounds = 0;
     }
 }

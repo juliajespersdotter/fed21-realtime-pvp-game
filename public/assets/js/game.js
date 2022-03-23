@@ -18,6 +18,9 @@ const gameGrid = document.querySelector('.main');
 const gameWrapperEl = document.querySelector('#game-wrapper');
 const waitingForPlayerWrapperEl = document.querySelector('#waitingForPlayer-wrapper');
 const countdownWrapperEl = document.querySelector('#countdown-wrapper');
+const gameoverWrapperEl = document.querySelector('#gameover-wrapper');
+const usernameForm = document.querySelector('#username-form');
+const chosenAvatar = document.querySelector('.avatar-wrapper');
 const virus = document.querySelector('.virus');
 
 
@@ -76,7 +79,7 @@ const countdown = () => {
 			gameWrapperEl.classList.remove('hide');
 			countdownWrapperEl.classList.add('hide');
 		} else {
-			countdownHTML.innerHTML = `<h2>${countdownTime} seconds left</h2>`;
+			countdownHTML.innerHTML = `<h2>Get ready to catch the virus! It can appear at any time!</h2><h2>${countdownTime} seconds left...</h2>`;
 		}
 		countdownTime -= 1;
 	}, 1000);
@@ -205,8 +208,6 @@ socket.on('scores', (data) => { //data innehåller winnerOfThisRound, vilket är
 	}
 });
 
-
-
 //********** TIMER **********/
 socket.on('stop:timer1'), () => {
 	stopTimerPlayer1();
@@ -236,20 +237,35 @@ const startTimerPlayer2 = () => {
     }, 10);
 }
 
+const saveTime  = () => {
+	// här kollar vi ifall spelare 1 klickat på virus -> i så fall ska tiden sparas. När båda spelare klickat på samma virus så kallar vi på funktionen startTimer(). Om det gått 10 spelomgångar, break ut från loop. 
+}
+
+socket.on('gameover', (winnerOfTheGame, room) => {
+	let gameoverHTML = document.getElementById("gameoverId");
+	gameoverWrapperEl.classList.remove('hide');
+
+	if (winnerOfTheGame === socket.id) {
+		gameoverHTML.innerHTML = `<h2>You're the winner!</h2>`
+	} else {
+		gameoverHTML.innerHTML = `<h2>You lost :( Better luck next time!</h2>`
+	}
+});
+ //i några sekunder - sen skickas tillbaka till start page (för username)
 function stopTimerPlayer1() {
 	clearInterval(intervalPlayer1);
-  }
+}
   
 function stopTimerPlayer2() {
 	  clearInterval(intervalPlayer2);
-	}
+}
 
 function resetTimer() {
 	seconds = 0;
 	milliseconds = 0;
 	timerPlayer1.innerHTML = `00 : 00`;
 	timerPlayer2.innerHTML = `00 : 00`;
-  }
+}
 
 
         
