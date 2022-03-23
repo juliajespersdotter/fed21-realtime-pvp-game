@@ -168,7 +168,7 @@ const countdown = () => {
 			startTimerPlayer1();
 			startTimerPlayer2();
 		} else {
-			countdownHTML.innerHTML = `<h2>${countdownTime} seconds left</h2>`;
+			countdownHTML.innerHTML = `<h2>Get ready to catch the virus! It can appear at any time!</h2><h2>${countdownTime} seconds left...</h2>`;
 		}
 		countdownTime -= 1;
 	}, 1000);
