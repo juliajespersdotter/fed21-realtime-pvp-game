@@ -2,6 +2,7 @@
  * Game
  */
 
+
 const socket = io();
 const startEl = document.querySelector('#start');
 const gameGrid = document.querySelector('.main');
@@ -14,6 +15,7 @@ const virus = document.querySelector('.virus');
 
 let username = null;
 let avatar = null;
+let timeStart = Date.now();
 
 const updatePlayerList = (playerOne, playerTwo) => {
 	let playerOne_list = document.querySelectorAll('.player1'); 
@@ -43,6 +45,9 @@ const updatePlayerList = (playerOne, playerTwo) => {
 
 		//start countdown
 		countdown();
+		setTimeout(function(){
+			socket.emit('start:game');
+		}, 4000)
 	}	
 }
 
@@ -58,16 +63,25 @@ socket.on('player:disconnected', (username) => {
 	console.log('Player disconnected', username);
 });
 
-socket.on('start:game', () => {
+socket.on('round:over', winner => {
+	console.log('winner was: ', winner.name);
+	socket.emit('start:game');
+})
+
+socket.on('new:round', data => {
 	// does not do much at this point, check if players are ready?
-	console.log("game started");
+	console.log("round started");
+	timeStart = Date.now();
+	console.log("Time start " + timeStart);
+
+	startGame(data, timeStart);
 	//countdown();
 	// startTimer();
 })
 
-socket.on('virus:clicked', (data) => {
-	moveVirus(data.offsetRow, data.offsetColumn, data.reactionTime);
-	saveTime(); 
+socket.on('virus:clicked', (data, randomTime) => {
+	moveVirus(data.offsetRow, data.offsetColumn, randomTime);
+	saveTime();
 });
 
 usernameForm.addEventListener('submit', e => {
@@ -109,33 +123,47 @@ usernameForm.addEventListener('submit', e => {
 	});
 });
 
+const startGame = (data, time) => {
+	setTimeout(function(){
+		moveVirus(data);
+	}, data.randomTimeout)
 
+	virus.addEventListener('click', () => {
+		let timeClicked = Date.now();
+		let reactiontime = timeClicked - time;
+		virus.src = "./assets/img/virus-sad.svg";
+
+		setTimeout(function () {
+			virus.classList.add('hide');
+
+			socket.emit('virus:clicked', reactiontime)
+		}, 1000)
+	})
+}
+
+/*
 // How to make sure something only happens if both users pressed the virus?
-virus.addEventListener('click', () => {
+virus.addEventListener('click', (timeClicked) => {
 	virus.src = "./assets/img/virus-sad.svg";
 
-	let clickTime = Date.now();
+	// let clickTime = Date.now();
 	// console.log(clickTime);
 
 	setTimeout(function () {
 		virus.classList.add('hide');
 
-	// when virus is clicked, randomise new numbers and send to socket
-		socket.emit('virus:clicked', {
-			offsetRow: Math.ceil(Math.random() * 12 ),
-			offsetColumn: Math.ceil(Math.random() * 12 ),
-			clickTime: clickTime,
-		});
+		socket.emit('virus:clicked')
 	}, 1000)
 
 
 	// when virus is clicked, randomise new numbers and send to socket
 });
+*/
 
 // move the virus using randomised numbers 
-function moveVirus(offsetRow, offsetColumn, clickTime) {
-		let row = offsetRow;
-		let column = offsetColumn;
+function moveVirus(data) {
+		let row = data.offsetRow;
+		let column = data.offsetColumn;
 		
 		virus.style.gridColumn = column;
 		virus.style.gridRow = row;
@@ -143,16 +171,6 @@ function moveVirus(offsetRow, offsetColumn, clickTime) {
 
 		virus.src = "./assets/img/virus.svg";
 		virus.classList.remove('hide');
-
-		
-		let showVirus = Date.now();
-		let reactionTime = (showVirus - clickTime)/1000;
-		console.log('Your reaction time ', reactionTime);
-
-		// socket.emit('calculate:time', {
-		// 	showVirus: showVirus,
-		// 	clickTime: clickTime
-		// });	
 }
 
 let score = 0;

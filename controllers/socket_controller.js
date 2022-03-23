@@ -84,7 +84,6 @@ const handleJoinGame = function(data, callback){
             success:false
         })
     } else {
-
        const game = gameList.find(gameRoom => {
             if(gameRoom.gameObject.playerTwo.id === null){
                 return true;
@@ -124,6 +123,55 @@ const handleJoinGame = function(data, callback){
             })
         }
     }
+}
+
+const handleKilledVirus = function(reactionTime) {
+        // accepts data for socket to get same for both players
+        // then sends back to front end
+        console.log('Socket id: ' + this.id);
+
+        // looks for room that matches this socked it
+        let id = this.id
+        const game = fetchGame(id);
+
+        // get room id
+        let room = (game.gameObject.id);
+        let playerOne = game.gameObject.playerOne;
+        let playerTwo = game.gameObject.playerTwo;
+        // console.log('Player id: ' + this.id + ' players id', playerOne.id + ' ' + playerTwo.id);
+
+        // check if both players clicked
+        if(playerOne.id === this.id){
+            playerOne.hasClicked = true;
+            playerOne['clickTime'] = reactionTime;
+            // socket.emit('stop:timer1')
+            // console.log("Player one click time " + data.clickTime);
+            console.log(playerOne);
+            
+        } else if(playerTwo.id === this.id){
+            playerTwo.hasClicked  = true;
+            playerTwo['clickTime'] = reactionTime;
+            // playerTwo['clickTime'] = data.clickTime;
+            // socket.emit('stop:timer2')
+            // console.log("Player two click time " + data.clickTime);
+            console.log(playerTwo);
+        }
+
+        // if both players clicked, only then mode the virus
+        if(playerOne.hasClicked && playerTwo.hasClicked){
+            playerOne.hasClicked = false;
+            playerTwo.hasClicked = false;
+
+            if(playerTwo.clickTime < playerOne.clickTime){
+                io.to(room).emit('round:over', playerTwo);
+            }
+
+            if(playerOne.clickTime < playerTwo.clickTime){
+                io.to(room).emit('round:over', playerOne);
+            }
+        } else{
+            console.log('Waiting for player');
+        }
 }
 
 let playersTimes = [{
@@ -201,60 +249,33 @@ module.exports = function(socket, _io) {
 
     socket.on('create:game', handleCreateGame);
 
-    socket.on('join', game => {
-        console.log("Game", game);
-        this.join(game);
-    })
-
     socket.on('player:time', handleScore);
+
+    socket.on('virus:clicked', handleKilledVirus);
 
 	// handle game start logic
 	socket.on('start:game', () => {
-        io.emit('start:game');
+        let id = socket.id;
+        const game = fetchGame(id);
+        let room = (game.gameObject.id);
+
+        io.to(room).emit('new:round', {
+            offsetRow: Math.ceil(Math.random() * 12 ),
+			offsetColumn: Math.ceil(Math.random() * 12 ),
+            randomTimeout:  Math.ceil(Math.random() * 7)
+        });
     });
 
     // handle when virus is clicked
-    socket.on('virus:clicked', (data) => {
-        // accepts data for socket to get same for both players
-        // then sends back to front end
-        console.log('Socket id: ' + socket.id);
-
-        // looks for room that matches this socked it
-        let id = socket.id
-        const game = fetchGame(id);
-
-        // get room id
-        let room = (game.gameObject.id);
-        let playerOne = game.gameObject.playerOne;
-        let playerTwo = game.gameObject.playerTwo;
-        // console.log('Player id: ' + socket.id + ' players id', playerOne.id + ' ' + playerTwo.id);
-
-        // check if both players clicked
-        if(playerOne.id === socket.id){
-            playerOne.hasClicked = true;
-            playerOne['clickTime'] = data.clickTime;
-            console.log("Player one click time " + data.clickTime);
-            
-        } else if(playerTwo.id === socket.id){
-            playerTwo.hasClicked  = true;
-            playerTwo['clickTime'] = data.clickTime;
-            console.log("Player two click time " + data.clickTime);
-        }
-
-        // if both players clicked, only then mode the virus
-        if(playerOne.hasClicked && playerTwo.hasClicked){
-            playerOne.hasClicked = false;
-            playerTwo.hasClicked = false;
-            io.to(room).emit('virus:clicked', data);
-        } else{
-            console.log('Waiting for player');
-        }
-    });
 
     // not functional
     socket.on('calculate:time', (data) => {
         // does not work
-        let playerTime = data.showVirus - data.clickTime;
-		console.log(`it took ${playerTime / 1000} seconds for you to catch the virus!`);
+        let playerOneTime = data.showVirus - data.playerOneTime;
+        let playerTwoTime = data.showVirus - data.playerTwoTime;
+
+        console.log("Player one time: ", playerOneTime);
+        console.log("player two time: ", playerTwoTime);
+		// console.log(`it took ${playerTime / 1000} seconds for you to catch the virus!`);
     })
 }
