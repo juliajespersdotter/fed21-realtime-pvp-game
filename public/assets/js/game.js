@@ -258,16 +258,17 @@ function resetTimer() {
 socket.on('game:over', (winnerOfTheGame, room) => {
 	let gameoverHTML = document.getElementById("gameoverId");
 	gameoverWrapperEl.classList.remove('hide');
+	startEl.classList.add('hide');
 
-	setInterval(function() {
+	if (winnerOfTheGame === socket.id) {
+		gameoverHTML.innerHTML = `<h2>You're the winner!</h2>`
+	} else {
+		gameoverHTML.innerHTML = `<h2>You lost :( Better luck next time!</h2>`
+	}
+
+	setTimeout(function() {
 		gameoverWrapperEl.classList.add('hide');
 		startEl.classList.remove('hide');
-
-		if (winnerOfTheGame === socket.id) {
-			gameoverHTML.innerHTML = `<h2>You're the winner!</h2>`
-		} else {
-			gameoverHTML.innerHTML = `<h2>You lost :( Better luck next time!</h2>`
-		}
 	}, 5000);
 });
         
