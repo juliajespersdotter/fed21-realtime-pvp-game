@@ -54,4 +54,6 @@ http://socket-slayers.herokuapp.com
 
 ## Printscreen
 
-<img src="https://github.com/marialovgren/myphotos/blob/master/printscreen/Screenshot%202022-03-10%20at%2010.36.30.png?raw=true" width=100%>
+<img src="https://github.com/juliajespersdotter/socket-slayers/blob/main/public/assets/img/screenshot-virus-start.png" width=100%>
+
+<img src="https://github.com/juliajespersdotter/socket-slayers/blob/main/public/assets/img/screenshot-virus-game.png" width=100%>
