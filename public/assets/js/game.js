@@ -27,8 +27,6 @@ const virus = document.querySelector('.virus');
 let intervalPlayer1;
 let intervalPlayer2;
 
-
-
 //********** USER JOINS GAME **********/
 usernameForm.addEventListener('submit', e => {
 	e.preventDefault();
@@ -42,7 +40,7 @@ usernameForm.addEventListener('submit', e => {
 		console.log("Server acknowledged that user joined", status);
 		
 		startEl.classList.add('hide');
-		gameWrapperEl.classList.remove('hide');
+		// gameWrapperEl.classList.remove('hide');
 
 		// updatePlayerList(status.playerOne, status.playerTwo);
 
@@ -56,7 +54,8 @@ usernameForm.addEventListener('submit', e => {
 			if (status.success) {
 				// socket.emit('start:game');
 				startEl.classList.add('hide');
-				gameWrapperEl.classList.remove('hide');
+
+				// gameWrapperEl.classList.remove('hide');
 
 				// updatePlayerList(status.playerOne, status.playerTwo);
 				}
@@ -86,11 +85,6 @@ const countdown = () => {
 
 
 //********** START GAME **********/
-socket.on('start:game', () => {
-	// does not do much at this point, check if players are ready?
-	console.log("game started");
-	//countdown();
-})
 
 socket.on('player:connected', (username, room) => {
 	console.log(`New player connected in room ${room} with username ${username}`);
@@ -114,6 +108,7 @@ const updatePlayerList = (playerOne, playerTwo) => {
 	} else {
 		let playerTwo_list = document.querySelectorAll('.player2');
 		playerTwo_list.forEach(player2 => {
+			gameWrapperEl.classList.add('hide');
 			player2.innerText = `${playerTwo.name}`;
 		});
 		document.querySelector('.avatar2').src = playerTwo.avatar;
@@ -122,7 +117,6 @@ const updatePlayerList = (playerOne, playerTwo) => {
 		// show countdown
 		countdownWrapperEl.classList.remove('hide');
 
-		gameWrapperEl.classList.add('hide');
 		//start countdown
 		countdown();	
 
@@ -136,8 +130,6 @@ socket.on('player:list', (playerOne, playerTwo) => {
 	updatePlayerList(playerOne, playerTwo);
 })
 
-
-
 //********** USER DISCONNECTS **********/
 socket.on('player:disconnected', (username) => {
 	console.log('Player disconnected', username);
@@ -146,6 +138,10 @@ socket.on('player:disconnected', (username) => {
 socket.on('round:over', winner => {
 	console.log('winner was: ', winner);
 	socket.emit('start:game');
+})
+
+socket.on('winner', winner => {
+	console.log("Winner was: ", winner);
 })
 
 socket.on('new:round', data => {
@@ -163,9 +159,9 @@ socket.on('stop:timer1'), () => {
 };
 
 
-socket.on('move:virus', (data) => {
-	moveVirus(data.offsetRow, data.offsetColumn, data.clickTime);
-});
+// socket.on('move:virus', (data) => {
+// 	moveVirus(data.offsetRow, data.offsetColumn, data.clickTime);
+// });
 
 /*
 usernameForm.addEventListener('submit', e => {
@@ -203,19 +199,17 @@ usernameForm.addEventListener('submit', e => {
 
 const startGame = (data) => {
 	// console.log("random time: " + data.randomTime);
-	let timeStart = Date.now();
 	moveVirus(data);
+	let timeStart = Date.now();
 
 	virus.addEventListener('click', () => {
 		let timeClicked = Date.now();
 		let reactionTime = timeClicked - timeStart;
-		virus.src = "./assets/img/virus-sad.svg";
+		// virus.src = "./assets/img/virus-sad.svg";
 
-		setTimeout(function () {
-			virus.classList.add('hide');
-
-			socket.emit('virus:clicked', reactionTime)
-		}, 1000)
+		virus.classList.add('hide');
+	
+		socket.emit('virus:clicked', reactionTime)
 	})
 }
 
@@ -256,7 +250,10 @@ function moveVirus(data) {
 		virus.style.animation = "none";
 
 		virus.src = "./assets/img/virus.svg";
-		virus.classList.remove('hide');
+
+		setTimeout(function(){
+			virus.classList.remove('hide');
+		}, data.randomTime)
 }
 
 

@@ -70,7 +70,8 @@ const handleJoinGame = function(data, callback){
             }
         });
 
-        if(game){ // if there is a gameObject where game has a playerTwo that is Null, then replace with this userinfo
+        // if there is a gameObject where game has a playerTwo that is Null, then replace with this userinfo
+        if(game){
             game.gameObject['playerTwo']['name'] = data.username;
             game.gameObject['playerTwo']['avatar'] = data.avatar;
             game.gameObject['playerTwo']['id'] = this.id;
@@ -100,30 +101,31 @@ const handleJoinGame = function(data, callback){
     }
 }
 
-
 const handleKilledVirus = function(reactionTime) {
         // accepts data for socket to get same for both players
         // then sends back to front end
-        console.log('Socket id: ' + this.id);
 
         // looks for room that matches this socked it
-        let id = this.id
+        let id = this.id;
         const game = fetchGame(id);
 
         // get room id
         let room = (game.gameObject.id);
         let playerOne = game.gameObject.playerOne;
         let playerTwo = game.gameObject.playerTwo;
+        let winner = null;
         // console.log('Player id: ' + this.id + ' players id', playerOne.id + ' ' + playerTwo.id);
 
         // check if both players clicked
         if(playerOne.id === this.id){
+            console.log("player one clicked");
             playerOne.hasClicked = true;
             playerOne['clickTime'] = reactionTime;
             // socket.emit('stop:timer1')
             // console.log("Player one click time " + data.clickTime);
             
         } else if(playerTwo.id === this.id){
+            console.log("player two clicked");
             playerTwo.hasClicked  = true;
             playerTwo['clickTime'] = reactionTime;
             // playerTwo['clickTime'] = data.clickTime;
@@ -135,21 +137,41 @@ const handleKilledVirus = function(reactionTime) {
         if(playerOne.hasClicked && playerTwo.hasClicked){
             playerOne.hasClicked = false;
             playerTwo.hasClicked = false;
+            rounds++;
+
+            if(rounds === 10){
+                if(playerOne.points > playerTwo.points){
+                    io.to(room).emit('game:over', playerOne);
+                }
+                else if(playerTwo.points > playerOne.points){
+                    io.to(room).emit('game:over', playerTwo);
+                }
+            }
 
             if(playerTwo.clickTime < playerOne.clickTime){
                 playerTwo.points++;
-                playerTwo.clickTime = 0;
-                let winner = playerTwo.name;
-                io.to(room).emit('round:over', winner);
+                console.log("Player one points: ",playerTwo.points);
+                winner = playerTwo.name;
+                io.to(room).emit('round:over',winner);
+                // io.to(room).emit('round:over', winner);
                 // io.to(room).emit('round:over', playerTwo);
             }
 
             else if(playerOne.clickTime < playerTwo.clickTime){
                 playerOne.points++;
-                playerOne.clickTime = 0;
-                let winner = playerOne.name;
-                io.to(room).emit('round:over', winner);
+                console.log("Player one points: ",playerOne.points);
+                winner = playerOne.name;
+                io.to(room).emit('round:over',winner);
             }
+
+           
+            // io.to(room).emit('round:over', winner);
+
+            // io.to(room).emit('new:round', {
+            //     offsetRow: Math.ceil(Math.random() * 12 ),
+            //     offsetColumn: Math.ceil(Math.random() * 12 ),
+            //     // randomTime:  Math.ceil(Math.random() * (5000 + 1000) + 1000)
+            // });
         }
 }
 
@@ -239,7 +261,7 @@ const handleScore = function(socket) {
         });
     }); */
     
-    if (rounds > maxRounds) {
+    if (rounds < maxRounds) {
 		io.to(room).emit('new-round');
     } else if (rounds === maxRounds) {
         io.to(room).emit('game:over');
@@ -270,14 +292,17 @@ module.exports = function(socket, _io) {
 
 	// handle game start logic
 	socket.on('start:game', () => {
+        
         let id = socket.id;
-        const game = fetchGame(id);
+        let game = fetchGame(id);
         let room = (game.gameObject.id);
+        game.gameObject.playerOne.hasClicked = false;
+        game.gameObject.playerTwo.hasClicked = false;
 
         io.to(room).emit('new:round', {
             offsetRow: Math.ceil(Math.random() * 12 ),
 			offsetColumn: Math.ceil(Math.random() * 12 ),
-            // randomTime:  Math.ceil(Math.random() * (5000 + 1000) + 1000)
+            randomTime:  Math.ceil(Math.random() * (5000 + 1000) + 1000)
         });
     });
 
