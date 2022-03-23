@@ -174,25 +174,26 @@ const countdown = () => {
 	}, 1000);
 }
 
+//* TIMER FUNCTIONS
 const startTimerPlayer1 = () => {
-	let startTimestamp = moment().startOf("day");
+	let startTimestamp = Date.now();
     setInterval(function() {
-        startTimestamp.add(1, 'second');
+        let elapsedTime = Date.now() - startTimestamp;
         document.getElementById('timerPlayer1').innerHTML = 
-            startTimestamp.format('mm:ss');
-    }, 1000);
+            (elapsedTime / 1000).toFixed(3);
+    }, 10);
 }
     
 const startTimerPlayer2 = () => {
-	let startTimestamp = moment().startOf("day");
+	let startTimestamp = Date.now();
     setInterval(function() {
-        startTimestamp.add(1, 'second');
+        let elapsedTime = Date.now() - startTimestamp;
         document.getElementById('timerPlayer2').innerHTML = 
-            startTimestamp.format('mm:ss');
-    }, 1000);
+            (elapsedTime / 1000).toFixed(3);
+    }, 10);
 }
 
-const saveTime  = () => {
-	// här kollar vi ifall spelare 1 klickat på virus -> i så fall ska tiden sparas. När båda spelare klickat på samma virus så kallar vi på funktionen startTimer(). Om det gått 10 spelomgångar, break ut från loop. 
-}
+
+
+
         
