@@ -241,15 +241,22 @@ const saveTime  = () => {
 	// här kollar vi ifall spelare 1 klickat på virus -> i så fall ska tiden sparas. När båda spelare klickat på samma virus så kallar vi på funktionen startTimer(). Om det gått 10 spelomgångar, break ut från loop. 
 }
 
-socket.on('gameover', (winnerOfTheGame, room) => {
+socket.on('game:over', (winnerOfTheGame, room) => {
 	let gameoverHTML = document.getElementById("gameoverId");
 	gameoverWrapperEl.classList.remove('hide');
 
-	if (winnerOfTheGame === socket.id) {
-		gameoverHTML.innerHTML = `<h2>You're the winner!</h2>`
-	} else {
-		gameoverHTML.innerHTML = `<h2>You lost :( Better luck next time!</h2>`
-	}
+	setInterval(function() {
+		if(countdownTime <= 0) {
+			gameoverWrapperEl.classList.add('hide');
+			startEl.classList.remove('hide');
+		} else {
+			if (winnerOfTheGame === socket.id) {
+				gameoverHTML.innerHTML = `<h2>You're the winner!</h2>`
+			} else {
+				gameoverHTML.innerHTML = `<h2>You lost :( Better luck next time!</h2>`
+			}
+		}
+	}, 5000);
 });
  //i några sekunder - sen skickas tillbaka till start page (för username)
 function stopTimerPlayer1() {
