@@ -183,8 +183,6 @@ const countdown = () => {
 			gameWrapperEl.classList.remove('hide');
 			countdownWrapperEl.classList.add('hide');
 
-			startTimerPlayer1();
-			startTimerPlayer2();
 		} else {
 			countdownHTML.innerHTML = `<h2>${countdownTime} seconds left</h2>`;
 		}
