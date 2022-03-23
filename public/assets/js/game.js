@@ -19,8 +19,6 @@ const gameWrapperEl = document.querySelector('#game-wrapper');
 const waitingForPlayerWrapperEl = document.querySelector('#waitingForPlayer-wrapper');
 const countdownWrapperEl = document.querySelector('#countdown-wrapper');
 const gameoverWrapperEl = document.querySelector('#gameover-wrapper');
-const usernameForm = document.querySelector('#username-form');
-const chosenAvatar = document.querySelector('.avatar-wrapper');
 const virus = document.querySelector('.virus');
 
 
