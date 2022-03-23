@@ -17,6 +17,10 @@ let username = null;
 let avatar = null;
 let timeStart = Date.now();
 
+//* TIMER
+let intervalPlayer1;
+let intervalPlayer2;
+
 const updatePlayerList = (playerOne, playerTwo) => {
 	let playerOne_list = document.querySelectorAll('.player1'); 
 	playerOne_list.forEach(player1 => {
@@ -42,12 +46,13 @@ const updatePlayerList = (playerOne, playerTwo) => {
 		countdownWrapperEl.classList.remove('hide');
 
 		gameWrapperEl.classList.add('hide');
-
 		//start countdown
 		countdown();
 		setTimeout(function(){
 			socket.emit('start:game');
 		}, 4000)
+
+		
 	}	
 }
 
@@ -70,53 +75,57 @@ socket.on('round:over', winner => {
 
 socket.on('new:round', data => {
 	// does not do much at this point, check if players are ready?
+	startTimerPlayer1();
+	startTimerPlayer2();
 	console.log("round started");
 	timeStart = Date.now();
 	console.log("Time start " + timeStart);
 
 	startGame(data, timeStart);
 	//countdown();
-	// startTimer();
 })
 
-socket.on('virus:clicked', (data, randomTime) => {
-	moveVirus(data.offsetRow, data.offsetColumn, randomTime);
-	saveTime();
+socket.on('stop:timer1'), () => {
+	stopTimerPlayer1();
+};
+
+socket.on('stop:timer2'), () => {
+	stopTimerPlayer2();
+};
+
+socket.on('virus:clicked', (data) => {
+	moveVirus(data.offsetRow, data.offsetColumn, data.clickTime);
 });
 
 usernameForm.addEventListener('submit', e => {
 	e.preventDefault();
 	username = usernameForm.username.value;
-	console.log(`Player username is ${username}`);
 
 	let avatar = document.querySelector('input[name="avatar"]:checked').value;
 
-		socket.emit('join:game', {username: username, avatar: avatar} , (status) => {
-		console.log(status);
+	socket.emit('join:game', {username: username, avatar: avatar} , (status) => {
 
-		if (status.success) {
+	if (status.success) {
 		console.log("Server acknowledged that user joined", status);
 		
 		startEl.classList.add('hide');
-
-		// show game view
 		gameWrapperEl.classList.remove('hide');
 
 		updatePlayerList(status.playerOne, status.playerTwo);
 
+		socket.emit('start:game');
+
 	}  else if(!status.success) {
-			socket.emit('create:game', {username: username, avatar: avatar}, (status) => {
+		socket.emit('create:game', {username: username, avatar: avatar}, (status) => {
 	
 			console.log("Server acknowledged that user joined", status);
 		
-				if (status.success) {
-					// update list of users in room
-					startEl.classList.add('hide');
+			if (status.success) {
+				socket.emit('start:game');
+				startEl.classList.add('hide');
+				gameWrapperEl.classList.remove('hide');
 
-					// show game view
-					gameWrapperEl.classList.remove('hide');
-
-					updatePlayerList(status.playerOne, status.playerTwo);
+				updatePlayerList(status.playerOne, status.playerTwo);
 				}
 			});
 		}
@@ -152,7 +161,11 @@ virus.addEventListener('click', (timeClicked) => {
 	setTimeout(function () {
 		virus.classList.add('hide');
 
-		socket.emit('virus:clicked')
+	// when virus is clicked, randomise new numbers and send to socket
+		socket.emit('virus:clicked', {
+			offsetRow: Math.ceil(Math.random() * 12 ),
+			offsetColumn: Math.ceil(Math.random() * 12 ),
+		});
 	}, 1000)
 
 
@@ -162,6 +175,10 @@ virus.addEventListener('click', (timeClicked) => {
 
 // move the virus using randomised numbers 
 function moveVirus(data) {
+		resetTimer();
+		startTimerPlayer1();
+		startTimerPlayer2();
+
 		let row = data.offsetRow;
 		let column = data.offsetColumn;
 		
@@ -193,7 +210,6 @@ const countdown = () => {
 			clearInterval(timer);
 			gameWrapperEl.classList.remove('hide');
 			countdownWrapperEl.classList.add('hide');
-			start = Date.now();
 
 			startTimerPlayer1();
 			startTimerPlayer2();
@@ -202,28 +218,43 @@ const countdown = () => {
 		}
 		countdownTime -= 1;
 	}, 1000);
-	// 100
 }
 
+//* TIMER FUNCTIONS
 const startTimerPlayer1 = () => {
-	var startTimestamp = moment().startOf("day");
-    setInterval(function() {
-        startTimestamp.add(1, 'second');
+	stopTimerPlayer1();
+	let startTimestamp = Date.now();
+    intervalPlayer1 = setInterval(function() {
+        let elapsedTime = Date.now() - startTimestamp;
         document.getElementById('timerPlayer1').innerHTML = 
-            startTimestamp.format('mm:ss');
-    }, 1000);
+            (elapsedTime / 1000).toFixed(2);
+    }, 10);
 }
     
 const startTimerPlayer2 = () => {
-	var startTimestamp = moment().startOf("day");
-    setInterval(function() {
-        startTimestamp.add(1, 'second');
+	stopTimerPlayer2();
+	let startTimestamp = Date.now();
+    intervalPlayer2 = setInterval(function() {
+        let elapsedTime = Date.now() - startTimestamp;
         document.getElementById('timerPlayer2').innerHTML = 
-            startTimestamp.format('mm:ss');
-    }, 1000);
+            (elapsedTime / 1000).toFixed(2);
+    }, 10);
 }
 
-const saveTime  = () => {
-	// här kollar vi ifall spelare 1 klickat på virus -> i så fall ska tiden sparas. När båda spelare klickat på samma virus så kallar vi på funktionen startTimer(). Om det gått 10 spelomgångar, break ut från loop. 
-}
+function stopTimerPlayer1() {
+	clearInterval(intervalPlayer1);
+  }
+  
+function stopTimerPlayer2() {
+	  clearInterval(intervalPlayer2);
+	}
+
+function resetTimer() {
+	seconds = 0;
+	milliseconds = 0;
+	timerPlayer1.innerHTML = `00 : 00`;
+	timerPlayer2.innerHTML = `00 : 00`;
+  }
+
+
         

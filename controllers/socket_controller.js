@@ -10,7 +10,7 @@ let io = null;
 let totalGameCount = 0;
 const gameList = [];
 
-
+// finds your game
 const fetchGame = id => {
     return gameList.find(gameRoom => {
         if(gameRoom.gameObject.playerOne.id === id || gameRoom.gameObject.playerTwo.id === id){
@@ -26,7 +26,6 @@ const handleDisconnect = function() {
     if ( totalGameCount === 0 ) {
         console.log('no');
     } else {
-
         // find the room that this socket is part of
         let id = this.id
         const game = fetchGame(id);
@@ -47,7 +46,7 @@ const handleDisconnect = function() {
     }
 }
 
-const handleCreateGame = function(data, callback) {
+const handleCreateGame = function(data, callback) { // data is username and avatar from the start-form
     let gameObject = {
         playerOne: {},
         playerTwo: {}
@@ -62,10 +61,8 @@ const handleCreateGame = function(data, callback) {
     gameObject.playerTwo.hasClicked = false;
     gameObject.playerOne.hasClicked = false;
     totalGameCount++;
-    console.log(gameObject);
     gameList.push({gameObject});
 
-    console.log("Game Created by "+ data.username + " w/ " + gameObject.id);
     this.broadcast.to(gameObject.id).emit('player:connected', data.username, gameObject.id);
     
     callback({
@@ -77,47 +74,40 @@ const handleCreateGame = function(data, callback) {
 };
 
 const handleJoinGame = function(data, callback){
-    console.log(data.username + " wants to join a game");
-
     if ( totalGameCount === 0 ) {
          callback({
-            success:false
-        })
+            success:false // creates a new game if there isnt a game to join
+        });
     } else {
        const game = gameList.find(gameRoom => {
             if(gameRoom.gameObject.playerTwo.id === null){
-                return true;
+                return true; // If there is a game where playerTwo is Null, then join this game. 
             }
         });
 
-        if(game){
-        console.log('Open game:',game);
-        game.gameObject['playerTwo']['name'] = data.username;
-        game.gameObject['playerTwo']['avatar'] = data.avatar;
-        game.gameObject['playerTwo']['id'] = this.id;
-        const gameId = game.gameObject.playerOne.id;
+        if(game){ // if there is a gameObject where game has a playerTwo that is Null, then replace with this userinfo
+            game.gameObject['playerTwo']['name'] = data.username;
+            game.gameObject['playerTwo']['avatar'] = data.avatar;
+            game.gameObject['playerTwo']['id'] = this.id;
+            const gameId = game.gameObject.playerOne.id;
 
-        this.join(gameId);
-        debug(`Player ${data.username} joined room ${gameId}`);
-        this.emit('join:success', gameId);
+            this.join(gameId);
+            debug(`Player ${data.username} joined room ${gameId}`);
 
-        console.log(data.username + " has been added to: " + gameId);
-        this.broadcast.to(gameId).emit('player:connected', data.username, gameId);
-        let playerOne = game.gameObject.playerOne;
-        let playerTwo = game.gameObject.playerTwo;
+            console.log(data.username + " has been added to: " + gameId);
+            this.broadcast.to(gameId).emit('player:connected', data.username, gameId);
+            let playerOne = game.gameObject.playerOne;
+            let playerTwo = game.gameObject.playerTwo;
 
-        // sends object to front end with info
-        callback({
-            success: true,
-            room: gameId,
-            playerOne: playerOne,
-            playerTwo: playerTwo
-        });
-    
-        // broadcast list of users in room to all connected sockets EXCEPT ourselves
+            // sends object to front end with info
+            callback({
+                success: true,
+                room: gameId,
+                playerOne: playerOne,
+                playerTwo: playerTwo
+            });
         this.broadcast.to(gameId).emit('player:list', playerOne, playerTwo);
         } else{
-            console.log('NO GAME FOUND, CREATING GAME');
             callback({
                 success:false
             })
