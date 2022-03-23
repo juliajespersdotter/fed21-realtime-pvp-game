@@ -251,7 +251,6 @@ socket.on('gameover', (winnerOfTheGame, room) => {
 		gameoverHTML.innerHTML = `<h2>You lost :( Better luck next time!</h2>`
 	}
 });
-
  //i några sekunder - sen skickas tillbaka till start page (för username)
 function stopTimerPlayer1() {
 	clearInterval(intervalPlayer1);
