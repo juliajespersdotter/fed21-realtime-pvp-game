@@ -213,9 +213,11 @@ module.exports = function(socket, _io) {
         // check if both players clicked
         if(playerOne.id === socket.id){
             playerOne.hasClicked = true;
+            io.to(room).emit('stop:timer1');
             
         } else if(playerTwo.id === socket.id){
             playerTwo.hasClicked  = true;
+            io.to(room).emit('stop:timer2');
         }
 
         // if both players clicked, only then mode the virus

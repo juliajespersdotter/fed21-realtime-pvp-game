@@ -16,6 +16,10 @@ const virus = document.querySelector('.virus');
 let username = null;
 let avatar = null;
 
+//* TIMER
+let intervalPlayer1;
+let intervalPlayer2;
+
 const updatePlayerList = (playerOne, playerTwo) => {
 	let playerOne_list = document.querySelectorAll('.player1'); 
 	playerOne_list.forEach(player1 => {
@@ -43,6 +47,8 @@ const updatePlayerList = (playerOne, playerTwo) => {
 		gameWrapperEl.classList.add('hide');
 		//start countdown
 		countdown();
+		startTimerPlayer1();
+		startTimerPlayer2();
 	}	
 }
 
@@ -62,12 +68,18 @@ socket.on('start:game', () => {
 	// does not do much at this point, check if players are ready?
 	console.log("game started");
 	//countdown();
-	// startTimer();
 })
+
+socket.on('stop:timer1'), () => {
+	stopTimerPlayer1();
+};
+
+socket.on('stop:timer2'), () => {
+	stopTimerPlayer2();
+};
 
 socket.on('virus:clicked', (data) => {
 	moveVirus(data.offsetRow, data.offsetColumn, data.clickTime);
-	saveTime(); 
 });
 
 usernameForm.addEventListener('submit', e => {
@@ -86,12 +98,15 @@ usernameForm.addEventListener('submit', e => {
 
 		updatePlayerList(status.playerOne, status.playerTwo);
 
+		socket.emit('start:game');
+
 	}  else if(!status.success) {
 		socket.emit('create:game', {username: username, avatar: avatar}, (status) => {
 	
 			console.log("Server acknowledged that user joined", status);
 		
 			if (status.success) {
+				socket.emit('start:game');
 				startEl.classList.add('hide');
 				gameWrapperEl.classList.remove('hide');
 
@@ -127,6 +142,9 @@ virus.addEventListener('click', () => {
 function moveVirus(offsetRow, offsetColumn) {
 	// let virusShowedAt = Date.now();
 	// 
+	resetTimer();
+	startTimerPlayer1();
+	startTimerPlayer2();
 	
 	let row = offsetRow;
 	let column = offsetColumn;
@@ -175,22 +193,25 @@ const countdown = () => {
 	}, 1000);
 }
 
+//* TIMER FUNCTIONS
 const startTimerPlayer1 = () => {
-	let startTimestamp = moment().startOf("day");
-    setInterval(function() {
-        startTimestamp.add(1, 'second');
+	stopTimerPlayer1();
+	let startTimestamp = Date.now();
+    intervalPlayer1 = setInterval(function() {
+        let elapsedTime = Date.now() - startTimestamp;
         document.getElementById('timerPlayer1').innerHTML = 
-            startTimestamp.format('mm:ss');
-    }, 1000);
+            (elapsedTime / 1000).toFixed(2);
+    }, 10);
 }
     
 const startTimerPlayer2 = () => {
-	let startTimestamp = moment().startOf("day");
-    setInterval(function() {
-        startTimestamp.add(1, 'second');
+	stopTimerPlayer2();
+	let startTimestamp = Date.now();
+    intervalPlayer2 = setInterval(function() {
+        let elapsedTime = Date.now() - startTimestamp;
         document.getElementById('timerPlayer2').innerHTML = 
-            startTimestamp.format('mm:ss');
-    }, 1000);
+            (elapsedTime / 1000).toFixed(2);
+    }, 10);
 }
 
 const saveTime  = () => {
@@ -206,4 +227,22 @@ socket.on('gameover', (winnerOfTheGame, room) => {
 	} else {
 		gameoverHTML.innerHTML = `<h2>You lost :( Better luck next time!</h2>`
 	}
-}); //i några sekunder - sen skickas tillbaka till start page (för username)
+});
+ //i några sekunder - sen skickas tillbaka till start page (för username)
+function stopTimerPlayer1() {
+	clearInterval(intervalPlayer1);
+}
+  
+function stopTimerPlayer2() {
+	  clearInterval(intervalPlayer2);
+}
+
+function resetTimer() {
+	seconds = 0;
+	milliseconds = 0;
+	timerPlayer1.innerHTML = `00 : 00`;
+	timerPlayer2.innerHTML = `00 : 00`;
+}
+
+
+        
