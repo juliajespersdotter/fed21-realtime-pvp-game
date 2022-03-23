@@ -260,15 +260,13 @@ socket.on('game:over', (winnerOfTheGame, room) => {
 	gameoverWrapperEl.classList.remove('hide');
 
 	setInterval(function() {
-		if(countdownTime <= 0) {
-			gameoverWrapperEl.classList.add('hide');
-			startEl.classList.remove('hide');
-		} else {
-			if (winnerOfTheGame === socket.id) {
-				gameoverHTML.innerHTML = `<h2>You're the winner!</h2>`
-			} else {
-				gameoverHTML.innerHTML = `<h2>You lost :( Better luck next time!</h2>`
-			}
+		gameoverWrapperEl.classList.add('hide');
+		startEl.classList.remove('hide');
+
+		if (winnerOfTheGame === socket.id) {
+			gameoverHTML.innerHTML = `<h2>You're the winner!</h2>`
+		} else {
+			gameoverHTML.innerHTML = `<h2>You lost :( Better luck next time!</h2>`
 		}
 	}, 5000);
 });
