@@ -5,17 +5,16 @@
 
 const socket = io();
 const startEl = document.querySelector('#start');
-const gameGrid = document.querySelector('.main');
+// const gameGrid = document.querySelector('.main');
 const gameWrapperEl = document.querySelector('#game-wrapper');
 const waitingForPlayerWrapperEl = document.querySelector('#waitingForPlayer-wrapper');
 const countdownWrapperEl = document.querySelector('#countdown-wrapper');
 const usernameForm = document.querySelector('#username-form');
-const chosenAvatar = document.querySelector('.avatar-wrapper');
+// const chosenAvatar = document.querySelector('.avatar-wrapper');
 const virus = document.querySelector('.virus');
 
 let username = null;
 let avatar = null;
-let timeStart = Date.now();
 
 //* TIMER
 let intervalPlayer1;
@@ -47,12 +46,11 @@ const updatePlayerList = (playerOne, playerTwo) => {
 
 		gameWrapperEl.classList.add('hide');
 		//start countdown
-		countdown();
+		countdown();	
+
 		setTimeout(function(){
 			socket.emit('start:game');
 		}, 4000)
-
-		
 	}	
 }
 
@@ -78,10 +76,8 @@ socket.on('new:round', data => {
 	startTimerPlayer1();
 	startTimerPlayer2();
 	console.log("round started");
-	timeStart = Date.now();
-	console.log("Time start " + timeStart);
 
-	startGame(data, timeStart);
+	startGame(data);
 	//countdown();
 })
 
@@ -93,7 +89,7 @@ socket.on('stop:timer2'), () => {
 	stopTimerPlayer2();
 };
 
-socket.on('virus:clicked', (data) => {
+socket.on('move:virus', (data) => {
 	moveVirus(data.offsetRow, data.offsetColumn, data.clickTime);
 });
 
@@ -111,9 +107,7 @@ usernameForm.addEventListener('submit', e => {
 		startEl.classList.add('hide');
 		gameWrapperEl.classList.remove('hide');
 
-		updatePlayerList(status.playerOne, status.playerTwo);
-
-		socket.emit('start:game');
+		// updatePlayerList(status.playerOne, status.playerTwo);
 
 	}  else if(!status.success) {
 		socket.emit('create:game', {username: username, avatar: avatar}, (status) => {
@@ -121,31 +115,30 @@ usernameForm.addEventListener('submit', e => {
 			console.log("Server acknowledged that user joined", status);
 		
 			if (status.success) {
-				socket.emit('start:game');
 				startEl.classList.add('hide');
 				gameWrapperEl.classList.remove('hide');
 
-				updatePlayerList(status.playerOne, status.playerTwo);
+				// updatePlayerList(status.playerOne, status.playerTwo);
 				}
 			});
 		}
 	});
 });
 
-const startGame = (data, time) => {
-	setTimeout(function(){
-		moveVirus(data);
-	}, data.randomTimeout)
+const startGame = (data) => {
+	// console.log("random time: " + data.randomTime);
+	let timeStart = Date.now();
+	moveVirus(data);
 
 	virus.addEventListener('click', () => {
 		let timeClicked = Date.now();
-		let reactiontime = timeClicked - time;
+		let reactionTime = timeClicked - timeStart;
 		virus.src = "./assets/img/virus-sad.svg";
 
 		setTimeout(function () {
 			virus.classList.add('hide');
 
-			socket.emit('virus:clicked', reactiontime)
+			socket.emit('virus:clicked', reactionTime)
 		}, 1000)
 	})
 }

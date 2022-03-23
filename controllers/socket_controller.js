@@ -60,10 +60,14 @@ const handleCreateGame = function(data, callback) { // data is username and avat
     gameObject.playerTwo.avatar = null;
     gameObject.playerTwo.hasClicked = false;
     gameObject.playerOne.hasClicked = false;
+    gameObject.playerOne.points = 0;
+    gameObject.playerTwo.points = 0;
+
     totalGameCount++;
     gameList.push({gameObject});
 
     this.broadcast.to(gameObject.id).emit('player:connected', data.username, gameObject.id);
+    io.to(this.id).emit('player:list', gameObject.playerOne, gameObject.playerTwo);
     
     callback({
         success: true,
@@ -106,7 +110,7 @@ const handleJoinGame = function(data, callback){
                 playerOne: playerOne,
                 playerTwo: playerTwo
             });
-        this.broadcast.to(gameId).emit('player:list', playerOne, playerTwo);
+        io.to(gameId).emit('player:list', playerOne, playerTwo);
         } else{
             callback({
                 success:false
@@ -114,6 +118,7 @@ const handleJoinGame = function(data, callback){
         }
     }
 }
+
 
 const handleKilledVirus = function(reactionTime) {
         // accepts data for socket to get same for both players
@@ -136,7 +141,6 @@ const handleKilledVirus = function(reactionTime) {
             playerOne['clickTime'] = reactionTime;
             // socket.emit('stop:timer1')
             // console.log("Player one click time " + data.clickTime);
-            console.log(playerOne);
             
         } else if(playerTwo.id === this.id){
             playerTwo.hasClicked  = true;
@@ -144,23 +148,26 @@ const handleKilledVirus = function(reactionTime) {
             // playerTwo['clickTime'] = data.clickTime;
             // socket.emit('stop:timer2')
             // console.log("Player two click time " + data.clickTime);
-            console.log(playerTwo);
         }
 
         // if both players clicked, only then mode the virus
         if(playerOne.hasClicked && playerTwo.hasClicked){
+            let winner;
             playerOne.hasClicked = false;
             playerTwo.hasClicked = false;
 
             if(playerTwo.clickTime < playerOne.clickTime){
-                io.to(room).emit('round:over', playerTwo);
+                playerTwo.points++;
+                winner = playerTwo.name;
+                // io.to(room).emit('round:over', playerTwo);
             }
 
-            if(playerOne.clickTime < playerTwo.clickTime){
-                io.to(room).emit('round:over', playerOne);
+            else if(playerOne.clickTime < playerTwo.clickTime){
+                playerOne.points++;
+                winner = playerOne.name;
             }
-        } else{
-            console.log('Waiting for player');
+
+            io.to(room).emit('round:over', winner);
         }
 }
 
@@ -252,12 +259,13 @@ module.exports = function(socket, _io) {
         io.to(room).emit('new:round', {
             offsetRow: Math.ceil(Math.random() * 12 ),
 			offsetColumn: Math.ceil(Math.random() * 12 ),
-            randomTimeout:  Math.ceil(Math.random() * 7)
+            randomTime:  Math.ceil(Math.random() * (5000 + 1000) + 1000)
         });
     });
 
     // handle when virus is clicked
 
+    /*
     // not functional
     socket.on('calculate:time', (data) => {
         // does not work
@@ -268,4 +276,5 @@ module.exports = function(socket, _io) {
         console.log("player two time: ", playerTwoTime);
 		// console.log(`it took ${playerTime / 1000} seconds for you to catch the virus!`);
     })
+    */
 }
