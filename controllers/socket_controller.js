@@ -1,51 +1,19 @@
 /**
- * Socket Controller
+ * * SOCKET SLAYERS
+ * * socket_controller.js
  */
 
 const debug = require('debug')('game:socket_controller');
 
 let io = null;
 
-
+//********** GAME COMPONENTS **********/
 let totalGameCount = 0;
 const gameList = [];
 
-// finds your game
-const fetchGame = id => {
-    return gameList.find(gameRoom => {
-        if(gameRoom.gameObject.playerOne.id === id || gameRoom.gameObject.playerTwo.id === id){
-            return true;
-        }
-    });
-}
 
-// handle when user has disconnected from chat
-const handleDisconnect = function() {
-	debug(`Client ${this.id} disconnected :(`);
 
-    if ( totalGameCount === 0 ) {
-        console.log('no');
-    } else {
-        // find the room that this socket is part of
-        let id = this.id
-        const game = fetchGame(id);
-
-        if(game){
-            let room = (game.gameObject.id);
-            // let everyone in the room know that user has disconnected
-            this.broadcast.to(room).emit('player:disconnected', this.id);
-        
-            // remove user from list of connected users in that room
-            delete game[this.id];
-        
-            // broadcast list of users in room to all connected sockets EXCEPT ourselves
-            this.broadcast.to(room).emit('player:list', game.gameObject.playerOne, game.gameObject.playerTwo);
-        } else{
-            console.log('no game found');
-        }
-    }
-}
-
+//********** CREATE GAME **********/
 const handleCreateGame = function(data, callback) { // data is username and avatar from the start-form
     let gameObject = {
         playerOne: {},
@@ -77,6 +45,20 @@ const handleCreateGame = function(data, callback) { // data is username and avat
     });
 };
 
+
+
+//********** FINDS GAME **********/
+const fetchGame = id => {
+    return gameList.find(gameRoom => {
+        if(gameRoom.gameObject.playerOne.id === id || gameRoom.gameObject.playerTwo.id === id){
+            return true;
+        }
+    });
+}
+
+
+
+//********** JOIN GAME **********/
 const handleJoinGame = function(data, callback){
     if ( totalGameCount === 0 ) {
          callback({
@@ -181,10 +163,48 @@ let playersTimes = [{
     ID: "askjdeBC8RtXvh_UZYsmRAAAX",
     Time: 5.0070
 }]
+
+//********** USER DISCONNECTS **********/
+const handleDisconnect = function() {
+	debug(`Client ${this.id} disconnected :(`);
+
+    if ( totalGameCount === 0 ) {
+        console.log('no');
+    } else {
+        // find the room that this socket is part of
+        let id = this.id
+        const game = fetchGame(id);
+
+        if(game){
+            let room = (game.gameObject.id);
+            // let everyone in the room know that user has disconnected
+            this.broadcast.to(room).emit('player:disconnected', this.id);
+        
+            // remove user from list of connected users in that room
+            delete game[this.id];
+        
+            // broadcast list of users in room to all connected sockets EXCEPT ourselves
+            this.broadcast.to(room).emit('player:list', game.gameObject.playerOne, game.gameObject.playerTwo);
+        } else{
+            console.log('no game found');
+        }
+    }
+}
+
+
+
+//********** SCORE **********/
 let rounds = 0;
 let maxRounds = 10;
 let compare;
 const handleScore = function(socket) {
+	//check if both players are here
+	//find the room
+	//the room with player1 is here?
+	//the room with player2 is here?
+	//if both are here then we can compare the times
+
+
     rounds ++;
     console.log('rounds played', rounds);
 
@@ -218,20 +238,18 @@ const handleScore = function(socket) {
             socket.in("scores").emit('scores', getHighest(scores)); 
         });
     }); */
-
-    //tell the score to everyone in the room
-    //this.broadcast.to(usersRoom.id).emit('winner', usersRoom.users);
-    //front: when they recieve the winner 1 point should be added to score.
     
     if (rounds > maxRounds) {
-
+		io.to(room).emit('new-round');
     } else if (rounds === maxRounds) {
-        io.emit('game:over', )
+        io.to(room).emit('game:over');
 		rounds = 0;
     }
 }
 
 
+
+//********** EXPORTS **********/
 module.exports = function(socket, _io) {
 	io = _io;
 

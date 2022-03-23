@@ -1,12 +1,11 @@
-/* Styles */
+/* 
+* SOCKET SLAYERS
+* style.css
+*/
 
 @import url('https://fonts.googleapis.com/css2?family=Bungee&family=Fredoka&family=Palette+Mosaic&display=swap');
 
-/******** General styles ********/
-html{
-	font-size: 18;
-}
-
+/******** GENERAL STYLES ********/
 body{
 	font-family: 'Fredoka', sans-serif;
 	font-size: 16px;
@@ -42,7 +41,7 @@ img {
 	height: auto;
 }
 
-/******** Startpage styles ********/
+/******** STARTPAGE ********/
 #start {
 	width: 100vw;
 	height: 100vh;
@@ -50,6 +49,12 @@ img {
 	display: grid;
 	grid-template-columns: repeat(5, 1fr);
 	grid-template-rows: repeat(5, 1fr);
+}
+
+.form {
+	background-color: #303245;
+	border-radius: 20px;
+	box-sizing: border-box;
 }
 
 #username-form {
@@ -63,11 +68,6 @@ img {
 	flex-direction: column;
 }
 
-.form {
-	background-color: #303245;
-	border-radius: 20px;
-	box-sizing: border-box;
-}
 .start-img {
 	padding-top: 5px;
 }
@@ -87,8 +87,16 @@ img {
 	font-weight: 600;
 }
 
-.ic1 {
+.username {
+	width: 20vw;
+	height: 7vh;
 	margin-top: 10px;
+}
+
+#username {
+	width: 100%;
+	height: 100%;
+	box-shadow: 0 0 3px 2px rgb(77, 76, 76);
 }
   
 .input {
@@ -102,17 +110,6 @@ img {
 	outline: 0;
 	padding: 4px 20px 0;
 	width: 100%;
-}
-
-.username {
-	width: 20vw;
-	height: 7vh;
-}
-
-#username {
-	width: 100%;
-	height: 100%;
-	box-shadow: 0 0 3px 2px rgb(77, 76, 76);
 }
 
 .avatar-wrapper {
@@ -137,20 +134,16 @@ img {
 	margin: 5px;
 }
 
-/* Hide radiobutton */
+/** STYLES FOR AVATAR RADIOBUTTONS **/
 [type=radio] { 
 	position: absolute;
 	opacity: 0;
 	width: 0;
 	height: 0;
 }
-  
-/* IMAGE STYLES */
 [type=radio] + img {
 	cursor: pointer;
 }
-  
-/* CHECKED STYLES */
 [type=radio]:checked + img {
 	border-bottom: 2px solid white;
 	padding: 5px;
@@ -188,7 +181,7 @@ img {
 	color: #15172b;
 }
 
-/******** Waiting & countdown styles ********/
+/******** WAITING TO JOIN GAME & COUNTDOWN ********/
 #waitingForPlayer-wrapper, #countdown-wrapper {
 	width: 100vw;
 	height: 100vh;
@@ -211,7 +204,7 @@ img {
 	flex-direction: column;
 }
 
-/******** Game styles ********/
+/******** GAME STYLES ********/
 #game-wrapper {
 	background-color: #E3DEDE;
 	width: 100vw;
@@ -284,6 +277,8 @@ img {
 	display: inline;
 }
 
+
+/********** TIMER **********/
 .aside {
 	background-color: #15172b;
 	padding: 10px;
@@ -363,3 +358,5 @@ img {
 		transform: translate3d(3px, 0, 0);
 	}
 }
+
+/********** GAME OVER **********/
