@@ -28,6 +28,7 @@ const playerTwoScore = document.querySelector('#player2-score');
 let intervalPlayer1;
 let intervalPlayer2;
 
+
 //********** USER JOINS GAME **********/
 usernameForm.addEventListener('submit', e => {
 	e.preventDefault();
@@ -151,10 +152,6 @@ const startGame = (data) => {
 	// console.log("random time: " + data.randomTime);
 	setTimeout(function (){
 		moveVirus(data);
-		resetTimer();
-
-		startTimerPlayer1();
-		startTimerPlayer2();
 	
 		let timeStart = Date.now();
 
@@ -174,10 +171,6 @@ const startGame = (data) => {
 
 // move the virus using randomised numbers 
 function moveVirus(data) {
-		resetTimer(data.delay);
-		//startTimerPlayer1();
-		//startTimerPlayer2();
-
 		let row = data.offsetRow;
 		let column = data.offsetColumn;
 		
@@ -187,7 +180,12 @@ function moveVirus(data) {
 
 		virus.src = "./assets/img/virus.svg";
 	
-		virus.classList.remove('hide');
+		setTimeout(function(){
+			virus.classList.remove('hide');
+			resetTimer();
+			startTimerPlayer1();
+			startTimerPlayer2();
+		}, 1000)
 }
 
 //********** TIMER **********/
@@ -200,6 +198,7 @@ socket.on('stop:timer', (p1, p2) => {
 		stopTimerPlayer2();
 	}
 });
+
 
 const startTimerPlayer1 = () => {
 	stopTimerPlayer1();
@@ -224,12 +223,10 @@ const startTimerPlayer2 = () => {
  //i några sekunder - sen skickas tillbaka till start page (för username)
 function stopTimerPlayer1() {
 	clearInterval(intervalPlayer1);
-	console.log("I´m in stopTimerPlayer1", intervalPlayer1);
 }
   
 function stopTimerPlayer2() {
 	  clearInterval(intervalPlayer2);
-	  console.log("I´m in stopTimerPlayer2", intervalPlayer2);
 }
 
 function resetTimer(delay) {
@@ -243,16 +240,16 @@ function resetTimer(delay) {
 
 
 //********** GAME OVER **********/
-socket.on('game:over', (winnerOfTheGame, room) => {
+socket.on('game:over', (winnerOfTheGame, loser) => {
 	let gameoverHTML = document.getElementById("gameoverId");
 	gameoverWrapperEl.classList.remove('hide');
 	startEl.classList.add('hide');
 	gameWrapperEl.classList.add('hide');
 
 	if (winnerOfTheGame.id === socket.id) {
-		gameoverHTML.innerHTML = `<h2>You're the winner!</h2>`
+		gameoverHTML.innerHTML = `<h2>You're the winner! You got ${winnerOfTheGame.points} points!</h2>`
 	} else {
-		gameoverHTML.innerHTML = `<h2>You lost :( Better luck next time!</h2>`
+		gameoverHTML.innerHTML = `<h2>You lost :( You got ${loser.points} points. Better luck next time!</h2>`
 	}
 
 	setTimeout(function() {
@@ -260,4 +257,18 @@ socket.on('game:over', (winnerOfTheGame, room) => {
 		startEl.classList.remove('hide');
 	}, 5000);
 });
+
+socket.on('no:winner', (playerOne, playerTwo) => {
+	let gameoverHTML = document.getElementById("gameoverId");
+	gameoverWrapperEl.classList.remove('hide');
+	startEl.classList.add('hide');
+	gameWrapperEl.classList.add('hide');
+
+	gameoverHTML.innerHTML = `<h2>You both got equal points! Player One: ${playerOne.points} Player Two: ${playerTwo.points}</h2>`
+
+	setTimeout(function() {
+		gameoverWrapperEl.classList.add('hide');
+		startEl.classList.remove('hide');
+	}, 5000);
+})
         

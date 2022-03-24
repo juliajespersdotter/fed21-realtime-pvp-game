@@ -10,7 +10,6 @@ let io = null;
 //********** GAME COMPONENTS **********/
 let totalGameCount = 0;
 const gameList = [];
-let rounds = 0;
 
 
 // Get random number for virus delay
@@ -31,21 +30,23 @@ const fetchGame = id => {
 //********** CREATE GAME **********/
 const handleCreateGame = function(data, callback) { // data is username and avatar from the start-form
     let gameObject = {
-        playerOne: {},
-        playerTwo: {}
+        id: this.id,
+        rounds: 0,
+        playerOne: {
+            id: this.id,
+            name: data.username,
+            avatar: data.avatar,
+            hasClicked: false,
+            points: 0
+        },
+        playerTwo: {
+            id: null,
+            name: null,
+            avatar: null,
+            hasClicked: false,
+            points: 0
+        }
     };
-
-    gameObject.id = (this.id);
-    gameObject.playerOne.id = this.id;
-    gameObject.playerTwo.id = null;
-    gameObject.playerOne.name = data.username;
-    gameObject.playerTwo.name = null;
-    gameObject.playerOne.avatar = data.avatar;
-    gameObject.playerTwo.avatar = null;
-    gameObject.playerTwo.hasClicked = false;
-    gameObject.playerOne.hasClicked = false;
-    gameObject.playerOne.points = 0;
-    gameObject.playerTwo.points = 0;
 
     totalGameCount++;
     gameList.push({gameObject});
@@ -155,37 +156,55 @@ const handleKilledVirus = async function(reactionTime) {
     if(playerOne.hasClicked && playerTwo.hasClicked){
         playerOne.hasClicked = false;
         playerTwo.hasClicked = false;
-        rounds++;
+        game.gameObject.rounds++;
 
-        if(rounds === 10){
-            if(playerOne.points > playerTwo.points){
-                io.to(room).emit('game:over', playerOne);
-            }
-            else if(playerTwo.points > playerOne.points){
-                io.to(room).emit('game:over', playerTwo);
-            }
-        } else {
-            let delay = getRandomNumber(9000, 3000);
-            console.log(delay);
+        let delay = getRandomNumber(7000, 3000);
+        console.log(delay);
 
-            if(playerTwo.clickTime < playerOne.clickTime){
-                playerTwo.points++;
-                console.log("Player two points: ",playerTwo.points);
-                winner = playerTwo;
-
-                io.to(room).emit('round:over', {
-                    playerOne: playerOne,
-                    playerTwo: playerTwo,
-                    winner: winner,
-                    delay: delay
-                });
+        if(playerTwo.clickTime < playerOne.clickTime){
+            playerTwo.points++;
+            if(playerTwo.points + playerOne.points === 10) {
+                game.gameObject.rounds = 0;
+    
+                if(playerOne.points > playerTwo.points){
+                    io.to(room).emit('game:over', playerOne, playerTwo);
+                }
+                else if(playerTwo.points > playerOne.points){
+                    io.to(room).emit('game:over', playerTwo, playerOne);
+                }
+                else {
+                    io.to(room).emit('no:winner', playerTwo, playerOne);
+                }
             }
 
-            else if(playerOne.clickTime < playerTwo.clickTime){
-                playerOne.points++;
+            console.log("Player two points: ",playerTwo.points);
+            winner = playerTwo;
+
+            io.to(room).emit('round:over', {
+                playerOne: playerOne,
+                playerTwo: playerTwo,
+                winner: winner,
+                delay: delay
+            });
+        }    
+        else if(playerOne.clickTime < playerTwo.clickTime){
+            playerOne.points++;
+            if(playerTwo.points + playerOne.points === 10){
+                game.gameObject.rounds = 0;
+    
+                if(playerOne.points > playerTwo.points){
+                    io.to(room).emit('game:over', playerOne, playerTwo);
+                }
+                else if(playerTwo.points > playerOne.points){
+                    io.to(room).emit('game:over', playerTwo, playerOne);
+                }
+                else {
+                    io.to(room).emit('no:winner', playerTwo, playerOne);
+                }
+            } else{
                 console.log("Player one points: ",playerOne.points);
                 winner = playerOne;
-
+    
                 io.to(room).emit('round:over',{
                     playerOne: playerOne,
                     playerTwo: playerTwo,
@@ -206,12 +225,14 @@ const handleDisconnect = function() {
     } else {
         // find the room that this socket is part of
         let id = this.id
-        const game = fetchGame(id);
+        let game = fetchGame(id);
+
+        console.log('game: ', game);
 
         if(game){
             let room = (game.gameObject.id);
             // let everyone in the room know that user has disconnected
-            this.broadcast.to(room).emit('player:disconnected', this.id);
+            this.broadcast.to(room).emit('player:disconnected', id);
         
             // remove user from list of connected users in that room
             delete game[this.id];
