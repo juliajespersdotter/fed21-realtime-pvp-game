@@ -139,7 +139,7 @@ const handleKilledVirus = function(reactionTime) {
             playerTwo.hasClicked = false;
             rounds++;
 
-            if(rounds === 10){
+            if(rounds === maxRounds){
                 if(playerOne.points > playerTwo.points){
                     io.to(room).emit('game:over', playerOne);
                 }
@@ -148,20 +148,23 @@ const handleKilledVirus = function(reactionTime) {
                 }
             }
 
-            if(playerTwo.clickTime < playerOne.clickTime){
-                playerTwo.points++;
-                console.log("Player one points: ",playerTwo.points);
-                winner = playerTwo.name;
-                io.to(room).emit('round:over',winner);
-                // io.to(room).emit('round:over', winner);
-                // io.to(room).emit('round:over', playerTwo);
-            }
+            else if(rounds < maxRounds){
+                if(playerTwo.clickTime < playerOne.clickTime){
+                    playerTwo.points++;
+                    console.log("Player one points: ",playerTwo.points);
+                    winner = playerTwo.name;
+                    io.to(room).emit('round:over',winner);
+                    // io.to(room).emit('round:over', winner);
+                    // io.to(room).emit('round:over', playerTwo);
+                }
+    
+                else if(playerOne.clickTime < playerTwo.clickTime){
+                    playerOne.points++;
+                    console.log("Player one points: ",playerOne.points);
+                    winner = playerOne.name;
+                    io.to(room).emit('round:over',winner);
+                }
 
-            else if(playerOne.clickTime < playerTwo.clickTime){
-                playerOne.points++;
-                console.log("Player one points: ",playerOne.points);
-                winner = playerOne.name;
-                io.to(room).emit('round:over',winner);
             }
 
            
