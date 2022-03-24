@@ -67,7 +67,7 @@ usernameForm.addEventListener('submit', e => {
 
 
 //********** COUNTDOWN FOR GAME TO START **********/
-let countdownTime = 10;
+let countdownTime = 3;
 const countdown = () => {
 	let countdownHTML = document.getElementById("countdownId");
 
