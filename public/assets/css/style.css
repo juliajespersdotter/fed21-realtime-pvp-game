@@ -268,6 +268,10 @@ img {
 	height: auto;
 }
 
+.wrapper-timer-player {
+	margin-top: 20px;
+}
+
 .center {
 	display: flex;
 	justify-content: center;
