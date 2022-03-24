@@ -190,43 +190,17 @@ function moveVirus(data) {
 socket.on('stop:timer'), (p1, p2) => {
 	if(p1.hasClicked) {
 		stopTimerPlayer1();
+		console.log("I´m at p1.hasClicked", stopTimerPlayer1);
 	}
 	else if(p2.hasClicked) {
 		stopTimerPlayer2();
+		console.log("I´m at p1.hasClicked", stopTimerPlayer1);
 	}
 
 };
 
-
-
 const startTimerPlayer1 = () => {
-	let startTimestamp = Date.now();
-    intervalPlayer1 = setInterval(function() {
-        let elapsedTime = Date.now() - startTimestamp;
-        document.getElementById('timerPlayer1').innerHTML = 
-            (elapsedTime / 1000).toFixed(2);
-    }, 10);
-		clearInterval(intervalPlayer1);
-		console.log("I´m in stopTimerPlayer1", intervalPlayer1);
-}
-
-const startTimerPlayer2 = () => {
-	let startTimestamp = Date.now();
-    intervalPlayer2 = setInterval(function() {
-        let elapsedTime = Date.now() - startTimestamp;
-        document.getElementById('timerPlayer2').innerHTML = 
-            (elapsedTime / 1000).toFixed(2);
-    }, 10);
-		clearInterval(intervalPlayer2);
-		console.log("I´m in stopTimerPlayer2", intervalPlayer2);
-}
-
- 
-
-
-/*
-const startTimerPlayer1 = () => {
-	//stopTimerPlayer1();
+	stopTimerPlayer1();
 	let startTimestamp = Date.now();
     intervalPlayer1 = setInterval(function() {
         let elapsedTime = Date.now() - startTimestamp;
@@ -236,7 +210,7 @@ const startTimerPlayer1 = () => {
 }
     
 const startTimerPlayer2 = () => {
-	//stopTimerPlayer2();
+	stopTimerPlayer2();
 	let startTimestamp = Date.now();
     intervalPlayer2 = setInterval(function() {
         let elapsedTime = Date.now() - startTimestamp;
@@ -255,7 +229,7 @@ function stopTimerPlayer2() {
 	  clearInterval(intervalPlayer2);
 	  console.log("I´m in stopTimerPlayer2", intervalPlayer2);
 }
-*/
+
 function resetTimer(delay) {
 	seconds = 0;
 	milliseconds = 0;
