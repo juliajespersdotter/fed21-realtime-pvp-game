@@ -10,6 +10,22 @@ let io = null;
 //********** GAME COMPONENTS **********/
 let totalGameCount = 0;
 const gameList = [];
+let rounds = 0;
+
+
+// Get random number for virus delay
+const getRandomNumber = (max, min) => {
+    return Math.floor(Math.random() * (max - min)) + min;
+  };
+
+//********** FINDS GAME **********/
+const fetchGame = id => {
+    return gameList.find(gameRoom => {
+        if(gameRoom.gameObject.playerOne.id === id || gameRoom.gameObject.playerTwo.id === id){
+            return true;
+        }
+    });
+}
 
 
 //********** CREATE GAME **********/
@@ -18,6 +34,7 @@ const handleCreateGame = function(data, callback) { // data is username and avat
         playerOne: {},
         playerTwo: {}
     };
+
     gameObject.id = (this.id);
     gameObject.playerOne.id = this.id;
     gameObject.playerTwo.id = null;
@@ -43,17 +60,6 @@ const handleCreateGame = function(data, callback) { // data is username and avat
         playerTwo: gameObject.playerTwo,
     });
 };
-
-
-
-//********** FINDS GAME **********/
-const fetchGame = id => {
-    return gameList.find(gameRoom => {
-        if(gameRoom.gameObject.playerOne.id === id || gameRoom.gameObject.playerTwo.id === id){
-            return true;
-        }
-    });
-}
 
 
 
@@ -101,90 +107,94 @@ const handleJoinGame = function(data, callback){
     }
 }
 
-const handleKilledVirus = function(reactionTime) {
-        // accepts data for socket to get same for both players
-        // then sends back to front end
+const startGame = function(delay) {  
+    let id = this.id;
+    let game = fetchGame(id);
+    let room = (game.gameObject.id);
+    game.gameObject.playerOne.hasClicked = false;
+    game.gameObject.playerTwo.hasClicked = false;
 
-        // looks for room that matches this socked it
-        let id = this.id;
-        const game = fetchGame(id);
+    io.to(room).emit('new:round', {
+        offsetRow: Math.ceil(Math.random() * 12 ),
+        offsetColumn: Math.ceil(Math.random() * 12 ),
+        randomTime: Math.floor(Math.random() * (5000 + 1000) + 1000),
+        delay: delay
+    });
+}
 
-        // get room id
-        let room = (game.gameObject.id);
-        let playerOne = game.gameObject.playerOne;
-        let playerTwo = game.gameObject.playerTwo;
-        let winner = null;
-        // console.log('Player id: ' + this.id + ' players id', playerOne.id + ' ' + playerTwo.id);
+const handleKilledVirus = async function(reactionTime) {
+    // accepts data for socket to get same for both players
+    // then sends back to front end
 
-        // check if both players clicked
-        if(playerOne.id === this.id){
-            console.log("player one clicked");
-            playerOne.hasClicked = true;
-            playerOne['clickTime'] = reactionTime;
-            // socket.emit('stop:timer1')
-            // console.log("Player one click time " + data.clickTime);
-            
-        } else if(playerTwo.id === this.id){
-            console.log("player two clicked");
-            playerTwo.hasClicked  = true;
-            playerTwo['clickTime'] = reactionTime;
-            // playerTwo['clickTime'] = data.clickTime;
-            // socket.emit('stop:timer2')
-            // console.log("Player two click time " + data.clickTime);
-        }
+    // looks for room that matches this socked it
+    let id = this.id;
+    const game = fetchGame(id);
 
-        // if both players clicked, only then mode the virus
-        if(playerOne.hasClicked && playerTwo.hasClicked){
-            playerOne.hasClicked = false;
-            playerTwo.hasClicked = false;
-            rounds++;
+    
+    // get room id
+    let room = (game.gameObject.id);
+    let playerOne = game.gameObject.playerOne;
+    let playerTwo = game.gameObject.playerTwo;
+    let winner = null;
 
-            if(rounds === 10){
-                if(playerOne.points > playerTwo.points){
-                    io.to(room).emit('game:over', playerOne);
-                }
-                else if(playerTwo.points > playerOne.points){
-                    io.to(room).emit('game:over', playerTwo);
-                }
+    
+    // check if both players clicked
+    if(playerOne.id === this.id){
+        playerOne.hasClicked = true;
+        playerOne['clickTime'] = reactionTime;
+        io.to(room).emit('stop:timer1')
+        
+    } else if(playerTwo.id === this.id){
+        playerTwo.hasClicked  = true;
+        playerTwo['clickTime'] = reactionTime;
+        io.to(room).emit('stop:timer2')
+    }
+
+    // if both players clicked, only then mode the virus
+    if(playerOne.hasClicked && playerTwo.hasClicked){
+        playerOne.hasClicked = false;
+        playerTwo.hasClicked = false;
+        rounds++;
+
+        if(rounds === 10){
+            if(playerOne.points > playerTwo.points){
+                io.to(room).emit('game:over', playerOne);
             }
+            else if(playerTwo.points > playerOne.points){
+                io.to(room).emit('game:over', playerTwo);
+            }
+        } else {
+            let delay = getRandomNumber(5000, 1000);
+            console.log(delay);
 
             if(playerTwo.clickTime < playerOne.clickTime){
                 playerTwo.points++;
-                console.log("Player one points: ",playerTwo.points);
-                winner = playerTwo.name;
-                io.to(room).emit('round:over',winner);
-                // io.to(room).emit('round:over', winner);
-                // io.to(room).emit('round:over', playerTwo);
+                console.log("Player two points: ",playerTwo.points);
+                winner = playerTwo;
+
+                io.to(room).emit('round:over', {
+                    playerOne: playerOne,
+                    playerTwo: playerTwo,
+                    winner: winner,
+                    delay: delay
+                });
             }
 
             else if(playerOne.clickTime < playerTwo.clickTime){
                 playerOne.points++;
                 console.log("Player one points: ",playerOne.points);
-                winner = playerOne.name;
-                io.to(room).emit('round:over',winner);
+                winner = playerOne;
+
+                io.to(room).emit('round:over',{
+                    playerOne: playerOne,
+                    playerTwo: playerTwo,
+                    winner: winner,
+                    delay: delay
+                });
             }
-
-           
-            // io.to(room).emit('round:over', winner);
-
-            // io.to(room).emit('new:round', {
-            //     offsetRow: Math.ceil(Math.random() * 12 ),
-            //     offsetColumn: Math.ceil(Math.random() * 12 ),
-            //     // randomTime:  Math.ceil(Math.random() * (5000 + 1000) + 1000)
-            // });
         }
+    }
 }
-
-let playersTimes = [{
-    ID: "eBC8RtXvh_UZYsmRAAAX",
-    Time: 2.3423
-    }, {
-    ID: "XeBC8RtXvh_UZYsmRAAAXsad",
-    Time: 3.4545
-    }, {
-    ID: "askjdeBC8RtXvh_UZYsmRAAAX",
-    Time: 5.0070
-}]
 
 //********** USER DISCONNECTS **********/
 const handleDisconnect = function() {
@@ -214,63 +224,6 @@ const handleDisconnect = function() {
 }
 
 
-
-//********** SCORE **********/
-let rounds = 0;
-let maxRounds = 10;
-let compare;
-const handleScore = function(socket) {
-	//check if both players are here
-	//find the room
-	//the room with player1 is here?
-	//the room with player2 is here?
-	//if both are here then we can compare the times
-
-
-    rounds ++;
-    console.log('rounds played', rounds);
-
-    console.log(`players time from the server ${playersTime} player ${player}`)
-
-    //check that array has 0-1 index.
-    //check lowest/highest number in each object, give them 'highest' and 'lowest
-    let lowest = Math.min.apply(null, playersTimes.map(function(score) {
-        return score.Time;
-    }));
-    
-    let highest = Math.max.apply(null, playersTimes.map(function(score) {
-        return score.Time;
-    }));
-    
-    console.log('The best time was', lowest);
-    console.log('The worst time was', highest);
-
-    let winnerOfThisRound = lowest;
-    //send to client and compare with the time that was sent to the server.
-    socket.emit('scores', winnerOfThisRound);
-
-/*  socket.on('connection', function(client) {
-        client.on('join', function(data) {
-            client.join("playersScore"); // Join socket IO Room
-        });
-    
-        client.on('playerScore', function(data){ 
-            scores.push(data);
-            //Send to all users in scores room
-            socket.in("scores").emit('scores', getHighest(scores)); 
-        });
-    }); */
-    
-    if (rounds < maxRounds) {
-		io.to(room).emit('new-round');
-    } else if (rounds === maxRounds) {
-        io.to(room).emit('game:over');
-		rounds = 0;
-    }
-}
-
-
-
 //********** EXPORTS **********/
 module.exports = function(socket, _io) {
 	io = _io;
@@ -282,42 +235,15 @@ module.exports = function(socket, _io) {
 	// handle user disconnect
 	socket.on('disconnect', handleDisconnect);
 
+    // handle join game
     socket.on('join:game', handleJoinGame);
 
+    // handle create game
     socket.on('create:game', handleCreateGame);
 
-    socket.on('player:time', handleScore);
-
+    // handle virus clicked
     socket.on('virus:clicked', handleKilledVirus);
 
 	// handle game start logic
-	socket.on('start:game', () => {
-        
-        let id = socket.id;
-        let game = fetchGame(id);
-        let room = (game.gameObject.id);
-        game.gameObject.playerOne.hasClicked = false;
-        game.gameObject.playerTwo.hasClicked = false;
-
-        io.to(room).emit('new:round', {
-            offsetRow: Math.ceil(Math.random() * 12 ),
-			offsetColumn: Math.ceil(Math.random() * 12 ),
-            randomTime:  Math.ceil(Math.random() * (5000 + 1000) + 1000)
-        });
-    });
-
-    // handle when virus is clicked
-
-    /*
-    // not functional
-    socket.on('calculate:time', (data) => {
-        // does not work
-        let playerOneTime = data.showVirus - data.playerOneTime;
-        let playerTwoTime = data.showVirus - data.playerTwoTime;
-
-        console.log("Player one time: ", playerOneTime);
-        console.log("player two time: ", playerTwoTime);
-		// console.log(`it took ${playerTime / 1000} seconds for you to catch the virus!`);
-    })
-    */
+	socket.on('start:game', startGame);
 }

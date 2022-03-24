@@ -12,7 +12,6 @@ const http = require('http');
 const socketio = require('socket.io');
 const { instrument } = require("@socket.io/admin-ui");
 const socket_controller = require('../controllers/socket_controller');
-const models = require('../models');
 
 /**
  * Get port from environment and store in Express.
@@ -40,16 +39,7 @@ io.on('connection', (socket) => {
 	socket_controller(socket, io);
 });
 
-/*
-// Connect to database
- models.connect()
- .then(() => {
-})
-.catch(e => {
-	debug('Failed to connect to database:', e);
-	process.exit(1);
-})
-*/
+
  /**
 ** Listen on provided port, on all network interfaces.
 */

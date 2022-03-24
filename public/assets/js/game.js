@@ -15,12 +15,13 @@ let avatar = null;
 
 //********** GAME COMPONENTS **********/
 const startEl = document.querySelector('#start');
-// const gameGrid = document.querySelector('.main');
 const gameWrapperEl = document.querySelector('#game-wrapper');
 const waitingForPlayerWrapperEl = document.querySelector('#waitingForPlayer-wrapper');
 const countdownWrapperEl = document.querySelector('#countdown-wrapper');
 const gameoverWrapperEl = document.querySelector('#gameover-wrapper');
 const virus = document.querySelector('.virus');
+const playerOneScore = document.querySelector('#player1-score');
+const playerTwoScore = document.querySelector('#player2-score');
 
 
 //********** TIMER **********/
@@ -40,11 +41,6 @@ usernameForm.addEventListener('submit', e => {
 		console.log("Server acknowledged that user joined", status);
 		
 		startEl.classList.add('hide');
-		// gameWrapperEl.classList.remove('hide');
-
-		// updatePlayerList(status.playerOne, status.playerTwo);
-
-		// socket.emit('start:game');
 
 	}  else if(!status.success) {
 		socket.emit('create:game', {username: username, avatar: avatar}, (status) => {
@@ -55,9 +51,6 @@ usernameForm.addEventListener('submit', e => {
 				// socket.emit('start:game');
 				startEl.classList.add('hide');
 
-				// gameWrapperEl.classList.remove('hide');
-
-				// updatePlayerList(status.playerOne, status.playerTwo);
 				}
 			});
 		}
@@ -137,106 +130,41 @@ socket.on('player:disconnected', (username) => {
 	console.log('Player disconnected', username);
 });
 
-socket.on('round:over', winner => {
-	console.log('winner was: ', winner);
-	socket.emit('start:game');
-})
-
-socket.on('winner', winner => {
-	console.log("Winner was: ", winner);
+socket.on('round:over', data => {
+	console.log('winner was: ', data.winner.name);
+	if(data.winner.id == data.playerOne.id){
+		playerOneScore.innerText = `${data.winner.points}`;
+	}
+	else{
+		playerTwoScore.innerText = `${data.winner.points}`;
+	}
+	socket.emit('start:game', data.delay);
 })
 
 socket.on('new:round', data => {
-	// does not do much at this point, check if players are ready?
-	startTimerPlayer1();
-	startTimerPlayer2();
+	// start new round
 	console.log("round started");
-
 	startGame(data);
-	//countdown();
 })
-
-socket.on('stop:timer1'), () => {
-	stopTimerPlayer1();
-};
-
-
-// socket.on('move:virus', (data) => {
-// 	moveVirus(data.offsetRow, data.offsetColumn, data.clickTime);
-// });
-
-/*
-usernameForm.addEventListener('submit', e => {
-	e.preventDefault();
-	username = usernameForm.username.value;
-
-	let avatar = document.querySelector('input[name="avatar"]:checked').value;
-
-	socket.emit('join:game', {username: username, avatar: avatar} , (status) => {
-
-	if (status.success) {
-		console.log("Server acknowledged that user joined", status);
-		
-		startEl.classList.add('hide');
-		gameWrapperEl.classList.remove('hide');
-
-		// updatePlayerList(status.playerOne, status.playerTwo);
-
-	}  else if(!status.success) {
-		socket.emit('create:game', {username: username, avatar: avatar}, (status) => {
-	
-			console.log("Server acknowledged that user joined", status);
-		
-			if (status.success) {
-				startEl.classList.add('hide');
-				gameWrapperEl.classList.remove('hide');
-
-				// updatePlayerList(status.playerOne, status.playerTwo);
-				}
-			});
-		}
-	});
-});
-*/
 
 const startGame = (data) => {
 	// console.log("random time: " + data.randomTime);
-	moveVirus(data);
-	let timeStart = Date.now();
-
-	virus.addEventListener('click', () => {
-		let timeClicked = Date.now();
-		let reactionTime = timeClicked - timeStart;
-		// virus.src = "./assets/img/virus-sad.svg";
-
-		virus.classList.add('hide');
+	setTimeout(function (){
+		moveVirus(data);
 	
-		socket.emit('virus:clicked', reactionTime)
-	})
+		let timeStart = Date.now();
+
+		virus.addEventListener('click', () => {
+			let timeClicked = Date.now();
+			let reactionTime = timeClicked - timeStart;
+			// virus.src = "./assets/img/virus-sad.svg";
+
+			virus.classList.add('hide');
+		
+			socket.emit('virus:clicked', reactionTime)
+		})
+	}, data.delay)
 }
-
-/*
-// How to make sure something only happens if both users pressed the virus?
-virus.addEventListener('click', (timeClicked) => {
-	virus.src = "./assets/img/virus-sad.svg";
-
-	// let clickTime = Date.now();
-	// console.log(clickTime);
-
-	setTimeout(function () {
-		virus.classList.add('hide');
-
-	// when virus is clicked, randomise new numbers and send to socket
-		socket.emit('virus:clicked', {
-			offsetRow: Math.ceil(Math.random() * 12 ),
-			offsetColumn: Math.ceil(Math.random() * 12 ),
-		});
-	}, 1000)
-
-
-	// when virus is clicked, randomise new numbers and send to socket
-});
-*/
 
 // move the virus using randomised numbers 
 function moveVirus(data) {
@@ -252,27 +180,12 @@ function moveVirus(data) {
 		virus.style.animation = "none";
 
 		virus.src = "./assets/img/virus.svg";
-
-		setTimeout(function(){
-			virus.classList.remove('hide');
-		}, data.randomTime)
+	
+		virus.classList.remove('hide');
 }
 
-
-
-//********** SCORE **********/
-let score = 0;
-socket.on('scores', (data) => { //data innehåller winnerOfThisRound, vilket är den lägsta tiden
-	let myTime = time;
-	if (myTime === data) {
-		const addScore = document.getElementById("player1-score"); // #player1-score?
-		addScore.innerHTML = `<h2>${score++}</h2>`;
-	} else if (myTime === data){
-		return;
-	}
-});
-
 //********** TIMER **********/
+
 socket.on('stop:timer1'), () => {
 	stopTimerPlayer1();
 };
@@ -323,8 +236,9 @@ socket.on('game:over', (winnerOfTheGame, room) => {
 	let gameoverHTML = document.getElementById("gameoverId");
 	gameoverWrapperEl.classList.remove('hide');
 	startEl.classList.add('hide');
+	gameWrapperEl.classList.add('hide');
 
-	if (winnerOfTheGame === socket.id) {
+	if (winnerOfTheGame.id === socket.id) {
 		gameoverHTML.innerHTML = `<h2>You're the winner!</h2>`
 	} else {
 		gameoverHTML.innerHTML = `<h2>You lost :( Better luck next time!</h2>`
