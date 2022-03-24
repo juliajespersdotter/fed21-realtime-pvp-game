@@ -156,36 +156,53 @@ const handleKilledVirus = async function(reactionTime) {
         playerTwo.hasClicked = false;
         game.gameObject.rounds++;
 
-        if(game.gameObject.rounds === 11){
-            game.gameObject.rounds = 0;
-            if(playerOne.points > playerTwo.points){
-                io.to(room).emit('game:over', playerOne, playerTwo);
-            }
-            else if(playerTwo.points > playerOne.points){
-                io.to(room).emit('game:over', playerTwo, playerOne);
-            }
-        } else {
-            let delay = getRandomNumber(7000, 3000);
-            console.log(delay);
+        let delay = getRandomNumber(7000, 3000);
+        console.log(delay);
 
-            if(playerTwo.clickTime < playerOne.clickTime){
-                playerTwo.points++;
-                console.log("Player two points: ",playerTwo.points);
-                winner = playerTwo;
-
-                io.to(room).emit('round:over', {
-                    playerOne: playerOne,
-                    playerTwo: playerTwo,
-                    winner: winner,
-                    delay: delay
-                });
+        if(playerTwo.clickTime < playerOne.clickTime){
+            playerTwo.points++;
+            if(playerTwo.points + playerOne.points === 10) {
+                game.gameObject.rounds = 0;
+    
+                if(playerOne.points > playerTwo.points){
+                    io.to(room).emit('game:over', playerOne, playerTwo);
+                }
+                else if(playerTwo.points > playerOne.points){
+                    io.to(room).emit('game:over', playerTwo, playerOne);
+                }
+                else {
+                    io.to(room).emit('no:winner', playerTwo, playerOne);
+                }
             }
 
-            else if(playerOne.clickTime < playerTwo.clickTime){
-                playerOne.points++;
+            console.log("Player two points: ",playerTwo.points);
+            winner = playerTwo;
+
+            io.to(room).emit('round:over', {
+                playerOne: playerOne,
+                playerTwo: playerTwo,
+                winner: winner,
+                delay: delay
+            });
+        }    
+        else if(playerOne.clickTime < playerTwo.clickTime){
+            playerOne.points++;
+            if(playerTwo.points + playerOne.points === 10){
+                game.gameObject.rounds = 0;
+    
+                if(playerOne.points > playerTwo.points){
+                    io.to(room).emit('game:over', playerOne, playerTwo);
+                }
+                else if(playerTwo.points > playerOne.points){
+                    io.to(room).emit('game:over', playerTwo, playerOne);
+                }
+                else {
+                    io.to(room).emit('no:winner', playerTwo, playerOne);
+                }
+            } else{
                 console.log("Player one points: ",playerOne.points);
                 winner = playerOne;
-
+    
                 io.to(room).emit('round:over',{
                     playerOne: playerOne,
                     playerTwo: playerTwo,

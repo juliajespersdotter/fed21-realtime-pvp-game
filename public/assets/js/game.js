@@ -170,7 +170,6 @@ const startGame = (data) => {
 
 // move the virus using randomised numbers 
 function moveVirus(data) {
-		resetTimer();
 		startTimerPlayer1();
 		startTimerPlayer2();
 
@@ -184,6 +183,7 @@ function moveVirus(data) {
 		virus.src = "./assets/img/virus.svg";
 	
 		setTimeout(function(){
+			resetTimer();
 			virus.classList.remove('hide');
 		}, 1000)
 }
@@ -197,6 +197,7 @@ socket.on('stop:timer1'), () => {
 socket.on('stop:timer2'), () => {
 	stopTimerPlayer2();
 };
+
 
 const startTimerPlayer1 = () => {
 	stopTimerPlayer1();
@@ -253,4 +254,18 @@ socket.on('game:over', (winnerOfTheGame, loser) => {
 		startEl.classList.remove('hide');
 	}, 5000);
 });
+
+socket.on('no:winner', (playerOne, playerTwo) => {
+	let gameoverHTML = document.getElementById("gameoverId");
+	gameoverWrapperEl.classList.remove('hide');
+	startEl.classList.add('hide');
+	gameWrapperEl.classList.add('hide');
+
+	gameoverHTML.innerHTML = `<h2>You both got equal points! Player One: ${playerOne.points} Player Two: ${playerTwo.points}</h2>`
+
+	setTimeout(function() {
+		gameoverWrapperEl.classList.add('hide');
+		startEl.classList.remove('hide');
+	}, 5000);
+})
         
