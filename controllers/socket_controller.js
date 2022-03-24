@@ -117,7 +117,6 @@ const startGame = function(delay) {
     io.to(room).emit('new:round', {
         offsetRow: Math.ceil(Math.random() * 12 ),
         offsetColumn: Math.ceil(Math.random() * 12 ),
-        randomTime: Math.floor(Math.random() * (5000 + 1000) + 1000),
         delay: delay
     });
 }
@@ -164,7 +163,7 @@ const handleKilledVirus = async function(reactionTime) {
                 io.to(room).emit('game:over', playerTwo);
             }
         } else {
-            let delay = getRandomNumber(5000, 1000);
+            let delay = getRandomNumber(9000, 3000);
             console.log(delay);
 
             if(playerTwo.clickTime < playerOne.clickTime){

@@ -156,9 +156,11 @@ const startGame = (data) => {
 		virus.addEventListener('click', () => {
 			let timeClicked = Date.now();
 			let reactionTime = timeClicked - timeStart;
-			// virus.src = "./assets/img/virus-sad.svg";
+			virus.src = "./assets/img/virus-sad.svg";
 
-			virus.classList.add('hide');
+			setTimeout(function(){
+				virus.classList.add('hide');
+			}, 1000)
 		
 			socket.emit('virus:clicked', reactionTime)
 		})
