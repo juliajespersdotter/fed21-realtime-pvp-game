@@ -71,7 +71,6 @@ usernameForm.addEventListener('submit', e => {
 			console.log("Server acknowledged that user joined", status);
 		
 			if (status.success) {
-				// socket.emit('start:game');
 				startEl.classList.add('hide');
 
 				}
@@ -151,7 +150,6 @@ socket.on('player:disconnected', (id) => {
 });
 
 socket.on('round:over', data => {
-	console.log('winner was: ', data.winner.name);
 	if(data.winner.id == data.playerOne.id){
 		playerOneScore.innerText = `${data.winner.points}`;
 	}
@@ -163,13 +161,10 @@ socket.on('round:over', data => {
 
 socket.on('new:round', data => {
 	// start new round
-	console.log("round started");
 	startGame(data);
 })
 
 const startGame = (data) => {
-	
-	// console.log("random time: " + data.randomTime);
 	setTimeout(function (){
 		moveVirus(data);
 	
@@ -264,6 +259,7 @@ socket.on('game:over', (winnerOfTheGame, loser) => {
 	gameoverWrapperEl.classList.remove('hide');
 	startEl.classList.add('hide');
 	gameWrapperEl.classList.add('hide');
+	gameoverHTML.classList.remove('hide');
 
 	if (winnerOfTheGame.id === socket.id) {
 		gameoverHTML.innerHTML = `<h2>You're the winner! You got ${winnerOfTheGame.points} points!</h2>`
@@ -272,7 +268,7 @@ socket.on('game:over', (winnerOfTheGame, loser) => {
 	}
 
 	setTimeout(function() {
-		reset();
+		socket.emit('reset:game');
 	}, 5000);
 });
 
@@ -280,11 +276,12 @@ socket.on('no:winner', (playerOne, playerTwo) => {
 	gameoverWrapperEl.classList.remove('hide');
 	startEl.classList.add('hide');
 	gameWrapperEl.classList.add('hide');
+	gameoverHTML.classList.remove('hide');
 
 	gameoverHTML.innerHTML = `<h2>You both got equal points! Player One: ${playerOne.points} Player Two: ${playerTwo.points}</h2>`
 
 	setTimeout(function() {
-		reset();
+		socket.emit('reset:game');
 	}, 5000);
 })
         

@@ -72,13 +72,13 @@ const handleJoinGame = function(data, callback){
         });
     } else {
        const game = gameList.find(gameRoom => {
-            if(gameRoom.gameObject.playerTwo.name === null){
-                return true; // If there is a game where playerTwo is Null, then join this game. 
+            if(gameRoom.gameObject.id){
+                return true; // If there is a game where id is not Null, then join this game. 
             }
         });
 
         // if there is a gameObject where game has a playerTwo that is Null, then replace with this userinfo
-        if(game){
+        if(game.gameObject.playerTwo.id === null){
             game.gameObject['playerTwo']['name'] = data.username;
             game.gameObject['playerTwo']['avatar'] = data.avatar;
             game.gameObject['playerTwo']['id'] = this.id;
@@ -122,14 +122,13 @@ const startGame = function(delay) {
     });
 }
 
-const handleKilledVirus = async function(reactionTime) {
+const handleKilledVirus = function(reactionTime) {
     // accepts data for socket to get same for both players
     // then sends back to front end
 
     // looks for room that matches this socked it
     let id = this.id;
-    const game = fetchGame(id);
-
+    let game = fetchGame(id);
     
     // get room id
     let room = (game.gameObject.id);
@@ -156,11 +155,11 @@ const handleKilledVirus = async function(reactionTime) {
         playerTwo.hasClicked = false;
         game.gameObject.rounds++;
 
-        let delay = getRandomNumber(7000, 3000);
-        console.log(delay);
+        let delay = getRandomNumber(5000, 1000);
 
         if(playerTwo.clickTime < playerOne.clickTime){
             playerTwo.points++;
+
             if(playerTwo.points + playerOne.points === 10) {
                 game.gameObject.rounds = 0;
     
@@ -186,6 +185,7 @@ const handleKilledVirus = async function(reactionTime) {
         }    
         else if(playerOne.clickTime < playerTwo.clickTime){
             playerOne.points++;
+
             if(playerTwo.points + playerOne.points === 10){
                 game.gameObject.rounds = 0;
     
@@ -218,20 +218,23 @@ const handleDisconnect = function() {
 	debug(`Client ${this.id} disconnected :(`);
     if ( totalGameCount === 0 ) {
         console.log('no');
-        // this.broadcast.to(room).emit('reset');
     } else{
     let id = this.id;
     let game = fetchGame(id);
     let room = (game.gameObject.id);
+    
 
-    if(game){
+    if(game && room){
         
-        // let everyone in the room know that user has disconnected
+        // let everyone in the game know that user has disconnected
         this.broadcast.to(room).emit('player:disconnected', id);
-        this.broadcast.to(room).emit('reset');
+        io.to(room).emit('reset');
         
-        // remove user from list of connected users in that room
-        delete game.gameObject[id];
+        // remove game object
+        game.gameObject.playerOne = '';
+        game.gameObject.id = null;
+        game.gameObject.playerTwo = '';
+        game.gameObject.id = null;
 
         totalGameCount -= 1;
         console.log('totalgamecount: ', totalGameCount)
@@ -239,8 +242,7 @@ const handleDisconnect = function() {
         console.log('All rooms after delete:' , gameList);
 
     } else{
-        console.log('no game found');
-        this.broadcast.to(room).emit('reset');
+        io.to(room).emit('reset');
     }
     }
 }
@@ -268,4 +270,6 @@ module.exports = function(socket, _io) {
 
 	// handle game start logic
 	socket.on('start:game', startGame);
+
+    socket.on('reset:game', handleDisconnect)
 }
