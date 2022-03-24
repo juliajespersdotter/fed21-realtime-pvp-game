@@ -10,7 +10,6 @@ const socket = io();
 const usernameForm = document.querySelector('#username-form');
 const chosenAvatar = document.querySelector('.avatar-wrapper');
 let username = null;
-let avatar = null;
 
 
 //********** GAME COMPONENTS **********/
@@ -27,6 +26,24 @@ const playerTwoScore = document.querySelector('#player2-score');
 //********** TIMER **********/
 let intervalPlayer1;
 let intervalPlayer2;
+
+socket.on('reset', () => {
+	reset();
+})
+
+const reset = () => {
+	gameWrapperEl.classList.add('hide');
+	playerOneScore.innerHTML = "0";
+	playerTwoScore.innerHTML = "0";
+	gameWrapperEl.classList.add('hide');
+	startEl.classList.remove('hide');
+	document.querySelectorAll('.player1').forEach(player1 => {
+		player1.innerText = "";
+	});
+	document.querySelectorAll('.player2').forEach(player2 => {
+		player2.innerText = "";
+	});
+}
 
 
 //********** USER JOINS GAME **********/
@@ -57,8 +74,6 @@ usernameForm.addEventListener('submit', e => {
 		}
 	});
 });
-
-
 
 //********** COUNTDOWN FOR GAME TO START **********/
 let countdownTime = 3;
@@ -126,8 +141,8 @@ socket.on('player:list', (playerOne, playerTwo) => {
 })
 
 //********** USER DISCONNECTS **********/
-socket.on('player:disconnected', (username) => {
-	console.log('Player disconnected', username);
+socket.on('player:disconnected', (id) => {
+	console.log('Player disconnected with id', id);
 });
 
 socket.on('round:over', data => {
@@ -250,8 +265,7 @@ socket.on('game:over', (winnerOfTheGame, loser) => {
 	}
 
 	setTimeout(function() {
-		gameoverWrapperEl.classList.add('hide');
-		startEl.classList.remove('hide');
+		reset();
 	}, 5000);
 });
 
@@ -264,8 +278,7 @@ socket.on('no:winner', (playerOne, playerTwo) => {
 	gameoverHTML.innerHTML = `<h2>You both got equal points! Player One: ${playerOne.points} Player Two: ${playerTwo.points}</h2>`
 
 	setTimeout(function() {
-		gameoverWrapperEl.classList.add('hide');
-		startEl.classList.remove('hide');
+		reset();
 	}, 5000);
 })
         

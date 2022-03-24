@@ -72,7 +72,7 @@ const handleJoinGame = function(data, callback){
         });
     } else {
        const game = gameList.find(gameRoom => {
-            if(gameRoom.gameObject.playerTwo.id === null){
+            if(gameRoom.gameObject.playerTwo.name === null){
                 return true; // If there is a game where playerTwo is Null, then join this game. 
             }
         });
@@ -100,7 +100,7 @@ const handleJoinGame = function(data, callback){
                 playerOne: playerOne,
                 playerTwo: playerTwo
             });
-        } else{
+        } else if(!game){
             callback({
                 success:false
             })
@@ -149,6 +149,7 @@ const handleKilledVirus = async function(reactionTime) {
         playerTwo['clickTime'] = reactionTime;
         // io.to(room).emit('stop:timer2')
     }
+
 
     // if both players clicked, only then mode the virus
     if(playerOne.hasClicked && playerTwo.hasClicked){
@@ -217,29 +218,32 @@ const handleKilledVirus = async function(reactionTime) {
 //********** USER DISCONNECTS **********/
 const handleDisconnect = function() {
 	debug(`Client ${this.id} disconnected :(`);
-
     if ( totalGameCount === 0 ) {
         console.log('no');
-    } else {
-        // find the room that this socket is part of
-        let id = this.id
-        let game = fetchGame(id);
+        // this.broadcast.to(room).emit('reset');
+    } else{
+    let id = this.id;
+    let game = fetchGame(id);
+    let room = (game.gameObject.id);
 
-        console.log('game: ', game);
+    if(game){
+        
+        // let everyone in the room know that user has disconnected
+        this.broadcast.to(room).emit('player:disconnected', id);
+        this.broadcast.to(room).emit('reset');
+        
+        // remove user from list of connected users in that room
+        delete game.gameObject[id];
 
-        if(game){
-            let room = (game.gameObject.id);
-            // let everyone in the room know that user has disconnected
-            this.broadcast.to(room).emit('player:disconnected', id);
-        
-            // remove user from list of connected users in that room
-            delete game[this.id];
-        
-            // broadcast list of users in room to all connected sockets EXCEPT ourselves
-            this.broadcast.to(room).emit('player:list', game.gameObject.playerOne, game.gameObject.playerTwo);
-        } else{
-            console.log('no game found');
-        }
+        totalGameCount -= 1;
+        console.log('totalgamecount: ', totalGameCount)
+    
+        console.log('All rooms after delete:' , gameList);
+
+    } else{
+        console.log('no game found');
+        this.broadcast.to(room).emit('reset');
+    }
     }
 }
 
