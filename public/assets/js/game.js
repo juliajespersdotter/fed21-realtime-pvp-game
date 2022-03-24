@@ -194,9 +194,8 @@ socket.on('stop:timer'), (p1, p2) => {
 	}
 	else if(p2.hasClicked) {
 		stopTimerPlayer2();
-		console.log("I´m at p1.hasClicked", stopTimerPlayer1);
+		console.log("I´m at p2.hasClicked", stopTimerPlayer2);
 	}
-
 };
 
 const startTimerPlayer1 = () => {
