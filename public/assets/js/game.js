@@ -77,7 +77,9 @@ const countdown = () => {
 			gameWrapperEl.classList.remove('hide');
 			countdownWrapperEl.classList.add('hide');
 		} else {
-			countdownHTML.innerHTML = `<h2>Get ready to catch the virus! It can appear at any time!</h2><h2>${countdownTime} seconds left...</h2>`;
+			countdownHTML.innerHTML = `<h2>Get ready to catch the virus! It can appear at any time!</h2>
+			<img src="/assets/img/virus.png" alt="">
+			<h2>${countdownTime} seconds left...</h2>`;
 		}
 		countdownTime -= 1;
 	}, 1000);
@@ -320,18 +322,17 @@ function resetTimer() {
 socket.on('game:over', (winnerOfTheGame, room) => {
 	let gameoverHTML = document.getElementById("gameoverId");
 	gameoverWrapperEl.classList.remove('hide');
+	startEl.classList.add('hide');
 
-	setInterval(function() {
-		if(countdownTime <= 0) {
-			gameoverWrapperEl.classList.add('hide');
-			startEl.classList.remove('hide');
-		} else {
-			if (winnerOfTheGame === socket.id) {
-				gameoverHTML.innerHTML = `<h2>You're the winner!</h2>`
-			} else {
-				gameoverHTML.innerHTML = `<h2>You lost :( Better luck next time!</h2>`
-			}
-		}
+	if (winnerOfTheGame === socket.id) {
+		gameoverHTML.innerHTML = `<h2>You're the winner!</h2>`
+	} else {
+		gameoverHTML.innerHTML = `<h2>You lost :( Better luck next time!</h2>`
+	}
+
+	setTimeout(function() {
+		gameoverWrapperEl.classList.add('hide');
+		startEl.classList.remove('hide');
 	}, 5000);
 });
         

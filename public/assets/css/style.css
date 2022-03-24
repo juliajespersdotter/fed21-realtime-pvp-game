@@ -182,7 +182,7 @@ img {
 }
 
 /******** WAITING TO JOIN GAME & COUNTDOWN ********/
-#waitingForPlayer-wrapper, #countdown-wrapper {
+#waitingForPlayer-wrapper, #countdown-wrapper, #gameover-wrapper {
 	width: 100vw;
 	height: 100vh;
 	background-color: white;
@@ -191,7 +191,7 @@ img {
 	grid-template-rows: repeat(5, 1fr);
 }
 
-#waitingForPlayer, .countdown {
+#waitingForPlayer, .countdown, .gameover {
 	background-color: #15172b;
 	width: 60vw;
 	height: 60vh;
