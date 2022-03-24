@@ -147,9 +147,14 @@ socket.on('new:round', data => {
 })
 
 const startGame = (data) => {
+	
 	// console.log("random time: " + data.randomTime);
 	setTimeout(function (){
 		moveVirus(data);
+		resetTimer();
+
+		startTimerPlayer1();
+		startTimerPlayer2();
 	
 		let timeStart = Date.now();
 
@@ -170,8 +175,8 @@ const startGame = (data) => {
 // move the virus using randomised numbers 
 function moveVirus(data) {
 		resetTimer(data.delay);
-		startTimerPlayer1();
-		startTimerPlayer2();
+		//startTimerPlayer1();
+		//startTimerPlayer2();
 
 		let row = data.offsetRow;
 		let column = data.offsetColumn;
@@ -187,16 +192,14 @@ function moveVirus(data) {
 
 //********** TIMER **********/
 
-socket.on('stop:timer'), (p1, p2) => {
+socket.on('stop:timer', (p1, p2) => {
 	if(p1.hasClicked) {
 		stopTimerPlayer1();
-		console.log("I´m at p1.hasClicked", stopTimerPlayer1);
 	}
 	else if(p2.hasClicked) {
 		stopTimerPlayer2();
-		console.log("I´m at p2.hasClicked", stopTimerPlayer2);
 	}
-};
+});
 
 const startTimerPlayer1 = () => {
 	stopTimerPlayer1();
