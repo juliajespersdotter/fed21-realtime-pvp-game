@@ -149,7 +149,7 @@ const handleKilledVirus = function(reactionTime) {
         io.to(room).emit('stop:timer', playerOne, playerTwo);
     }
 
-    // if both players clicked, only then mode the virus
+    // if both players clicked, only then move the virus
     if(playerOne.hasClicked && playerTwo.hasClicked){
         playerOne.hasClicked = false;
         playerTwo.hasClicked = false;
@@ -157,9 +157,11 @@ const handleKilledVirus = function(reactionTime) {
 
         let delay = getRandomNumber(5000, 1000);
 
+        // if player two is the winner
         if(playerTwo.clickTime < playerOne.clickTime){
             playerTwo.points++;
 
+            // if the points added up is 10
             if(playerTwo.points + playerOne.points === 10) {
                 game.gameObject.rounds = 0;
     
@@ -183,9 +185,12 @@ const handleKilledVirus = function(reactionTime) {
                 delay: delay
             });
         }    
+
+        // if player one is the winner
         else if(playerOne.clickTime < playerTwo.clickTime){
             playerOne.points++;
 
+            // if the points added up is 10
             if(playerTwo.points + playerOne.points === 10){
                 game.gameObject.rounds = 0;
     

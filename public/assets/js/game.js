@@ -235,7 +235,6 @@ const startTimerPlayer2 = () => {
     }, 10);
 }
 
- //i några sekunder - sen skickas tillbaka till start page (för username)
 function stopTimerPlayer1() {
 	clearInterval(intervalPlayer1);
 }
@@ -267,6 +266,7 @@ socket.on('game:over', (winnerOfTheGame, loser) => {
 		gameoverHTML.innerHTML = `<h2>You lost :( You got ${loser.points} points. Better luck next time!</h2>`
 	}
 
+	// reset game after game over
 	setTimeout(function() {
 		socket.emit('reset:game');
 	}, 5000);
