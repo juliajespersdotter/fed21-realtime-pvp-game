@@ -67,7 +67,7 @@ usernameForm.addEventListener('submit', e => {
 
 
 //********** COUNTDOWN FOR GAME TO START **********/
-let countdownTime = 3;
+let countdownTime = 10;
 const countdown = () => {
 	let countdownHTML = document.getElementById("countdownId");
 
@@ -78,7 +78,6 @@ const countdown = () => {
 			countdownWrapperEl.classList.add('hide');
 		} else {
 			countdownHTML.innerHTML = `<h2>Get ready to catch the virus! It can appear at any time!</h2>
-			<img src="/assets/img/virus.png" alt="">
 			<h2>${countdownTime} seconds left...</h2>`;
 		}
 		countdownTime -= 1;
