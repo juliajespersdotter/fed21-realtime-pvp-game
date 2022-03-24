@@ -21,6 +21,7 @@ const gameoverWrapperEl = document.querySelector('#gameover-wrapper');
 const virus = document.querySelector('.virus');
 const playerOneScore = document.querySelector('#player1-score');
 const playerTwoScore = document.querySelector('#player2-score');
+const gameoverHTML = document.getElementById("gameoverId");
 
 
 //********** TIMER **********/
@@ -43,6 +44,10 @@ const reset = () => {
 	document.querySelectorAll('.player2').forEach(player2 => {
 		player2.innerText = "";
 	});
+	gameoverHTML.classList.add('hide');
+	gameoverWrapperEl.classList.add('hide');
+	gameoverHTML.innerHTML = "";
+	countdownTime = 3;
 }
 
 
@@ -253,7 +258,6 @@ function resetTimer() {
 
 //********** GAME OVER **********/
 socket.on('game:over', (winnerOfTheGame, loser) => {
-	let gameoverHTML = document.getElementById("gameoverId");
 	gameoverWrapperEl.classList.remove('hide');
 	startEl.classList.add('hide');
 	gameWrapperEl.classList.add('hide');
@@ -270,7 +274,6 @@ socket.on('game:over', (winnerOfTheGame, loser) => {
 });
 
 socket.on('no:winner', (playerOne, playerTwo) => {
-	let gameoverHTML = document.getElementById("gameoverId");
 	gameoverWrapperEl.classList.remove('hide');
 	startEl.classList.add('hide');
 	gameWrapperEl.classList.add('hide');

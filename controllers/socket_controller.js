@@ -176,7 +176,6 @@ const handleKilledVirus = async function(reactionTime) {
                 }
             }
 
-            console.log("Player two points: ",playerTwo.points);
             winner = playerTwo;
 
             io.to(room).emit('round:over', {
@@ -200,8 +199,8 @@ const handleKilledVirus = async function(reactionTime) {
                 else {
                     io.to(room).emit('no:winner', playerTwo, playerOne);
                 }
+
             } else{
-                console.log("Player one points: ",playerOne.points);
                 winner = playerOne;
     
                 io.to(room).emit('round:over',{
