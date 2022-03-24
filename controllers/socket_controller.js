@@ -142,14 +142,13 @@ const handleKilledVirus = async function(reactionTime) {
     if(playerOne.id === this.id){
         playerOne.hasClicked = true;
         playerOne['clickTime'] = reactionTime;
-        // io.to(room).emit('stop:timer1')
+        io.to(room).emit('stop:timer', playerOne, playerTwo);
         
     } else if(playerTwo.id === this.id){
         playerTwo.hasClicked  = true;
         playerTwo['clickTime'] = reactionTime;
-        // io.to(room).emit('stop:timer2')
+        io.to(room).emit('stop:timer', playerOne, playerTwo);
     }
-
 
     // if both players clicked, only then mode the virus
     if(playerOne.hasClicked && playerTwo.hasClicked){

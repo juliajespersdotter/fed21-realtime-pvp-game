@@ -168,6 +168,7 @@ socket.on('new:round', data => {
 })
 
 const startGame = (data) => {
+	
 	// console.log("random time: " + data.randomTime);
 	setTimeout(function (){
 		moveVirus(data);
@@ -190,9 +191,6 @@ const startGame = (data) => {
 
 // move the virus using randomised numbers 
 function moveVirus(data) {
-		startTimerPlayer1();
-		startTimerPlayer2();
-
 		let row = data.offsetRow;
 		let column = data.offsetColumn;
 		
@@ -203,20 +201,23 @@ function moveVirus(data) {
 		virus.src = "./assets/img/virus.svg";
 	
 		setTimeout(function(){
-			resetTimer();
 			virus.classList.remove('hide');
+			resetTimer();
+			startTimerPlayer1();
+			startTimerPlayer2();
 		}, 1000)
 }
 
 //********** TIMER **********/
 
-socket.on('stop:timer1'), () => {
-	stopTimerPlayer1();
-};
-
-socket.on('stop:timer2'), () => {
-	stopTimerPlayer2();
-};
+socket.on('stop:timer', (p1, p2) => {
+	if(p1.hasClicked) {
+		stopTimerPlayer1();
+	}
+	else if(p2.hasClicked) {
+		stopTimerPlayer2();
+	}
+});
 
 
 const startTimerPlayer1 = () => {
@@ -248,11 +249,13 @@ function stopTimerPlayer2() {
 	  clearInterval(intervalPlayer2);
 }
 
-function resetTimer() {
+function resetTimer(delay) {
 	seconds = 0;
 	milliseconds = 0;
-	timerPlayer1.innerHTML = `00 : 00`;
-	timerPlayer2.innerHTML = `00 : 00`;
+	setTimeout(function () {
+		timerPlayer1.innerHTML = `00 : 00`;
+		timerPlayer2.innerHTML = `00 : 00`;
+	}, delay)
 }
 
 
