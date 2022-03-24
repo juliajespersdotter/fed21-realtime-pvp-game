@@ -156,16 +156,16 @@ const handleKilledVirus = async function(reactionTime) {
         playerTwo.hasClicked = false;
         game.gameObject.rounds++;
 
-        if(game.gameObject.rounds === 10){
+        if(game.gameObject.rounds === 11){
             game.gameObject.rounds = 0;
             if(playerOne.points > playerTwo.points){
-                io.to(room).emit('game:over', playerOne);
+                io.to(room).emit('game:over', playerOne, playerTwo);
             }
             else if(playerTwo.points > playerOne.points){
-                io.to(room).emit('game:over', playerTwo);
+                io.to(room).emit('game:over', playerTwo, playerOne);
             }
         } else {
-            let delay = getRandomNumber(9000, 3000);
+            let delay = getRandomNumber(7000, 3000);
             console.log(delay);
 
             if(playerTwo.clickTime < playerOne.clickTime){

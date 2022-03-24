@@ -185,7 +185,7 @@ function moveVirus(data) {
 	
 		setTimeout(function(){
 			virus.classList.remove('hide');
-		})
+		}, 1000)
 }
 
 //********** TIMER **********/
@@ -236,16 +236,16 @@ function resetTimer() {
 
 
 //********** GAME OVER **********/
-socket.on('game:over', (winnerOfTheGame, room) => {
+socket.on('game:over', (winnerOfTheGame, loser) => {
 	let gameoverHTML = document.getElementById("gameoverId");
 	gameoverWrapperEl.classList.remove('hide');
 	startEl.classList.add('hide');
 	gameWrapperEl.classList.add('hide');
 
 	if (winnerOfTheGame.id === socket.id) {
-		gameoverHTML.innerHTML = `<h2>You're the winner!</h2>`
+		gameoverHTML.innerHTML = `<h2>You're the winner! You got ${winnerOfTheGame.points} points!</h2>`
 	} else {
-		gameoverHTML.innerHTML = `<h2>You lost :( Better luck next time!</h2>`
+		gameoverHTML.innerHTML = `<h2>You lost :( You got ${loser.points} points. Better luck next time!</h2>`
 	}
 
 	setTimeout(function() {
