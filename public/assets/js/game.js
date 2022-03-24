@@ -28,6 +28,7 @@ const playerTwoScore = document.querySelector('#player2-score');
 let intervalPlayer1;
 let intervalPlayer2;
 
+
 //********** USER JOINS GAME **********/
 usernameForm.addEventListener('submit', e => {
 	e.preventDefault();
@@ -182,7 +183,9 @@ function moveVirus(data) {
 
 		virus.src = "./assets/img/virus.svg";
 	
-		virus.classList.remove('hide');
+		setTimeout(function(){
+			virus.classList.remove('hide');
+		})
 }
 
 //********** TIMER **********/
