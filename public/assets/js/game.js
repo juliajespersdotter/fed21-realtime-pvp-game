@@ -169,7 +169,7 @@ const startGame = (data) => {
 
 // move the virus using randomised numbers 
 function moveVirus(data) {
-		resetTimer();
+		resetTimer(data.delay);
 		startTimerPlayer1();
 		startTimerPlayer2();
 
@@ -187,16 +187,46 @@ function moveVirus(data) {
 
 //********** TIMER **********/
 
-socket.on('stop:timer1'), () => {
-	stopTimerPlayer1();
+socket.on('stop:timer'), (p1, p2) => {
+	if(p1.hasClicked) {
+		stopTimerPlayer1();
+	}
+	else if(p2.hasClicked) {
+		stopTimerPlayer2();
+	}
+
 };
 
-socket.on('stop:timer2'), () => {
-	stopTimerPlayer2();
-};
+
 
 const startTimerPlayer1 = () => {
-	stopTimerPlayer1();
+	let startTimestamp = Date.now();
+    intervalPlayer1 = setInterval(function() {
+        let elapsedTime = Date.now() - startTimestamp;
+        document.getElementById('timerPlayer1').innerHTML = 
+            (elapsedTime / 1000).toFixed(2);
+    }, 10);
+		clearInterval(intervalPlayer1);
+		console.log("I´m in stopTimerPlayer1", intervalPlayer1);
+}
+
+const startTimerPlayer2 = () => {
+	let startTimestamp = Date.now();
+    intervalPlayer2 = setInterval(function() {
+        let elapsedTime = Date.now() - startTimestamp;
+        document.getElementById('timerPlayer2').innerHTML = 
+            (elapsedTime / 1000).toFixed(2);
+    }, 10);
+		clearInterval(intervalPlayer2);
+		console.log("I´m in stopTimerPlayer2", intervalPlayer2);
+}
+
+ 
+
+
+/*
+const startTimerPlayer1 = () => {
+	//stopTimerPlayer1();
 	let startTimestamp = Date.now();
     intervalPlayer1 = setInterval(function() {
         let elapsedTime = Date.now() - startTimestamp;
@@ -206,7 +236,7 @@ const startTimerPlayer1 = () => {
 }
     
 const startTimerPlayer2 = () => {
-	stopTimerPlayer2();
+	//stopTimerPlayer2();
 	let startTimestamp = Date.now();
     intervalPlayer2 = setInterval(function() {
         let elapsedTime = Date.now() - startTimestamp;
@@ -218,17 +248,21 @@ const startTimerPlayer2 = () => {
  //i några sekunder - sen skickas tillbaka till start page (för username)
 function stopTimerPlayer1() {
 	clearInterval(intervalPlayer1);
+	console.log("I´m in stopTimerPlayer1", intervalPlayer1);
 }
   
 function stopTimerPlayer2() {
 	  clearInterval(intervalPlayer2);
+	  console.log("I´m in stopTimerPlayer2", intervalPlayer2);
 }
-
-function resetTimer() {
+*/
+function resetTimer(delay) {
 	seconds = 0;
 	milliseconds = 0;
-	timerPlayer1.innerHTML = `00 : 00`;
-	timerPlayer2.innerHTML = `00 : 00`;
+	setTimeout(function () {
+		timerPlayer1.innerHTML = `00 : 00`;
+		timerPlayer2.innerHTML = `00 : 00`;
+	}, delay)
 }
 
 
