@@ -3,12 +3,11 @@
 "Kill the virus"
 http://socket-slayers.herokuapp.com
 
-### Languages used:
+### Languages and Frameworks used:
 
 - Node.js
 - Express
 - Socket.io
-- MongoDB
 
 ## Table of contents
 
