@@ -22,14 +22,14 @@ http://socket-slayers.herokuapp.com
 
 #### Basic requirements
 
-- Use Node.js, Express, Socket.io and MongoDB
-- Version control using git
-- Deploy to Heroku
-- Users must be allowed to fill in their username / nickname
-- All calculation regardin scores should be done on the server side
-- Show timer and latest reaction time and the opponent's latest reaction time
-- Several games should be able to run simultaneously
-- When a player connects, “Waiting for another player…” or similar message should appear. As soon as two players are connected, a round starts
+- Use Node.js, Express, and Socket.io.
+- Version control using git.
+- Deploy to Heroku.
+- Users must be allowed to fill in their username / nickname.
+- All calculation regarding scores should be done on the server side.
+- Show timer and latest reaction time and the opponent's latest reaction time.
+- Several games should be able to run simultaneously.
+- When a player connects, “Waiting for another player…” or similar message should appear. As soon as two players are connected, a round starts.
 
 #### The game must follow this structure:
 
