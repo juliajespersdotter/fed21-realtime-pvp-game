@@ -21,7 +21,7 @@ http://socket-slayers.herokuapp.com
 - Create a simple 2-player realtime game where the goal is to click on a virus as quickly as possible to exterminate it, and points will be awarded to the player with the most rapid reaction time.
 - The assignment must be completed in a group of 3 students
 
-#### Basic requirement
+#### Basic requirements
 
 - Use Node.js, Express, Socket.io and MongoDB
 - Version control using git
@@ -32,7 +32,7 @@ http://socket-slayers.herokuapp.com
 - Several games should be able to run simultaneously
 - When a player connects, “Waiting for another player…” or similar message should appear. As soon as two players are connected, a round starts
 
-#### The game must follow ths structure:
+#### The game must follow this structure:
 
 1. Start game - waiting for opponent
 2. Once player have joined, start the game
