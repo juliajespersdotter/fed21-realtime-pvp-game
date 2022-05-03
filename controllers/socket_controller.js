@@ -67,40 +67,42 @@ const handleCreateGame = function(data, callback) { // data is username and avat
 //********** JOIN GAME **********/
 const handleJoinGame = function(data, callback){
     if ( totalGameCount === 0 ) {
-         callback({
-            success:false // creates a new game if there isnt a game to join
-        });
+          callback({
+             success:false // creates a new game if there isnt a game to join
+         });
     } else {
-       const game = gameList.find(gameRoom => {
-            if(gameRoom.gameObject.id){
+        const game = gameList.find(gameRoom => {
+            if(gameRoom.gameObject.playerTwo.id === null){
                 return true; // If there is a game where id is not Null, then join this game. 
             }
         });
-
+    
         // if there is a gameObject where game has a playerTwo that is Null, then replace with this userinfo
-        if(game.gameObject.playerTwo.id === null){
-            game.gameObject['playerTwo']['name'] = data.username;
-            game.gameObject['playerTwo']['avatar'] = data.avatar;
-            game.gameObject['playerTwo']['id'] = this.id;
-            const gameId = game.gameObject.playerOne.id;
+        if(game){
+            // if(game.gameObject.playerTwo.id === null) {
+                game.gameObject['playerTwo']['name'] = data.username;
+                game.gameObject['playerTwo']['avatar'] = data.avatar;
+                game.gameObject['playerTwo']['id'] = this.id;
+                const gameId = game.gameObject.playerOne.id;
 
-            this.join(gameId);
-            debug(`Player ${data.username} joined room ${gameId}`);
+                this.join(gameId);
+                debug(`Player ${data.username} joined room ${gameId}`);
 
-            console.log(data.username + " has been added to: " + gameId);
-            this.broadcast.to(gameId).emit('player:connected', data.username, gameId);
-            let playerOne = game.gameObject.playerOne;
-            let playerTwo = game.gameObject.playerTwo;
+                console.log(data.username + " has been added to: " + gameId);
+                this.broadcast.to(gameId).emit('player:connected', data.username, gameId);
+                let playerOne = game.gameObject.playerOne;
+                let playerTwo = game.gameObject.playerTwo;
 
-            // sends object to front end with info
-            io.to(gameId).emit('player:list', playerOne, playerTwo);
-            callback({
-                success: true,
-                room: gameId,
-                playerOne: playerOne,
-                playerTwo: playerTwo
-            });
-        } else if(!game){
+                // sends object to front end with info
+                io.to(gameId).emit('player:list', playerOne, playerTwo);
+                callback({
+                    success: true,
+                    room: gameId,
+                    playerOne: playerOne,
+                    playerTwo: playerTwo
+                });
+            // }
+        } else {
             callback({
                 success:false
             })
@@ -111,15 +113,18 @@ const handleJoinGame = function(data, callback){
 const startGame = function(delay) {  
     let id = this.id;
     let game = fetchGame(id);
-    let room = (game.gameObject.id);
-    game.gameObject.playerOne.hasClicked = false;
-    game.gameObject.playerTwo.hasClicked = false;
 
-    io.to(room).emit('new:round', {
-        offsetRow: Math.ceil(Math.random() * 12 ),
-        offsetColumn: Math.ceil(Math.random() * 12 ),
-        delay: delay
-    });
+    if(game){
+        let room = (game.gameObject.id);
+        game.gameObject.playerOne.hasClicked = false;
+        game.gameObject.playerTwo.hasClicked = false;
+    
+        io.to(room).emit('new:round', {
+            offsetRow: Math.ceil(Math.random() * 12 ),
+            offsetColumn: Math.ceil(Math.random() * 12 ),
+            delay: delay
+        });
+    } 
 }
 
 const handleKilledVirus = function(reactionTime) {
@@ -221,36 +226,33 @@ const handleKilledVirus = function(reactionTime) {
 //********** USER DISCONNECTS **********/
 const handleDisconnect = function() {
 	debug(`Client ${this.id} disconnected :(`);
-    if ( totalGameCount === 0 ) {
-        console.log('no');
-    } else{
     let id = this.id;
     let game = fetchGame(id);
-    let room = (game.gameObject.id);
-    
-
-    if(game && room){
         
-        // let everyone in the game know that user has disconnected
-        this.broadcast.to(room).emit('player:disconnected', id);
-        io.to(room).emit('reset');
+        if(game){
+            let room = (game.gameObject.id);
+            
+            // let everyone in the game know that user has disconnected
+            this.broadcast.to(room).emit('player:disconnected', id);
+            io.to(room).emit('reset');
+            
+            // remove game object
+            game.gameObject.playerOne = '';
+            game.gameObject.id = null;
+            game.gameObject.playerTwo = '';
+            game.gameObject.id = null;
+
+            totalGameCount -= 1;
+
+            console.log('totalgamecount: ', totalGameCount)
         
-        // remove game object
-        game.gameObject.playerOne = '';
-        game.gameObject.id = null;
-        game.gameObject.playerTwo = '';
-        game.gameObject.id = null;
+            console.log('All rooms after delete:' , gameList);
 
-        totalGameCount -= 1;
-        console.log('totalgamecount: ', totalGameCount)
-    
-        console.log('All rooms after delete:' , gameList);
-
-    } else{
-        io.to(room).emit('reset');
+        } else{
+            io.to(this.id).emit('reset');
+        }
     }
-    }
-}
+// }
 
 
 //********** EXPORTS **********/
