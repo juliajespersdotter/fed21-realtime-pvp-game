@@ -1,6 +1,7 @@
 # Realtime player vs player game
 
 ** The project was hosted on Heroku but since Heroku have removed the free package, this project isn´t hosted there any longer ** 
+
 "Kill the virus"
 http://socket-slayers.herokuapp.com
 
